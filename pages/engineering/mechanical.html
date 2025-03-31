@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engenharia Mecânica</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../css/themes/light.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="../../index.html">Engenharia</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../../index.html" data-translate="nav_home">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="englishDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_english">
+                                Inglês
+                            </a>
+                            <ul class="dropdown-menu">
+                                
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="medicineDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_medicine">
+                                Medicina
+                            </a>
+                            <ul class="dropdown-menu">
+                                
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="oilGasDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_oilgas">
+                                Petróleo e Gás
+                            </a>
+                            <ul class="dropdown-menu">
+                               
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="engineeringDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_engineering">
+                                Engenharias
+                            </a>
+                            <ul class="dropdown-menu">
+                              
+                                <li><a class="dropdown-item" href="computer.html">Computação</a></li>
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../misc/index.html" data-translate="nav_misc">Diversos</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary me-2">
+                            <span class="theme-icon">🌙</span>
+                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary active language-btn" data-lang="pt">PT</button>
+                            <button class="btn btn-sm btn-outline-primary language-btn" data-lang="en">EN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-4">
+        <!-- Cabeçalho da Página -->
+        <div class="page-header mb-4">
+            <h1 class="display-4">Engenharia Mecânica</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../../index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="index.html">Engenharias</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Mecânica</li>
+                </ol>
+            </nav>
+            <hr>
+        </div>
+
+        <!-- Introdução -->
+        <section class="mb-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h2 class="card-title">O que é Engenharia Mecânica?</h2>
+                            <p class="card-text">
+                                A Engenharia Mecânica é o ramo da engenharia que aplica os princípios da física e ciência dos materiais 
+                                para projetar, analisar, fabricar e manter sistemas mecânicos. É uma das disciplinas mais antigas e mais 
+                                abrangentes da engenharia.
+                            </p>
+                            <p class="card-text">
+                                Os engenheiros mecânicos projetam desde pequenos componentes e dispositivos, como sensores microscópicos, 
+                                até sistemas e máquinas de grande porte, como robôs industriais, veículos e usinas de energia.
+                            </p>
+                        </div>
+                        <div class="col-lg-4 d-flex align-items-center">
+                            <img src="https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" class="img-fluid rounded" alt="Engenharia Mecânica">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Áreas de Atuação -->
+        <section class="mb-5">
+            <h2 class="section-title">Principais Áreas de Atuação</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <!-- Área 1 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-gear me-2 text-primary"></i>Projeto Mecânico</h5>
+                            <p class="card-text">Desenvolvimento de componentes, máquinas e sistemas mecânicos, utilizando princípios de mecânica, resistência dos materiais e CAD.</p>
+                            <a href="mechanical/design.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 2 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-tools me-2 text-primary"></i>Manufatura</h5>
+                            <p class="card-text">Processos de fabricação, planejamento de produção, controle de qualidade e implementação de tecnologias de Indústria 4.0.</p>
+                            <a href="mechanical/manufacturing.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 3 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-thermometer-half me-2 text-primary"></i>Termodinâmica</h5>
+                            <p class="card-text">Estudo e aplicação dos princípios de energia térmica, sistemas de refrigeração, motores térmicos e trocadores de calor.</p>
+                            <a href="mechanical/thermodynamics.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 4 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-droplet me-2 text-primary"></i>Mecânica dos Fluidos</h5>
+                            <p class="card-text">Análise do comportamento de fluidos (líquidos e gases) e seus aplicações em sistemas hidráulicos, pneumáticos e turbomáquinas.</p>
+                            <a href="mechanical/fluid-mechanics.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 5 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-robot me-2 text-primary"></i>Automação e Robótica</h5>
+                            <p class="card-text">Projeto e implementação de sistemas automatizados, robôs industriais e integração de sistemas de controle.</p>
+                            <a href="mechanical/robotics.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 6 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-wrench-adjustable me-2 text-primary"></i>Manutenção</h5>
+                            <p class="card-text">Estratégias e técnicas para manutenção de equipamentos e sistemas mecânicos, incluindo manutenção preditiva e preventiva.</p>
+                            <a href="mechanical/maintenance.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Softwares Essenciais -->
+        <section class="mb-5">
+            <h2 class="section-title">Softwares Essenciais para Engenheiros Mecânicos</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">CAD (Desenho Assistido por Computador)</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    AutoCAD
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    SolidWorks
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Inventor
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    CATIA
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">CAE (Engenharia Assistida por Computador)</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    ANSYS
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Abaqus
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    SolidWorks Simulation
+                                </li>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    COMSOL Multiphysics
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Vocabulário Técnico -->
+        <section class="mb-5">
+            <h2 class="section-title">Vocabulário Técnico Essencial</h2>
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">
+                        Termos técnicos essenciais em inglês para engenheiros mecânicos:
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Inglês</th>
+                                    <th>Português</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Gear</td>
+                                    <td>Engrenagem</td>
+                                </tr>
+                                <tr>
+                                    <td>Bearing</td>
+                                    <td>Rolamento</td>
+                                </tr>
+                                <tr>
+                                    <td>Shaft</td>
+                                    <td>Eixo</td>
+                                </tr>
+                                <tr>
+                                    <td>Heat Exchanger</td>
+                                    <td>Trocador de Calor</td>
+                                </tr>
+                                <tr>
+                                    <td>Pump</td>
+                                    <td>Bomba</td>
+                                </tr>
+                                <tr>
+                                    <td>Machining</td>
+                                    <td>Usinagem</td>
+                                </tr>
+                                <tr>
+                                    <td>Welding</td>
+                                    <td>Soldagem</td>
+                                </tr>
+                                <tr>
+                                    <td>Stress Analysis</td>
+                                    <td>Análise de Tensões</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="mechanical/vocabulary.html" class="btn btn-outline-primary">Ver glossário completo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Newsletter -->
+        <section class="newsletter-section bg-light p-4 rounded mb-5">
+            <h3>Receba conteúdo sobre Engenharia Mecânica</h3>
+            <p>Inscreva-se para receber artigos, tutoriais e novidades sobre Engenharia Mecânica.</p>
+            <form class="row g-3">
+                <div class="col-md-8">
+                    <input type="email" class="form-control" id="newsletterEmail" placeholder="Seu email">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Inscrever-se</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 data-translate="footer_about">Sobre o Blog</h5>
+                    <p data-translate="footer_about_text">Blog multilingue focado em compartilhar conhecimento especializado em diversas áreas.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 data-translate="footer_quicklinks">Links Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="../../index.html" class="text-light">Home</a></li>
+                        <li><a href="../../pages/contact.html" class="text-light">Contato</a></li>
+                        <li><a href="../../pages/privacy.html" class="text-light">Política de Privacidade</a></li>
+                        <li><a href="../../pages/terms.html" class="text-light">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 data-translate="footer_contact">Contato</h5>
+                    <p>Email: contato@blogmultilingue.com</p>
+                    <div class="social-media">
+                        <a href="#" class="text-light me-2">Facebook</a>
+                        <a href="#" class="text-light me-2">Twitter</a>
+                        <a href="#" class="text-light">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p>&copy; 2025 Justificações Acadêmicas. <span data-translate="footer_rights">Todos os direitos reservados.</span></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/components/translator.js"></script>
+</body>
+</html>

@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Blog Multilingue</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/publications-admin.css">
+    <link id="theme-style" rel="stylesheet" href="../css/themes/light.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            console.log('Página carregada, verificando AdminData...');
+            
+            // Verificar autenticação
+            if (!localStorage.getItem('adminLoggedIn')) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Verificar expiração do login
+            const expirationTime = localStorage.getItem('adminLoginExpires');
+            if (expirationTime && Date.now() > parseInt(expirationTime)) {
+                // Login expirado
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminLoginExpires');
+                localStorage.removeItem('adminRemembered');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            setTimeout(function() {
+                if (typeof window.BlogData !== 'undefined') {
+                    console.log('BlogData está disponível globalmente!');
+                } else {
+                    console.error('BlogData não está disponível globalmente!');
+                }
+            }, 500);
+        };
+    </script>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Container -->
+            <div id="sidebar-container"></div>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Painel Administrativo</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <a href="../index.html" class="btn btn-sm btn-outline-secondary" target="_blank">Ver Blog</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Section -->
+                <div id="dashboard-content" class="content-section">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total de Artigos</h5>
+                                    <h2 class="card-text">0</h2>
+                                    <button class="btn btn-sm btn-primary show-section-btn" data-section="articles">Ver Artigos</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Eventos</h5>
+                                    <h2 class="card-text">0</h2>
+                                    <button class="btn btn-sm btn-primary show-section-btn" data-section="events">Ver Eventos</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Materiais</h5>
+                                    <h2 class="card-text">0</h2>
+                                    <button class="btn btn-sm btn-primary show-section-btn" data-section="resources">Ver Materiais</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabela de artigos recentes -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Artigos Recentes</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Título</th>
+                                        <th>Categoria</th>
+                                        <th>Data</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-articles-list">
+                                    <tr>
+                                        <td colspan="4" class="text-center">Nenhum artigo encontrado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Articles Section -->
+                <div id="articles-content" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Gerenciar Artigos</h3>
+                        <button class="btn btn-primary" id="new-article-btn">Novo Artigo</button>
+                    </div>
+                    
+                    <div id="articles-list-container">
+                        <div class="alert alert-info">Nenhum artigo encontrado. Clique em "Novo Artigo" para adicionar um.</div>
+                    </div>
+                </div>
+
+                <!-- Events Section -->
+                <div id="events-content" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h3>Gerenciar Eventos</h3>
+                            <p class="text-muted">Gerencie todos os eventos do blog</p>
+                        </div>
+                        <button class="btn btn-success" id="new-event-btn">
+                            <i class="bi bi-calendar-plus"></i> Novo Evento
+                        </button>
+                    </div>
+                    
+                    <!-- Filtros de eventos -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="event-filter-category" class="form-label">Categoria</label>
+                                    <select id="event-filter-category" class="form-select">
+                                        <option value="">Todas as categorias</option>
+                                        <option value="medicina">Medicina</option>
+                                        <option value="engenharia">Engenharias</option>
+                                        <option value="petroleo-gas">Petróleo e Gás</option>
+                                        <option value="ingles">Inglês</option>
+                                        <option value="diversos">Diversos</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="event-filter-type" class="form-label">Tipo</label>
+                                    <select id="event-filter-type" class="form-select">
+                                        <option value="">Todos os tipos</option>
+                                        <option value="congresso">Congresso</option>
+                                        <option value="simposio">Simpósio</option>
+                                        <option value="curso">Curso</option>
+                                        <option value="webinar">Webinar</option>
+                                        <option value="workshop">Workshop</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="event-filter-date" class="form-label">Data</label>
+                                    <select id="event-filter-date" class="form-select">
+                                        <option value="">Todas as datas</option>
+                                        <option value="upcoming">Próximos eventos</option>
+                                        <option value="past">Eventos passados</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <button id="apply-event-filters" class="btn btn-sm btn-primary">
+                                        Aplicar Filtros
+                                    </button>
+                                    <button id="clear-event-filters" class="btn btn-sm btn-outline-secondary">
+                                        Limpar Filtros
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lista de eventos -->
+                    <div id="events-list-container">
+                        <div class="alert alert-info">Carregando eventos...</div>
+                    </div>
+                </div>
+
+                <!-- Publications Section -->
+                <div id="publications-content" class="content-section">
+                    <div class="publications-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3>Gerenciar Publicações</h3>
+                            <p class="text-muted">Gerencie todos os tipos de conteúdo do blog em um só lugar</p>
+                        </div>
+                        <div class="publication-actions">
+                            <button class="btn btn-primary" id="pub-article-btn">
+                                <i class="bi bi-file-earmark-text"></i> Novo Artigo
+                            </button>
+                            <button class="btn btn-success" id="pub-event-btn">
+                                <i class="bi bi-calendar-event"></i> Novo Evento
+                            </button>
+                            <button class="btn btn-info text-white" id="pub-material-btn">
+                                <i class="bi bi-file-earmark-richtext"></i> Novo Material
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Conteúdo da página de publicações -->
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Artigos</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Total: <span id="pub-articles-count">0</span> artigos</p>
+                                    <button class="btn btn-sm btn-primary show-section-btn" data-section="articles">
+                                        Ver Todos
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Eventos</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Total: <span id="pub-events-count">0</span> eventos</p>
+                                    <button class="btn btn-sm btn-primary show-section-btn" data-section="events">
+                                        Ver Todos
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Materiais</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Total: <span id="pub-materials-count">0</span> materiais</p>
+                                    <button class="btn btn-sm btn-primary show-section-btn" data-section="resources">
+                                        Ver Todos
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media Content -->
+                <div id="media-content" class="content-section">
+                    <h3>Biblioteca de Mídia</h3>
+                    <p class="text-muted">Gerencie todos os arquivos de mídia do blog</p>
+                    <div class="alert alert-info">
+                        Funcionalidade em desenvolvimento. Em breve você poderá gerenciar imagens e outros arquivos de mídia aqui.
+                    </div>
+                </div>
+                
+                <!-- Categories Content -->
+                <div id="categories-content" class="content-section">
+                    <h3>Categorias</h3>
+                    <p class="text-muted">Gerencie as categorias do blog</p>
+                    <div class="alert alert-info">
+                        Funcionalidade em desenvolvimento. Em breve você poderá gerenciar categorias aqui.
+                    </div>
+                </div>
+                
+                <!-- Resources/Materials Section -->
+                <div id="resources-content" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h3>Gerenciar Materiais</h3>
+                            <p class="text-muted">Gerencie todos os materiais disponíveis para download</p>
+                        </div>
+                        <button class="btn btn-info text-white" id="new-material-btn">
+                            <i class="bi bi-file-earmark-plus"></i> Novo Material
+                        </button>
+                    </div>
+                    
+                    <!-- Filtros de materiais -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="material-filter-category" class="form-label">Categoria</label>
+                                    <select id="material-filter-category" class="form-select">
+                                        <option value="">Todas as categorias</option>
+                                        <option value="medicina">Medicina</option>
+                                        <option value="engenharia">Engenharias</option>
+                                        <option value="petroleo-gas">Petróleo e Gás</option>
+                                        <option value="ingles">Inglês</option>
+                                        <option value="diversos">Diversos</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="material-filter-type" class="form-label">Tipo</label>
+                                    <select id="material-filter-type" class="form-select">
+                                        <option value="">Todos os tipos</option>
+                                        <option value="manual">Manual</option>
+                                        <option value="guia">Guia</option>
+                                        <option value="ebook">E-book</option>
+                                        <option value="software">Software</option>
+                                        <option value="infografico">Infográfico</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="material-filter-access" class="form-label">Acesso</label>
+                                    <select id="material-filter-access" class="form-select">
+                                        <option value="">Todos</option>
+                                        <option value="gratuito">Gratuito</option>
+                                        <option value="pago">Pago</option>
+                                        <option value="restrito">Restrito</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <button id="apply-material-filters" class="btn btn-sm btn-primary">
+                                        Aplicar Filtros
+                                    </button>
+                                    <button id="clear-material-filters" class="btn btn-sm btn-outline-secondary">
+                                        Limpar Filtros
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lista de materiais -->
+                    <div id="materials-list-container">
+                        <div class="alert alert-info">Carregando materiais...</div>
+                    </div>
+                </div>
+                
+                <!-- Settings Content -->
+                <div id="settings-content" class="content-section">
+                    <h3>Configurações</h3>
+                    <p class="text-muted">Configure as preferências do blog</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5>Informações do Usuário</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <p><strong>Usuário:</strong> Admin</p>
+                                        <p><strong>Último acesso:</strong> <span id="last-login-date">Hoje</span></p>
+                                    </div>
+                                    <button class="btn btn-danger" id="logout-btn">
+                                        <i class="bi bi-box-arrow-right"></i> Sair do Sistema
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Preferências</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tema</label>
+                                        <div class="d-flex">
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" name="theme" id="theme-light" value="light" checked>
+                                                <label class="form-check-label" for="theme-light">
+                                                    Claro
+                                                </label>
+                                            </div>
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" name="theme" id="theme-dark" value="dark">
+                                                <label class="form-check-label" for="theme-dark">
+                                                    Escuro
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" id="save-preferences-btn">
+                                        <i class="bi bi-save"></i> Salvar Preferências
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para Artigos Científicos -->
+    <div id="uploadArticleModal" class="modal fade" tabindex="-1" aria-labelledby="uploadArticleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadArticleModalLabel">Novo Artigo Científico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="scientific-article-form">
+                        <!-- Informações básicas -->
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="article-title" class="form-label">Título do Artigo <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="article-title" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="article-date" class="form-label">Data de Publicação <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="article-date" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Autores e categorização -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="article-authors" class="form-label">Autores <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="article-authors" placeholder="Ex: Silva, J., Oliveira, M. & Santos, P." required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="article-category" class="form-label">Categoria <span class="text-danger">*</span></label>
+                                <select class="form-select" id="article-category" required>
+                                    <option value="">Selecione</option>
+                                    <option value="medicina">Medicina</option>
+                                    <option value="engenharia">Engenharias</option>
+                                    <option value="petroleo-gas">Petróleo e Gás</option>
+                                    <option value="ingles">Inglês</option>
+                                    <option value="diversos">Diversos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="article-subcategory" class="form-label">Subcategoria</label>
+                                <select class="form-select" id="article-subcategory">
+                                    <option value="">Selecione</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Journal e DOI -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="article-journal" class="form-label">Revista/Journal</label>
+                                <input type="text" class="form-control" id="article-journal" placeholder="Ex: Revista Brasileira de Medicina">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="article-doi" class="form-label">DOI (se disponível)</label>
+                                <input type="text" class="form-control" id="article-doi" placeholder="Ex: 10.1000/xyz123">
+                            </div>
+                        </div>
+                        
+                        <!-- Resumo -->
+                        <div class="mb-3">
+                            <label for="article-abstract" class="form-label">Resumo/Abstract <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="article-abstract" rows="4" maxlength="500" required></textarea>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Resumo breve do artigo, será exibido na listagem de publicações</small>
+                                <small id="abstract-counter" class="text-muted">0/500</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Links de arquivo e imagem -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="article-file-link" class="form-label">Link do Artigo (PDF) <span class="text-danger">*</span></label>
+                                <input type="url" class="form-control" id="article-file-link" placeholder="https://drive.google.com/file/d/..." required>
+                                <small class="text-muted">Cole o link compartilhável do Google Drive, Dropbox, etc.</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="article-thumbnail-link" class="form-label">Link da Imagem em Destaque</label>
+                                <input type="url" class="form-control" id="article-thumbnail-link" placeholder="https://i.imgur.com/...">
+                                <small class="text-muted">Cole o link direto da imagem (JPG, PNG, etc.)</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Conteúdo -->
+                        <div class="mb-3">
+                            <label for="article-content" class="form-label">Conteúdo Adicional / Detalhes</label>
+                            <textarea class="form-control" id="article-content" rows="4"></textarea>
+                            <small class="text-muted">Conteúdo que será exibido na página de detalhes do artigo (opcional)</small>
+                        </div>
+                        
+                        <!-- Status, idioma e acesso -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="article-status" class="form-label">Status</label>
+                                <select class="form-select" id="article-status">
+                                    <option value="publicado">Publicado</option>
+                                    <option value="rascunho">Rascunho</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="article-language" class="form-label">Idioma Principal</label>
+                                <select class="form-select" id="article-language">
+                                    <option value="pt">Português</option>
+                                    <option value="en">Inglês</option>
+                                    <option value="es">Espanhol</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="article-access" class="form-label">Acesso</label>
+                                <select class="form-select" id="article-access">
+                                    <option value="publico">Público</option>
+                                    <option value="restrito">Restrito</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Tags -->
+                        <div class="mb-3">
+                            <label for="article-tags" class="form-label">Tags</label>
+                            <input type="text" class="form-control" id="article-tags" placeholder="Separe as tags por vírgulas">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="save-article-btn">Salvar Artigo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Eventos -->
+    <div id="uploadEventModal" class="modal fade" tabindex="-1" aria-labelledby="uploadEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadEventModalLabel">Novo Evento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="event-form">
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="event-title" class="form-label required">Título do Evento</label>
+                                <input type="text" class="form-control" id="event-title" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="event-date" class="form-label required">Data do Evento</label>
+                                <input type="date" class="form-control" id="event-date" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="event-location" class="form-label required">Local</label>
+                                <input type="text" class="form-control" id="event-location" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="event-category" class="form-label required">Categoria</label>
+                                <select class="form-select" id="event-category" required>
+                                    <option value="">Selecione</option>
+                                    <option value="medicina">Medicina</option>
+                                    <option value="engenharia">Engenharias</option>
+                                    <option value="petroleo-gas">Petróleo e Gás</option>
+                                    <option value="ingles">Inglês</option>
+                                    <option value="diversos">Diversos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="event-type" class="form-label">Tipo</label>
+                                <select class="form-select" id="event-type">
+                                    <option value="congresso">Congresso</option>
+                                    <option value="simposio">Simpósio</option>
+                                    <option value="curso">Curso</option>
+                                    <option value="webinar">Webinar</option>
+                                    <option value="workshop">Workshop</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="event-description" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="event-description" rows="4"></textarea>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="event-image-link" class="form-label">Link da Imagem do Evento</label>
+                                <input type="url" class="form-control" id="event-image-link" placeholder="https://i.imgur.com/...">
+                                <small class="text-muted">Cole o link direto da imagem (JPG, PNG, etc.)</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="event-link" class="form-label">Link para Inscrição</label>
+                                <input type="url" class="form-control" id="event-link" placeholder="https://...">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="save-event-btn">Salvar Evento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Materiais -->
+    <div id="uploadMaterialModal" class="modal fade" tabindex="-1" aria-labelledby="uploadMaterialModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadMaterialModalLabel">Novo Material</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="material-form">
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label for="material-title" class="form-label required">Título do Material</label>
+                                <input type="text" class="form-control" id="material-title" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="material-type" class="form-label required">Tipo</label>
+                                <select class="form-select" id="material-type" required>
+                                    <option value="">Selecione</option>
+                                    <option value="manual">Manual</option>
+                                    <option value="guia">Guia</option>
+                                    <option value="ebook">E-book</option>
+                                    <option value="software">Software</option>
+                                    <option value="infografico">Infográfico</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="material-category" class="form-label required">Categoria</label>
+                                <select class="form-select" id="material-category" required>
+                                    <option value="">Selecione</option>
+                                    <option value="medicina">Medicina</option>
+                                    <option value="engenharia">Engenharias</option>
+                                    <option value="petroleo-gas">Petróleo e Gás</option>
+                                    <option value="ingles">Inglês</option>
+                                    <option value="diversos">Diversos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="material-access" class="form-label">Acesso</label>
+                                <select class="form-select" id="material-access">
+                                    <option value="gratuito">Gratuito</option>
+                                    <option value="pago">Pago</option>
+                                    <option value="restrito">Restrito</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="material-description" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="material-description" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="material-file-link" class="form-label required">Link do Arquivo</label>
+                                <input type="url" class="form-control" id="material-file-link" placeholder="https://drive.google.com/file/d/..." required>
+                                <small class="text-muted">Cole o link compartilhável do Google Drive, Dropbox, etc.</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="material-cover-link" class="form-label">Link da Imagem de Capa</label>
+                                <input type="url" class="form-control" id="material-cover-link" placeholder="https://i.imgur.com/...">
+                                <small class="text-muted">Cole o link direto da imagem (JPG, PNG, etc.)</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-info text-white" id="save-material-btn">Salvar Material</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Definir o AdminData diretamente no HTML para garantir que esteja disponível
+        window.BlogData = {
+            articles: [],
+            events: [],
+            materials: [],
+            
+            // Inicializar dados do localStorage
+            init: function() {
+                console.log('BlogData.init() chamado');
+                
+                // Carregar dados do localStorage
+                try {
+                    const storedArticles = localStorage.getItem('blogArticles');
+                    if (storedArticles) {
+                        this.articles = JSON.parse(storedArticles);
+                    }
+                    
+                    const storedEvents = localStorage.getItem('blogEvents');
+                    if (storedEvents) {
+                        this.events = JSON.parse(storedEvents);
+                    }
+                    
+                    const storedMaterials = localStorage.getItem('blogMaterials');
+                    if (storedMaterials) {
+                        this.materials = JSON.parse(storedMaterials);
+                    }
+                    
+                    console.log('Dados carregados do localStorage');
+                } catch (error) {
+                    console.error('Erro ao carregar dados:', error);
+                    
+                    // Inicializar com arrays vazios em caso de erro
+                    this.articles = [];
+                    this.events = [];
+                    this.materials = [];
+                }
+            },
+            
+            // Salvar dados no localStorage
+            save: function() {
+                try {
+                    localStorage.setItem('blogArticles', JSON.stringify(this.articles));
+                    localStorage.setItem('blogEvents', JSON.stringify(this.events));
+                    localStorage.setItem('blogMaterials', JSON.stringify(this.materials));
+                    console.log('Dados salvos no localStorage');
+                } catch (error) {
+                    console.error('Erro ao salvar dados:', error);
+                }
+            },
+            
+            // Adicionar um artigo
+            addArticle: function(article) {
+                // Adicionar ID e data de criação
+                article.id = Date.now().toString();
+                article.createdAt = new Date().toISOString();
+                
+                // Adicionar ao array
+                this.articles.push(article);
+                
+                // Salvar no localStorage
+                this.save();
+                
+                return article;
+            },
+            
+            // Excluir um artigo
+            deleteArticle: function(id) {
+                const index = this.articles.findIndex(article => article.id === id);
+                if (index !== -1) {
+                    this.articles.splice(index, 1);
+                    this.save();
+                    return true;
+                }
+                return false;
+            },
+            
+            // Obter contagens
+            getCounts: function() {
+                return {
+                    articles: this.articles.length,
+                    events: this.events ? this.events.length : 0,
+                    materials: this.materials ? this.materials.length : 0
+                };
+            }
+        };
+        
+        // Inicializar ao carregar a página
+        window.BlogData.init();
+        
+        // Alias para compatibilidade, caso existam referências a AdminData
+        window.AdminData = window.BlogData;
+    </script>
+    
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Função para verificar autenticação
+        function checkAuthentication() {
+            // Verificar se o usuário está logado
+            if (!localStorage.getItem('adminLoggedIn')) {
+                // Redirecionar para a página de login se não estiver autenticado
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            // Verificar expiração do login
+            const expirationTime = localStorage.getItem('adminLoginExpires');
+            if (expirationTime && Date.now() > parseInt(expirationTime)) {
+                // Login expirado
+                localStorage.removeItem('adminLoggedIn');
+                localStorage.removeItem('adminLoginExpires');
+                localStorage.removeItem('adminRemembered');
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Função de logout
+        function logout() {
+            // Remover credenciais do localStorage
+            localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('adminLoginExpires');
+            localStorage.removeItem('adminRemembered');
+            
+            // Redirecionar para a página de login com mensagem de sucesso
+            localStorage.setItem('logoutMessage', 'Logout realizado com sucesso!');
+            window.location.href = 'login.html';
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar autenticação primeiro
+            if (!checkAuthentication()) return;
+            
+            console.log('DOM carregado, inicializando funções');
+            
+            // Configurar o botão de logout
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    logout();
+                });
+            }
+            
+            // Atualizar contadores
+            updateDashboardCounts();
+            
+            // Atualizar lista de artigos recentes
+            refreshRecentArticlesList();
+            
+            // Inicializar eventos para categoria
+            const categorySelect = document.getElementById('article-category');
+            if (categorySelect) {
+                categorySelect.addEventListener('change', function() {
+                    const subcategorySelect = document.getElementById('article-subcategory');
+                    if (!subcategorySelect) return;
+                    
+                    // Limpar opções atuais
+                    subcategorySelect.innerHTML = '<option value="">Selecione</option>';
+                    
+                    // Subcategorias específicas para cada categoria
+                    const subcategories = {
+                        'medicina': [
+                            {value: 'cardiologia', text: 'Cardiologia'},
+                            {value: 'neurologia', text: 'Neurologia'},
+                            {value: 'pediatria', text: 'Pediatria'},
+                            {value: 'oncologia', text: 'Oncologia'}
+                        ],
+                        'engenharia': [
+                            {value: 'civil', text: 'Civil'},
+                            {value: 'mecanica', text: 'Mecânica'},
+                            {value: 'eletrica', text: 'Elétrica'},
+                            {value: 'computacao', text: 'Computação'}
+                        ],
+                        'petroleo-gas': [
+                            {value: 'extracao', text: 'Extração'},
+                            {value: 'processamento', text: 'Processamento'},
+                            {value: 'distribuicao', text: 'Distribuição'}
+                        ],
+                        'ingles': [
+                            {value: 'gramatica', text: 'Gramática'},
+                            {value: 'vocabulario', text: 'Vocabulário'},
+                            {value: 'negocios', text: 'Inglês para Negócios'}
+                        ],
+                        'diversos': [
+                            {value: 'tecnologia', text: 'Tecnologia'},
+                            {value: 'cultura', text: 'Cultura'},
+                            {value: 'arte', text: 'Arte'}
+                        ]
+                    };
+                    
+                    // Adicionar opções com base na categoria selecionada
+                    if (this.value && subcategories[this.value]) {
+                        subcategories[this.value].forEach(option => {
+                            const optionElement = document.createElement('option');
+                            optionElement.value = option.value;
+                            optionElement.textContent = option.text;
+                            subcategorySelect.appendChild(optionElement);
+                        });
+                    }
+                });
+            }
+            
+            // Inicializar contador de caracteres para o abstract
+            const abstractTextarea = document.getElementById('article-abstract');
+            const abstractCounter = document.getElementById('abstract-counter');
+            if (abstractTextarea && abstractCounter) {
+                abstractTextarea.addEventListener('input', function() {
+                    const charCount = this.value.length;
+                    const maxLength = this.getAttribute('maxlength');
+                    abstractCounter.textContent = `${charCount}/${maxLength}`;
+                });
+            }
+            
+            // Botão Novo Artigo
+            const newArticleBtn = document.getElementById('new-article-btn');
+            if (newArticleBtn) {
+                newArticleBtn.addEventListener('click', function() {
+                    const modal = new bootstrap.Modal(document.getElementById('uploadArticleModal'));
+                    modal.show();
+                });
+            }
+            
+            const pubArticleBtn = document.getElementById('pub-article-btn');
+            if (pubArticleBtn) {
+                pubArticleBtn.addEventListener('click', function() {
+                    const modal = new bootstrap.Modal(document.getElementById('uploadArticleModal'));
+                    modal.show();
+                });
+            }
+            
+            // Botão salvar artigo
+            const saveArticleBtn = document.getElementById('save-article-btn');
+            if (saveArticleBtn) {
+                saveArticleBtn.addEventListener('click', function() {
+                    console.log('Botão salvar artigo clicado');
+                    
+                    // Validar formulário
+                    const form = document.getElementById('scientific-article-form');
+                    if (!form) {
+                        console.error('Formulário não encontrado');
+                        return;
+                    }
+                    
+                    const titleInput = document.getElementById('article-title');
+                    const dateInput = document.getElementById('article-date');
+                    const authorsInput = document.getElementById('article-authors');
+                    const categorySelect = document.getElementById('article-category');
+                    const abstractTextarea = document.getElementById('article-abstract');
+                    const fileLinkInput = document.getElementById('article-file-link');
+                    
+                    // Verificar campos obrigatórios
+                    let isValid = true;
+                    
+                    if (!titleInput.value.trim()) {
+                        titleInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        titleInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!dateInput.value) {
+                        dateInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        dateInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!authorsInput.value.trim()) {
+                        authorsInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        authorsInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!categorySelect.value) {
+                        categorySelect.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        categorySelect.classList.remove('is-invalid');
+                    }
+                    
+                    if (!abstractTextarea.value.trim()) {
+                        abstractTextarea.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        abstractTextarea.classList.remove('is-invalid');
+                    }
+                    
+                    if (!fileLinkInput.value.trim()) {
+                        fileLinkInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        fileLinkInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!isValid) {
+                        alert('Por favor, preencha todos os campos obrigatórios.');
+                        return;
+                    }
+                    
+                    // Coletar dados do formulário
+                    const articleData = {
+                        title: titleInput.value,
+                        date: dateInput.value,
+                        authors: authorsInput.value,
+                        category: categorySelect.value,
+                        subcategory: document.getElementById('article-subcategory').value || '',
+                        journal: document.getElementById('article-journal').value || '',
+                        doi: document.getElementById('article-doi').value || '',
+                        abstract: abstractTextarea.value,
+                        fileLink: fileLinkInput.value,
+                        thumbnailLink: document.getElementById('article-thumbnail-link').value || '',
+                        content: document.getElementById('article-content').value || '',
+                        status: document.getElementById('article-status').value || 'publicado',
+                        language: document.getElementById('article-language').value || 'pt',
+                        access: document.getElementById('article-access').value || 'publico',
+                        tags: document.getElementById('article-tags').value || ''
+                    };
+                    
+                    try {
+                        // Adicionar artigo
+                        window.BlogData.addArticle(articleData);
+                        
+                        // Mostrar mensagem de sucesso
+                        const successAlert = document.createElement('div');
+                        successAlert.className = 'alert alert-success alert-dismissible fade show fixed-bottom mx-4 mb-4';
+                        successAlert.innerHTML = `
+                            <strong>Sucesso!</strong> Artigo científico publicado com sucesso.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        `;
+                        document.body.appendChild(successAlert);
+                        
+                        // Remover alerta após 5 segundos
+                        setTimeout(() => {
+                            successAlert.remove();
+                        }, 5000);
+                        
+                        // Fechar modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('uploadArticleModal'));
+                        modal.hide();
+                        
+                        // Limpar formulário
+                        form.reset();
+                        
+                        // Atualizar contadores e lista
+                        updateDashboardCounts();
+                        refreshRecentArticlesList();
+                        
+                        // Atualizar a lista de artigos na seção Artigos
+                        updateArticlesList();
+                    } catch (error) {
+                        console.error('Erro ao salvar artigo:', error);
+                        alert('Erro ao salvar artigo: ' + error.message);
+                    }
+                });
+            }
+
+            // Botões de evento e material
+            const pubEventBtn = document.getElementById('pub-event-btn');
+            if (pubEventBtn) {
+                pubEventBtn.addEventListener('click', function() {
+                    const modal = new bootstrap.Modal(document.getElementById('uploadEventModal'));
+                    modal.show();
+                });
+            }
+            
+            // Botão novo evento
+            const newEventBtn = document.getElementById('new-event-btn');
+            if (newEventBtn) {
+                newEventBtn.addEventListener('click', function() {
+                    // Limpar formulário e resetar título do modal
+                    document.getElementById('event-form').reset();
+                    delete document.getElementById('event-form').dataset.editId;
+                    document.getElementById('uploadEventModalLabel').textContent = 'Novo Evento';
+                    const modal = new bootstrap.Modal(document.getElementById('uploadEventModal'));
+                    modal.show();
+                });
+            }
+            
+            // Botão salvar evento
+            const saveEventBtn = document.getElementById('save-event-btn');
+            if (saveEventBtn) {
+                saveEventBtn.addEventListener('click', function() {
+                    console.log('Botão salvar evento clicado');
+                    
+                    // Validar formulário
+                    const form = document.getElementById('event-form');
+                    if (!form) {
+                        console.error('Formulário não encontrado');
+                        return;
+                    }
+                    
+                    const titleInput = document.getElementById('event-title');
+                    const dateInput = document.getElementById('event-date');
+                    const locationInput = document.getElementById('event-location');
+                    const categorySelect = document.getElementById('event-category');
+                    
+                    // Verificar campos obrigatórios
+                    let isValid = true;
+                    
+                    if (!titleInput.value.trim()) {
+                        titleInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        titleInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!dateInput.value) {
+                        dateInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        dateInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!locationInput.value.trim()) {
+                        locationInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        locationInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!categorySelect.value) {
+                        categorySelect.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        categorySelect.classList.remove('is-invalid');
+                    }
+                    
+                    if (!isValid) {
+                        alert('Por favor, preencha todos os campos obrigatórios.');
+                        return;
+                    }
+                    
+                    // Coletar dados do formulário
+                    const eventData = {
+                        title: titleInput.value,
+                        eventDate: dateInput.value,
+                        location: locationInput.value,
+                        category: categorySelect.value,
+                        eventType: document.getElementById('event-type').value || 'congresso',
+                        description: document.getElementById('event-description').value || '',
+                        imageLink: document.getElementById('event-image-link').value || '',
+                        link: document.getElementById('event-link').value || ''
+                    };
+                    
+                    try {
+                        // Verificar se é uma edição ou um novo evento
+                        const editId = form.dataset.editId;
+                        
+                        if (editId) {
+                            // Edição de evento existente
+                            const index = window.BlogData.events.findIndex(e => e.id === editId);
+                            if (index !== -1) {
+                                // Manter ID e data de criação originais
+                                eventData.id = editId;
+                                eventData.createdAt = window.BlogData.events[index].createdAt;
+                                // Atualizar dados
+                                window.BlogData.events[index] = eventData;
+                                window.BlogData.save();
+                                showSuccessAlert('Evento atualizado com sucesso.');
+                            }
+                        } else {
+                            // Novo evento
+                            if (!window.BlogData.events) {
+                                window.BlogData.events = [];
+                            }
+                            
+                            // Adicionar ID e data de criação
+                            eventData.id = Date.now().toString();
+                            eventData.createdAt = new Date().toISOString();
+                            
+                            // Adicionar ao array
+                            window.BlogData.events.push(eventData);
+                            window.BlogData.save();
+                            showSuccessAlert('Evento publicado com sucesso.');
+                        }
+                        
+                        // Fechar modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('uploadEventModal'));
+                        modal.hide();
+                        
+                        // Limpar formulário e remover data-edit-id
+                        form.reset();
+                        delete form.dataset.editId;
+                        
+                        // Atualizar contadores e listas
+                        updateDashboardCounts();
+                        updateEventsList();
+                    } catch (error) {
+                        console.error('Erro ao salvar evento:', error);
+                        alert('Erro ao salvar evento: ' + error.message);
+                    }
+                });
+            }
+            
+            const pubMaterialBtn = document.getElementById('pub-material-btn');
+            if (pubMaterialBtn) {
+                pubMaterialBtn.addEventListener('click', function() {
+                    const modal = new bootstrap.Modal(document.getElementById('uploadMaterialModal'));
+                    modal.show();
+                });
+            }
+            
+            // Botão novo material
+            const newMaterialBtn = document.getElementById('new-material-btn');
+            if (newMaterialBtn) {
+                newMaterialBtn.addEventListener('click', function() {
+                    // Limpar formulário e resetar título do modal
+                    document.getElementById('material-form').reset();
+                    delete document.getElementById('material-form').dataset.editId;
+                    document.getElementById('uploadMaterialModalLabel').textContent = 'Novo Material';
+                    const modal = new bootstrap.Modal(document.getElementById('uploadMaterialModal'));
+                    modal.show();
+                });
+            }
+            
+            // Botão salvar material
+            const saveMaterialBtn = document.getElementById('save-material-btn');
+            if (saveMaterialBtn) {
+                saveMaterialBtn.addEventListener('click', function() {
+                    console.log('Botão salvar material clicado');
+                    
+                    // Validar formulário
+                    const form = document.getElementById('material-form');
+                    if (!form) {
+                        console.error('Formulário não encontrado');
+                        return;
+                    }
+                    
+                    const titleInput = document.getElementById('material-title');
+                    const typeSelect = document.getElementById('material-type');
+                    const categorySelect = document.getElementById('material-category');
+                    const fileLinkInput = document.getElementById('material-file-link');
+                    
+                    // Verificar campos obrigatórios
+                    let isValid = true;
+                    
+                    if (!titleInput.value.trim()) {
+                        titleInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        titleInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!typeSelect.value) {
+                        typeSelect.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        typeSelect.classList.remove('is-invalid');
+                    }
+                    
+                    if (!categorySelect.value) {
+                        categorySelect.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        categorySelect.classList.remove('is-invalid');
+                    }
+                    
+                    if (!fileLinkInput.value.trim()) {
+                        fileLinkInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        fileLinkInput.classList.remove('is-invalid');
+                    }
+                    
+                    if (!isValid) {
+                        alert('Por favor, preencha todos os campos obrigatórios.');
+                        return;
+                    }
+                    
+                    // Coletar dados do formulário
+                    const materialData = {
+                        title: titleInput.value,
+                        type: typeSelect.value,
+                        category: categorySelect.value,
+                        access: document.getElementById('material-access').value || 'gratuito',
+                        description: document.getElementById('material-description').value || '',
+                        fileLink: fileLinkInput.value,
+                        coverLink: document.getElementById('material-cover-link').value || ''
+                    };
+                    
+                    try {
+                        // Verificar se é uma edição ou um novo material
+                        const editId = form.dataset.editId;
+                        
+                        if (editId) {
+                            // Edição de material existente
+                            const index = window.BlogData.materials.findIndex(m => m.id === editId);
+                            if (index !== -1) {
+                                // Manter ID e data de criação originais
+                                materialData.id = editId;
+                                materialData.createdAt = window.BlogData.materials[index].createdAt;
+                                // Atualizar dados
+                                window.BlogData.materials[index] = materialData;
+                                window.BlogData.save();
+                                showSuccessAlert('Material atualizado com sucesso.');
+                            }
+                        } else {
+                            // Novo material
+                            if (!window.BlogData.materials) {
+                                window.BlogData.materials = [];
+                            }
+                            
+                            // Adicionar ID e data de criação
+                            materialData.id = Date.now().toString();
+                            materialData.createdAt = new Date().toISOString();
+                            
+                            // Adicionar ao array
+                            window.BlogData.materials.push(materialData);
+                            window.BlogData.save();
+                            showSuccessAlert('Material publicado com sucesso.');
+                        }
+                        
+                        // Fechar modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('uploadMaterialModal'));
+                        modal.hide();
+                        
+                        // Limpar formulário e remover data-edit-id
+                        form.reset();
+                        delete form.dataset.editId;
+                        
+                        // Atualizar contadores e listas
+                        updateDashboardCounts();
+                        updateMaterialsList();
+                    } catch (error) {
+                        console.error('Erro ao salvar material:', error);
+                        alert('Erro ao salvar material: ' + error.message);
+                    }
+                });
+            }
+            
+            // Mostrar/ocultar seções
+            const showSection = function(sectionId) {
+                // Ocultar todas as seções
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Mostrar a seção solicitada
+                const targetSection = document.getElementById(sectionId + '-content');
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    
+                    // Carregar os dados adequados para a seção
+                    if (sectionId === 'articles') {
+                        updateArticlesList();
+                    } else if (sectionId === 'resources') {
+                        updateMaterialsList();
+                    } else if (sectionId === 'events') {
+                        updateEventsList();
+                    }
+                }
+            };
+            
+            // Configurar preferências de tema
+            const savePreferencesBtn = document.getElementById('save-preferences-btn');
+            if (savePreferencesBtn) {
+                // Carregar preferências salvas
+                const savedTheme = localStorage.getItem('blogAdminTheme') || 'light';
+                document.getElementById('theme-' + savedTheme).checked = true;
+                
+                // Aplicar tema ao carregar
+                document.getElementById('theme-style').href = '../css/themes/' + savedTheme + '.css';
+                
+                // Salvar preferências
+                savePreferencesBtn.addEventListener('click', function() {
+                    const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+                    localStorage.setItem('blogAdminTheme', selectedTheme);
+                    
+                    // Aplicar tema
+                    document.getElementById('theme-style').href = '../css/themes/' + selectedTheme + '.css';
+                    
+                    showSuccessAlert('Preferências salvas com sucesso!');
+                });
+            }
+            
+            // Atualizar lista de artigos na seção Artigos
+            function updateArticlesList() {
+                const container = document.getElementById('articles-list-container');
+                if (!container) return;
+                
+                // Limpar container
+                container.innerHTML = '';
+                
+                // Obter artigos
+                const articles = window.BlogData.articles;
+                
+                if (!articles || articles.length === 0) {
+                    container.innerHTML = '<div class="alert alert-info">Nenhum artigo encontrado. Clique em "Novo Artigo" para adicionar um.</div>';
+                    return;
+                }
+                
+                // Ordenar por data (mais recentes primeiro)
+                articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Criar tabela
+                const tableHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Categoria</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="articles-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = tableHTML;
+                
+                const tableBody = document.getElementById('articles-table-body');
+                
+                // Adicionar artigos à tabela
+                articles.forEach(article => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${article.title}</td>
+                        <td>${article.category}${article.subcategory ? ' / ' + article.subcategory : ''}</td>
+                        <td>${formatDate(article.date)}</td>
+                        <td><span class="badge ${article.status === 'publicado' ? 'bg-success' : 'bg-warning'}">${article.status}</span></td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="${article.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver artigo">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger delete-article-btn" data-id="${article.id}" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Adicionar eventos aos botões de exclusão
+                tableBody.querySelectorAll('.delete-article-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const articleId = this.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir este artigo?')) {
+                            window.BlogData.deleteArticle(articleId);
+                            updateArticlesList();
+                            refreshRecentArticlesList();
+                            updateDashboardCounts();
+                        }
+                    });
+                });
+            }
+            
+            // Função para atualizar a lista de eventos
+            function updateEventsList() {
+                const container = document.getElementById('events-list-container');
+                if (!container) return;
+                
+                // Obter eventos
+                const events = window.BlogData.events || [];
+                
+                if (events.length === 0) {
+                    container.innerHTML = '<div class="alert alert-info">Nenhum evento encontrado. Clique em "Novo Evento" para adicionar um.</div>';
+                    return;
+                }
+                
+                // Ordenar por data (mais recentes primeiro)
+                events.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+                
+                // Criar tabela
+                const tableHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Categoria</th>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = tableHTML;
+                
+                const tableBody = document.getElementById('events-table-body');
+                
+                // Adicionar eventos à tabela
+                events.forEach(event => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${event.title}</td>
+                        <td>${event.category}</td>
+                        <td>${formatDate(event.eventDate)}</td>
+                        <td>${event.location}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-secondary edit-event-btn" data-id="${event.id}" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <a href="${event.link || '#'}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver evento" ${!event.link ? 'disabled' : ''}>
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger delete-event-btn" data-id="${event.id}" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Adicionar eventos aos botões
+                addEventButtonListeners();
+            }
+            
+            // Adicionar listeners aos botões de eventos
+            function addEventButtonListeners() {
+                // Botões de editar evento
+                document.querySelectorAll('.edit-event-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const eventId = this.getAttribute('data-id');
+                        editEvent(eventId);
+                    });
+                });
+                
+                // Botões de excluir evento
+                document.querySelectorAll('.delete-event-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const eventId = this.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir este evento?')) {
+                            deleteEvent(eventId);
+                        }
+                    });
+                });
+            }
+            
+            // Função para editar um evento
+            function editEvent(eventId) {
+                // Encontrar o evento pelo ID
+                const event = window.BlogData.events.find(e => e.id === eventId);
+                if (!event) {
+                    console.error('Evento não encontrado');
+                    return;
+                }
+                
+                // Preencher o formulário com os dados do evento
+                document.getElementById('event-title').value = event.title;
+                document.getElementById('event-date').value = event.eventDate;
+                document.getElementById('event-location').value = event.location;
+                document.getElementById('event-category').value = event.category;
+                document.getElementById('event-type').value = event.eventType || 'congresso';
+                document.getElementById('event-description').value = event.description || '';
+                document.getElementById('event-image-link').value = event.imageLink || '';
+                document.getElementById('event-link').value = event.link || '';
+                
+                // Adicionar o ID ao formulário para identificar que é uma edição
+                document.getElementById('event-form').dataset.editId = eventId;
+                
+                // Alterar o título do modal
+                document.getElementById('uploadEventModalLabel').textContent = 'Editar Evento';
+                
+                // Abrir o modal
+                const modal = new bootstrap.Modal(document.getElementById('uploadEventModal'));
+                modal.show();
+            }
+            
+            // Função para excluir um evento
+            function deleteEvent(eventId) {
+                const index = window.BlogData.events.findIndex(e => e.id === eventId);
+                if (index !== -1) {
+                    window.BlogData.events.splice(index, 1);
+                    window.BlogData.save();
+                    
+                    // Atualizar a interface
+                    updateEventsList();
+                    updateDashboardCounts();
+                    
+                    // Mostrar mensagem de sucesso
+                    showSuccessAlert('Evento excluído com sucesso.');
+                }
+            }
+            
+            // Função para atualizar a lista de materiais
+            function updateMaterialsList() {
+                const container = document.getElementById('materials-list-container');
+                if (!container) return;
+                
+                // Obter materiais
+                const materials = window.BlogData.materials || [];
+                
+                if (materials.length === 0) {
+                    container.innerHTML = '<div class="alert alert-info">Nenhum material encontrado. Clique em "Novo Material" para adicionar um.</div>';
+                    return;
+                }
+                
+                // Ordenar por data de criação (mais recentes primeiro)
+                materials.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                // Criar tabela
+                const tableHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Tipo</th>
+                                    <th>Categoria</th>
+                                    <th>Acesso</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materials-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = tableHTML;
+                
+                const tableBody = document.getElementById('materials-table-body');
+                
+                // Adicionar materiais à tabela
+                materials.forEach(material => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${material.title}</td>
+                        <td>${material.type}</td>
+                        <td>${material.category}</td>
+                        <td><span class="badge ${getBadgeClass(material.access)}">${material.access}</span></td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-secondary edit-material-btn" data-id="${material.id}" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <a href="${material.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver material">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger delete-material-btn" data-id="${material.id}" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Adicionar eventos aos botões
+                addMaterialButtonListeners();
+            }
+            
+            // Helper para determinar a classe do badge baseado no acesso
+            function getBadgeClass(access) {
+                switch(access) {
+                    case 'gratuito': return 'bg-success';
+                    case 'pago': return 'bg-warning text-dark';
+                    case 'restrito': return 'bg-danger';
+                    default: return 'bg-secondary';
+                }
+            }
+            
+            // Adicionar listeners aos botões de materiais
+            function addMaterialButtonListeners() {
+                // Botões de editar material
+                document.querySelectorAll('.edit-material-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const materialId = this.getAttribute('data-id');
+                        editMaterial(materialId);
+                    });
+                });
+                
+                // Botões de excluir material
+                document.querySelectorAll('.delete-material-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const materialId = this.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir este material?')) {
+                            deleteMaterial(materialId);
+                        }
+                    });
+                });
+            }
+            
+            // Função para editar um material
+            function editMaterial(materialId) {
+                // Encontrar o material pelo ID
+                const material = window.BlogData.materials.find(m => m.id === materialId);
+                if (!material) {
+                    console.error('Material não encontrado');
+                    return;
+                }
+                
+                // Preencher o formulário com os dados do material
+                document.getElementById('material-title').value = material.title;
+                document.getElementById('material-type').value = material.type;
+                document.getElementById('material-category').value = material.category;
+                document.getElementById('material-access').value = material.access || 'gratuito';
+                document.getElementById('material-description').value = material.description || '';
+                document.getElementById('material-file-link').value = material.fileLink;
+                document.getElementById('material-cover-link').value = material.coverLink || '';
+                
+                // Adicionar o ID ao formulário para identificar que é uma edição
+                document.getElementById('material-form').dataset.editId = materialId;
+                
+                // Alterar o título do modal
+                document.getElementById('uploadMaterialModalLabel').textContent = 'Editar Material';
+                
+                // Abrir o modal
+                const modal = new bootstrap.Modal(document.getElementById('uploadMaterialModal'));
+                modal.show();
+            }
+            
+            // Função para excluir um material
+            function deleteMaterial(materialId) {
+                const index = window.BlogData.materials.findIndex(m => m.id === materialId);
+                if (index !== -1) {
+                    window.BlogData.materials.splice(index, 1);
+                    window.BlogData.save();
+                    
+                    // Atualizar a interface
+                    updateMaterialsList();
+                    updateDashboardCounts();
+                    
+                    // Mostrar mensagem de sucesso
+                    showSuccessAlert('Material excluído com sucesso.');
+                }
+            }
+            
+            // Função para exibir mensagem de sucesso
+            function showSuccessAlert(message) {
+                const successAlert = document.createElement('div');
+                successAlert.className = 'alert alert-success alert-dismissible fade show fixed-bottom mx-4 mb-4';
+                successAlert.innerHTML = `
+                    <strong>Sucesso!</strong> ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                document.body.appendChild(successAlert);
+                
+                // Remover alerta após 5 segundos
+                setTimeout(() => {
+                    successAlert.remove();
+                }, 5000);
+            }
+            
+            // Botões para navegar entre seções
+            document.querySelectorAll('.show-section-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    showSection(section);
+                    
+                    // Atualizar menu lateral
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('data-section') === section) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Inicializar filtros para eventos
+            const applyEventFiltersBtn = document.getElementById('apply-event-filters');
+            if (applyEventFiltersBtn) {
+                applyEventFiltersBtn.addEventListener('click', function() {
+                    filterEvents();
+                });
+            }
+            
+            const clearEventFiltersBtn = document.getElementById('clear-event-filters');
+            if (clearEventFiltersBtn) {
+                clearEventFiltersBtn.addEventListener('click', function() {
+                    document.getElementById('event-filter-category').value = '';
+                    document.getElementById('event-filter-type').value = '';
+                    document.getElementById('event-filter-date').value = '';
+                    updateEventsList();
+                });
+            }
+            
+            // Inicializar filtros para materiais
+            const applyMaterialFiltersBtn = document.getElementById('apply-material-filters');
+            if (applyMaterialFiltersBtn) {
+                applyMaterialFiltersBtn.addEventListener('click', function() {
+                    filterMaterials();
+                });
+            }
+            
+            const clearMaterialFiltersBtn = document.getElementById('clear-material-filters');
+            if (clearMaterialFiltersBtn) {
+                clearMaterialFiltersBtn.addEventListener('click', function() {
+                    document.getElementById('material-filter-category').value = '';
+                    document.getElementById('material-filter-type').value = '';
+                    document.getElementById('material-filter-access').value = '';
+                    updateMaterialsList();
+                });
+            }
+            
+            // Função para filtrar eventos
+            function filterEvents() {
+                const categoryFilter = document.getElementById('event-filter-category').value;
+                const typeFilter = document.getElementById('event-filter-type').value;
+                const dateFilter = document.getElementById('event-filter-date').value;
+                
+                // Obter todos os eventos
+                const events = window.BlogData.events || [];
+                
+                // Aplicar filtros
+                let filteredEvents = [...events];
+                
+                if (categoryFilter) {
+                    filteredEvents = filteredEvents.filter(event => event.category === categoryFilter);
+                }
+                
+                if (typeFilter) {
+                    filteredEvents = filteredEvents.filter(event => event.eventType === typeFilter);
+                }
+                
+                if (dateFilter) {
+                    const today = new Date();
+                    if (dateFilter === 'upcoming') {
+                        filteredEvents = filteredEvents.filter(event => new Date(event.eventDate) >= today);
+                    } else if (dateFilter === 'past') {
+                        filteredEvents = filteredEvents.filter(event => new Date(event.eventDate) < today);
+                    }
+                }
+                
+                // Ordenar por data (mais recentes primeiro)
+                filteredEvents.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+                
+                // Atualizar a tabela com os eventos filtrados
+                updateEventsTable(filteredEvents);
+            }
+            
+            // Função auxiliar para atualizar a tabela de eventos com os resultados filtrados
+            function updateEventsTable(events) {
+                const container = document.getElementById('events-list-container');
+                if (!container) return;
+                
+                if (events.length === 0) {
+                    container.innerHTML = '<div class="alert alert-info">Nenhum evento encontrado com os filtros aplicados.</div>';
+                    container.innerHTML = '<div class="alert alert-info">Nenhum evento encontrado com os filtros aplicados.</div>';
+                    return;
+                }
+                
+                // Criar tabela
+                const tableHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Categoria</th>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = tableHTML;
+                
+                const tableBody = document.getElementById('events-table-body');
+                
+                // Adicionar eventos à tabela
+                events.forEach(event => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${event.title}</td>
+                        <td>${event.category}</td>
+                        <td>${formatDate(event.eventDate)}</td>
+                        <td>${event.location}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-secondary edit-event-btn" data-id="${event.id}" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <a href="${event.link || '#'}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver evento" ${!event.link ? 'disabled' : ''}>
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger delete-event-btn" data-id="${event.id}" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Adicionar eventos aos botões
+                addEventButtonListeners();
+            }
+            
+            // Função para filtrar materiais
+            function filterMaterials() {
+                const categoryFilter = document.getElementById('material-filter-category').value;
+                const typeFilter = document.getElementById('material-filter-type').value;
+                const accessFilter = document.getElementById('material-filter-access').value;
+                
+                // Obter todos os materiais
+                const materials = window.BlogData.materials || [];
+                
+                // Aplicar filtros
+                let filteredMaterials = [...materials];
+                
+                if (categoryFilter) {
+                    filteredMaterials = filteredMaterials.filter(material => material.category === categoryFilter);
+                }
+                
+                if (typeFilter) {
+                    filteredMaterials = filteredMaterials.filter(material => material.type === typeFilter);
+                }
+                
+                if (accessFilter) {
+                    filteredMaterials = filteredMaterials.filter(material => material.access === accessFilter);
+                }
+                
+                // Ordenar por data de criação (mais recentes primeiro)
+                filteredMaterials.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                // Atualizar a tabela com os materiais filtrados
+                updateMaterialsTable(filteredMaterials);
+            }
+            
+            // Função auxiliar para atualizar a tabela de materiais com os resultados filtrados
+            function updateMaterialsTable(materials) {
+                const container = document.getElementById('materials-list-container');
+                if (!container) return;
+                
+                if (materials.length === 0) {
+                    container.innerHTML = '<div class="alert alert-info">Nenhum material encontrado com os filtros aplicados.</div>';
+                    return;
+                }
+                
+                // Criar tabela
+                const tableHTML = `
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Tipo</th>
+                                    <th>Categoria</th>
+                                    <th>Acesso</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materials-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = tableHTML;
+                
+                const tableBody = document.getElementById('materials-table-body');
+                
+                // Adicionar materiais à tabela
+                materials.forEach(material => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${material.title}</td>
+                        <td>${material.type}</td>
+                        <td>${material.category}</td>
+                        <td><span class="badge ${getBadgeClass(material.access)}">${material.access}</span></td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-secondary edit-material-btn" data-id="${material.id}" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <a href="${material.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver material">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger delete-material-btn" data-id="${material.id}" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Adicionar eventos aos botões
+                addMaterialButtonListeners();
+            }
+            
+            // Carregar sidebar
+            const sidebarContainer = document.getElementById('sidebar-container');
+            if (sidebarContainer) {
+                sidebarContainer.innerHTML = `
+                    <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                        <div class="position-sticky pt-3">
+                            <div class="sidebar-header mb-4">
+                                <h5>Blog Multilingue</h5>
+                                <p class="text-muted small">Painel Administrativo</p>
+                            </div>
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#" data-section="dashboard">
+                                        <i class="bi bi-house-door"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-section="articles">
+                                        <i class="bi bi-file-text"></i> Artigos
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-section="events">
+                                        <i class="bi bi-calendar-event"></i> Eventos
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-section="resources">
+                                        <i class="bi bi-download"></i> Materiais
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-section="media">
+                                        <i class="bi bi-images"></i> Mídia
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-section="categories">
+                                        <i class="bi bi-tag"></i> Categorias
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-section="publications">
+                                        <i class="bi bi-journal-richtext"></i> Publicações
+                                    </a>
+                                </li>
+                            </ul>
+                            
+                            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                                <span>CONFIGURAÇÕES</span>
+                            </h6>
+                            <ul class="nav flex-column mb-2">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" data-section="settings">
+                                        <i class="bi bi-gear"></i> Configurações
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" id="logout-link">
+                                        <i class="bi bi-box-arrow-right"></i> Sair
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                `;
+                
+                // Adicionar eventos aos links da sidebar
+                sidebarContainer.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Verificar se é o link de logout
+                        if (this.id === 'logout-link') {
+                            logout();
+                            return;
+                        }
+                        
+                        // Remover classe active de todos os links
+                        sidebarContainer.querySelectorAll('.nav-link').forEach(l => {
+                            l.classList.remove('active');
+                        });
+                        
+                        // Adicionar classe active ao link clicado
+                        this.classList.add('active');
+                        
+                        // Mostrar seção correspondente
+                        const section = this.getAttribute('data-section');
+                        if (section) {
+                            showSection(section);
+                        }
+                    });
+                });
+            }
+            
+            // Exibir data do último acesso
+            const lastLoginDate = document.getElementById('last-login-date');
+            if (lastLoginDate) {
+                // Obter data do último login ou usar a data atual
+                const lastLogin = localStorage.getItem('adminLastLogin') || new Date().toISOString();
+                const formattedDate = formatDate(lastLogin);
+                lastLoginDate.textContent = formattedDate;
+                
+                // Salvar a data de acesso atual
+                localStorage.setItem('adminLastLogin', new Date().toISOString());
+            }
+            
+            // Mostrar seção inicial (dashboard)
+            showSection('dashboard');
+        });
+        
+        // Funções para atualizar dashboard
+        function updateDashboardCounts() {
+            try {
+                const counts = window.BlogData.getCounts();
+                
+                const articleCount = document.querySelector('#dashboard-content .card:nth-child(1) .card-text');
+                const eventCount = document.querySelector('#dashboard-content .card:nth-child(2) .card-text');
+                const materialCount = document.querySelector('#dashboard-content .card:nth-child(3) .card-text');
+                
+                if (articleCount) articleCount.textContent = counts.articles;
+                if (eventCount) eventCount.textContent = counts.events;
+                if (materialCount) materialCount.textContent = counts.materials;
+                
+                // Atualizar contadores na página de publicações
+                const pubArticlesCount = document.getElementById('pub-articles-count');
+                const pubEventsCount = document.getElementById('pub-events-count');
+                const pubMaterialsCount = document.getElementById('pub-materials-count');
+                
+                if (pubArticlesCount) pubArticlesCount.textContent = counts.articles;
+                if (pubEventsCount) pubEventsCount.textContent = counts.events;
+                if (pubMaterialsCount) pubMaterialsCount.textContent = counts.materials;
+            } catch (error) {
+                console.error('Erro ao atualizar contadores:', error);
+            }
+        }
+        
+        function refreshRecentArticlesList() {
+            try {
+                const articlesTable = document.getElementById('recent-articles-list');
+                if (!articlesTable) return;
+                
+                // Limpar tabela
+                articlesTable.innerHTML = '';
+                
+                // Obter artigos
+                if (!window.BlogData || !window.BlogData.articles) {
+                    articlesTable.innerHTML = '<tr><td colspan="4" class="text-center">Erro ao carregar artigos</td></tr>';
+                    return;
+                }
+                
+                const articles = window.BlogData.articles;
+                
+                if (articles.length === 0) {
+                    articlesTable.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum artigo encontrado</td></tr>';
+                    return;
+                }
+                
+                // Ordenar por data (mais recentes primeiro)
+                articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Exibir os 3 mais recentes
+                const recentArticles = articles.slice(0, 3);
+                
+                recentArticles.forEach(article => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${article.title}</td>
+                        <td>${article.category}</td>
+                        <td>${formatDate(article.date)}</td>
+                        <td>
+                            <a href="${article.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a>
+                            <button class="btn btn-sm btn-outline-danger delete-article-btn" data-id="${article.id}">Excluir</button>
+                        </td>
+                    `;
+                    articlesTable.appendChild(row);
+                });
+                
+                // Adicionar eventos aos botões
+                articlesTable.querySelectorAll('.delete-article-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const articleId = this.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir este artigo?')) {
+                            window.BlogData.deleteArticle(articleId);
+                            refreshRecentArticlesList();
+                            updateDashboardCounts();
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Erro ao atualizar lista de artigos:', error);
+            }
+        }
+        
+        function formatDate(dateStr) {
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('pt-BR');
+            } catch (error) {
+                return dateStr;
+            }
+        }
+    </script>
+</body>
+</html>

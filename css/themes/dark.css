@@ -1,0 +1,120 @@
+/**
+ * Tema escuro para o Blog Multilingue
+ */
+
+ :root {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --nav-bg: #1e1e1e;
+    --card-bg: #2d2d2d;
+    --card-border: #444444;
+    --input-bg: #2d2d2d;
+    --input-border: #444444;
+    --primary-color: #4287f5;
+    --secondary-color: #a0a0a0;
+    --link-color: #4287f5;
+    --link-hover: #75a8ff;
+    --header-color: #ffffff;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.navbar {
+    background-color: var(--nav-bg) !important;
+}
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-nav .nav-link {
+    color: var(--text-color);
+}
+
+.navbar-light .navbar-toggler-icon {
+    filter: invert(1);
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+    color: var(--text-color);
+}
+
+.form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--header-color);
+}
+
+a {
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--link-hover);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--link-hover);
+    border-color: var(--link-hover);
+}
+
+.newsletter-section {
+    background-color: var(--card-bg);
+}
+
+.dropdown-menu {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+.dropdown-item {
+    color: var(--text-color);
+}
+
+.dropdown-item:hover {
+    background-color: #3d3d3d;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(0);
+}
+
+.text-dark {
+    color: var(--text-color) !important;
+}
+
+.bg-light {
+    background-color: var(--nav-bg) !important;
+}
+
+/* Invertendo alguns elementos para melhor visibilidade no tema escuro */
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.card-header {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--card-border);
+}

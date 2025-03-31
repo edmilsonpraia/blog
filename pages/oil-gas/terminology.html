@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminologia de Petróleo e Gás - Blog Multilingue</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../css/themes/light.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <!-- CSS adicional para terminologia -->
+    <style>
+        .term-card {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.2s;
+        }
+        
+        .term-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .term-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .term-category {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .term-english {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .glossary-nav .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0;
+            margin-bottom: 3px;
+        }
+        
+        .glossary-nav .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="../../index.html">Blog Multilingue</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../../index.html" data-translate="nav_home">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="englishDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_english">
+                                Inglês
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="../english/grammar.html">Gramática</a></li>
+                                <li><a class="dropdown-item" href="../english/vocabulary.html">Vocabulário</a></li>
+                                <li><a class="dropdown-item" href="../english/resources.html">Recursos</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="medicineDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_medicine">
+                                Medicina
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="../medicine/research.html">Pesquisas</a></li>
+                                <li><a class="dropdown-item" href="../medicine/techniques.html">Técnicas</a></li>
+                                <li><a class="dropdown-item" href="../medicine/glossary.html">Glossário</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="oilGasDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_oilgas">
+                                Petróleo e Gás
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="industry.html">Indústria</a></li>
+                                <li><a class="dropdown-item active" href="terminology.html">Terminologia</a></li>
+                                <li><a class="dropdown-item" href="innovations.html">Inovações</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="engineeringDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_engineering">
+                                Engenharias
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="../engineering/civil.html">Civil</a></li>
+                                <li><a class="dropdown-item" href="../engineering/mechanical.html">Mecânica</a></li>
+                                <li><a class="dropdown-item" href="../engineering/electrical.html">Elétrica</a></li>
+                                <li><a class="dropdown-item" href="../engineering/computer.html">Computação</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../misc/index.html" data-translate="nav_misc">Diversos</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary me-2">
+                            <span class="theme-icon">🌙</span>
+                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary active language-btn" data-lang="pt">PT</button>
+                            <button class="btn btn-sm btn-outline-primary language-btn" data-lang="en">EN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-4">
+        <!-- Cabeçalho da Página -->
+        <div class="page-header mb-4">
+            <h1 class="display-4">Terminologia de Petróleo e Gás</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../../index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="index.html">Petróleo e Gás</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Terminologia</li>
+                </ol>
+            </nav>
+            <hr>
+        </div>
+
+        <!-- Introdução -->
+        <section class="mb-5">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <h2 class="card-title">Vocabulário Técnico da Indústria</h2>
+                    <p class="card-text">
+                        A indústria de petróleo e gás possui uma terminologia técnica específica, amplamente utilizada em inglês mesmo em países não-anglófonos. 
+                        Esta seção apresenta os principais termos utilizados no setor, com suas definições em português e equivalentes em inglês, 
+                        organizados por categorias e em ordem alfabética para facilitar a consulta.
+                    </p>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Este glossário é útil para estudantes, profissionais e tradutores que trabalham na indústria de petróleo e gás.
+                        Os termos foram selecionados com base em sua relevância e frequência de uso no setor.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="row">
+            <!-- Barra lateral com navegação -->
+            <div class="col-lg-3 mb-4">
+                <!-- Busca -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Buscar Termos</h5>
+                        <div class="input-group">
+                            <input type="text" id="term-search" class="form-control" placeholder="Digite um termo...">
+                            <button class="btn btn-primary" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navegação por categoria -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Categorias</h5>
+                        <nav class="glossary-nav">
+                            <div class="nav nav-pills flex-column">
+                                <a class="nav-link active" href="#exploration">Exploração e Produção</a>
+                                <a class="nav-link" href="#drilling">Perfuração</a>
+                                <a class="nav-link" href="#processing">Processamento</a>
+                                <a class="nav-link" href="#transportation">Transporte</a>
+                                <a class="nav-link" href="#refining">Refino e Petroquímica</a>
+                                <a class="nav-link" href="#commercial">Comercial e Regulação</a>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                
+                <!-- Recursos adicionais -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Recursos</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="terminology/pdf/oil-gas-glossary.pdf" class="d-flex align-items-center">
+                                    <i class="bi bi-file-pdf text-danger me-2"></i>
+                                    Glossário Completo (PDF)
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="terminology/industry-acronyms.html" class="d-flex align-items-center">
+                                    <i class="bi bi-list-columns me-2"></i>
+                                    Lista de Siglas e Acrônimos
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="terminology/visual-dictionary.html" class="d-flex align-items-center">
+                                    <i class="bi bi-images me-2"></i>
+                                    Dicionário Visual de Equipamentos
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conteúdo principal com os termos -->
+            <div class="col-lg-9">
+                <!-- Exploração e Produção -->
+                <section id="exploration" class="mb-5">
+                    <h2 class="section-title">Exploração e Produção</h2>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Acumulação</h3>
+                                <span class="term-english">Accumulation</span>
+                            </div>
+                            <div class="term-category">Categoria: Geologia de Petróleo</div>
+                            <p class="card-text">Volume de petróleo e/ou gás natural contido em um reservatório. É classificada como descoberta quando comprovada por testes, amostragens ou medições de produção.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Bacia Sedimentar</h3>
+                                <span class="term-english">Sedimentary Basin</span>
+                            </div>
+                            <div class="term-category">Categoria: Geologia de Petróleo</div>
+                            <p class="card-text">Depressão da crosta terrestre onde ocorre acumulação de sedimentos. São os locais com maior probabilidade de ocorrência de petróleo e gás natural, sendo o foco principal da exploração.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Campo de Petróleo</h3>
+                                <span class="term-english">Oil Field</span>
+                            </div>
+                            <div class="term-category">Categoria: Produção</div>
+                            <p class="card-text">Área produtora de petróleo ou gás natural a partir de um ou mais reservatórios, a profundidades variáveis, abrangendo instalações e equipamentos destinados à produção.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Rocha Geradora</h3>
+                                <span class="term-english">Source Rock</span>
+                            </div>
+                            <div class="term-category">Categoria: Geologia de Petróleo</div>
+                            <p class="card-text">Rocha rica em matéria orgânica que, quando submetida a determinadas condições de temperatura e pressão, gera petróleo ou gás natural. Geralmente são folhelhos ou calcários depositados em ambientes de baixa energia.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Perfuração -->
+                <section id="drilling" class="mb-5">
+                    <h2 class="section-title">Perfuração</h2>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Blowout</h3>
+                                <span class="term-english">Blowout</span>
+                            </div>
+                            <div class="term-category">Categoria: Segurança de Poço</div>
+                            <p class="card-text">Fluxo descontrolado de fluidos de formação (óleo, gás ou água) para a superfície, que ocorre quando a pressão da formação excede a pressão hidrostática exercida pelo fluido de perfuração. Representa um dos maiores riscos em operações de perfuração.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Broca</h3>
+                                <span class="term-english">Drill Bit</span>
+                            </div>
+                            <div class="term-category">Categoria: Equipamentos de Perfuração</div>
+                            <p class="card-text">Ferramenta utilizada para cortar ou triturar rochas durante o processo de perfuração de poços. Existem diversos tipos, como brocas de roletes (tricônicas), PDC (Polycrystalline Diamond Compact) e diamantadas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Fluido de Perfuração</h3>
+                                <span class="term-english">Drilling Fluid / Mud</span>
+                            </div>
+                            <div class="term-category">Categoria: Perfuração</div>
+                            <p class="card-text">Mistura de líquidos, sólidos e aditivos químicos utilizada durante a perfuração de poços para remover os cascalhos, resfriar e lubrificar a broca, manter a estabilidade do poço e controlar as pressões de formação.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Processamento -->
+                <section id="processing" class="mb-5">
+                    <h2 class="section-title">Processamento</h2>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Separador</h3>
+                                <span class="term-english">Separator</span>
+                            </div>
+                            <div class="term-category">Categoria: Equipamentos de Processamento</div>
+                            <p class="card-text">Equipamento utilizado para separar as fases (gás, óleo e água) do fluido produzido. Podem ser bifásicos (separam gás de líquido) ou trifásicos (separam gás, óleo e água).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card term-card">
+                        <div class="card-body">
+                            <div class="term-header">
+                                <h3 class="h5">Tratamento de Gás</h3>
+                                <span class="term-english">Gas Treatment</span>
+                            </div>
+                            <div class="term-category">Categoria: Processamento de Gás</div>
+                            <p class="card-text">Conjunto de processos ao qual o gás natural bruto é submetido para remover impurezas como água, CO2, H2S e outros contaminantes, de modo a atender às especificações para comercialização.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Paginação -->
+                <nav aria-label="Navegação de páginas">
+                    <ul class="pagination justify-content-center mb-5">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Próxima</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Artigos Relacionados -->
+        <section class="mb-5">
+            <h2 class="section-title">Artigos Relacionados</h2>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">A Importância da Terminologia Técnica para Profissionais de Petróleo e Gás</h5>
+                            <p class="card-text">Como o domínio do vocabulário técnico pode impactar a carreira dos profissionais do setor.</p>
+                            <a href="terminology/importance-technical-terms.html" class="btn btn-outline-primary">Ler artigo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Inglês Técnico para Comunicação em Plataformas Offshore</h5>
+                            <p class="card-text">Guia prático para comunicação eficiente em ambientes multilíngues de trabalho offshore.</p>
+                            <a href="terminology/english-offshore-platforms.html" class="btn btn-outline-primary">Ler artigo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Newsletter específica -->
+        <section class="newsletter-section bg-light p-4 rounded mb-5">
+            <h3>Inscreva-se para Receber Atualizações do Glossário</h3>
+            <p>Mantenha-se informado sobre a adição de novos termos e atualizações no nosso glossário de petróleo e gás.</p>
+            <form class="row g-3">
+                <div class="col-md-8">
+                    <input type="email" class="form-control" id="newsletterEmail" placeholder="Seu email">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Inscrever-se</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 data-translate="footer_about">Sobre o Blog</h5>
+                    <p data-translate="footer_about_text">Blog multilingue focado em compartilhar conhecimento especializado em diversas áreas.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 data-translate="footer_quicklinks">Links Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="../../index.html" class="text-light">Home</a></li>
+                        <li><a href="../../pages/contact.html" class="text-light">Contato</a></li>
+                        <li><a href="../../pages/privacy.html" class="text-light">Política de Privacidade</a></li>
+                        <li><a href="../../pages/terms.html" class="text-light">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 data-translate="footer_contact">Contato</h5>
+                    <p>Email: contato@blogmultilingue.com</p>
+                    <div class="social-media">
+                        <a href="#" class="text-light me-2">Facebook</a>
+                        <a href="#" class="text-light me-2">Twitter</a>
+                        <a href="#" class="text-light">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p>&copy; 2025 Justificações Acadêmicas. <span data-translate="footer_rights">Todos os direitos reservados.</span></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/components/translator.js"></script>
+</body>
+</html>

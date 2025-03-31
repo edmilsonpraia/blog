@@ -1,0 +1,303 @@
+<!-- Modal para Upload de Artigos Científicos -->
+ 
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="uploadArticleModalLabel">Novo Artigo Científico</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="scientific-article-form">
+                <!-- Informações básicas -->
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <label for="article-title" class="form-label required">Título do Artigo</label>
+                        <input type="text" class="form-control" id="article-title" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="article-date" class="form-label required">Data de Publicação</label>
+                        <input type="date" class="form-control" id="article-date" required>
+                    </div>
+                </div>
+                
+                <!-- Autores e categorização -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="article-authors" class="form-label required">Autores</label>
+                        <input type="text" class="form-control" id="article-authors" placeholder="Ex: Silva, J., Oliveira, M. & Santos, P. (2025)" required>
+                        <small class="text-muted">Insira todos os autores no formato: Sobrenome, Inicial. & Sobrenome, Inicial.</small>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="article-category" class="form-label required">Categoria Principal</label>
+                        <select class="form-select" id="article-category" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="medicine">Medicina</option>
+                            <option value="engineering">Engenharias</option>
+                            <option value="oil-gas">Petróleo e Gás</option>
+                            <option value="english">Inglês</option>
+                            <option value="misc">Diversos</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="article-subcategory" class="form-label">Subcategoria</label>
+                        <select class="form-select" id="article-subcategory">
+                            <option value="">Selecione uma subcategoria</option>
+                            <!-- As opções serão carregadas via JavaScript baseadas na categoria selecionada -->
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Credenciais adicionais -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="article-journal" class="form-label">Revista/Journal</label>
+                        <input type="text" class="form-control" id="article-journal" placeholder="Ex: Revista Brasileira de Medicina">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="article-doi" class="form-label">DOI (se disponível)</label>
+                        <input type="text" class="form-control" id="article-doi" placeholder="Ex: 10.1000/xyz123">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="article-badge" class="form-label">Tipo de Badge</label>
+                        <select class="form-select" id="article-badge">
+                            <option value="standard">Padrão</option>
+                            <option value="featured">Destaque</option>
+                            <option value="clinical">Clínica</option>
+                            <option value="research">Pesquisa</option>
+                            <option value="education">Educação</option>
+                            <option value="technology">Tecnologia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Resumo/Abstract -->
+                <div class="mb-3">
+                    <label for="article-abstract" class="form-label required">Resumo/Abstract</label>
+                    <textarea class="form-control" id="article-abstract" rows="4" maxlength="500" required></textarea>
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">Resumo breve do artigo, será exibido na listagem de publicações</small>
+                        <small id="abstract-counter" class="text-muted">0/500</small>
+                    </div>
+                </div>
+                
+                <!-- Arquivo e imagem em destaque -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="article-file" class="form-label required">Arquivo do Artigo (PDF)</label>
+                        <input type="file" class="form-control" id="article-file" accept=".pdf" required>
+                        <small class="text-muted">Tamanho máximo: 10MB</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="article-thumbnail" class="form-label">Imagem em Destaque</label>
+                        <input type="file" class="form-control" id="article-thumbnail" accept="image/*">
+                        <small class="text-muted">Recomendado: 800x400px, formato JPG ou PNG</small>
+                    </div>
+                </div>
+                
+                <!-- Conteúdo completo ou detalhes adicionais -->
+                <div class="mb-3">
+                    <label for="article-content" class="form-label">Conteúdo Adicional / Detalhes</label>
+                    <textarea class="form-control rich-editor" id="article-content" rows="8"></textarea>
+                    <small class="text-muted">Conteúdo que será exibido na página de detalhes do artigo (opcional)</small>
+                </div>
+                
+                <!-- Status e visibilidade -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="article-status" class="form-label">Status</label>
+                        <select class="form-select" id="article-status">
+                            <option value="published">Publicado</option>
+                            <option value="draft">Rascunho</option>
+                            <option value="scheduled">Agendado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="article-language" class="form-label">Idioma Principal</label>
+                        <select class="form-select" id="article-language">
+                            <option value="pt">Português</option>
+                            <option value="en">Inglês</option>
+                            <option value="es">Espanhol</option>
+                            <option value="fr">Francês</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="article-access" class="form-label">Acesso</label>
+                        <select class="form-select" id="article-access">
+                            <option value="public">Público</option>
+                            <option value="members">Apenas Membros</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Tags e metadados SEO -->
+                <div class="mb-3">
+                    <label for="article-tags" class="form-label">Tags</label>
+                    <input type="text" class="form-control" id="article-tags" placeholder="Insira tags separadas por vírgula">
+                    <small class="text-muted">Ex: medicina regenerativa, células-tronco, tratamento avançado</small>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="save-article-btn">Publicar Artigo</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Contador de caracteres para o Abstract
+const abstractTextarea = document.getElementById('article-abstract');
+const abstractCounter = document.getElementById('abstract-counter');
+
+if (abstractTextarea && abstractCounter) {
+    abstractTextarea.addEventListener('input', function() {
+        const charCount = this.value.length;
+        const maxLength = this.getAttribute('maxlength');
+        abstractCounter.textContent = `${charCount}/${maxLength}`;
+    });
+}
+
+// Gerenciar subcategorias com base na categoria selecionada
+const categorySelect = document.getElementById('article-category');
+const subcategorySelect = document.getElementById('article-subcategory');
+
+if (categorySelect && subcategorySelect) {
+    const subcategories = {
+        'medicine': [
+            {value: 'clinical', text: 'Clínica'},
+            {value: 'research', text: 'Pesquisas'},
+            {value: 'education', text: 'Educação Médica'}
+        ],
+        'engineering': [
+            {value: 'civil', text: 'Civil'},
+            {value: 'mechanical', text: 'Mecânica'},
+            {value: 'electrical', text: 'Elétrica'},
+            {value: 'computer', text: 'Computação'}
+        ],
+        'oil-gas': [
+            {value: 'extraction', text: 'Extração'},
+            {value: 'processing', text: 'Processamento'},
+            {value: 'distribution', text: 'Distribuição'},
+            {value: 'environment', text: 'Meio Ambiente'}
+        ],
+        'english': [
+            {value: 'grammar', text: 'Gramática'},
+            {value: 'vocabulary', text: 'Vocabulário'},
+            {value: 'business', text: 'Inglês para Negócios'}
+        ],
+        'misc': [
+            {value: 'technology', text: 'Tecnologia'},
+            {value: 'business', text: 'Negócios'},
+            {value: 'culture', text: 'Cultura'},
+            {value: 'language', text: 'Idiomas'}
+        ]
+    };
+    
+    categorySelect.addEventListener('change', function() {
+        // Limpar opções atuais
+        subcategorySelect.innerHTML = '<option value="">Selecione uma subcategoria</option>';
+        
+        // Adicionar novas opções baseadas na categoria selecionada
+        const category = this.value;
+        if (category && subcategories[category]) {
+            subcategories[category].forEach(function(item) {
+                const option = document.createElement('option');
+                option.value = item.value;
+                option.textContent = item.text;
+                subcategorySelect.appendChild(option);
+            });
+            subcategorySelect.disabled = false;
+        } else {
+            subcategorySelect.disabled = true;
+        }
+    });
+}
+
+// Salvar artigo
+const saveArticleBtn = document.getElementById('save-article-btn');
+if (saveArticleBtn) {
+    saveArticleBtn.addEventListener('click', function() {
+        const form = document.getElementById('scientific-article-form');
+        
+        // Verificar se todos os campos obrigatórios estão preenchidos
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(function(field) {
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+        
+        // Simular envio
+        const btnText = this.textContent;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...';
+        this.disabled = true;
+        
+        // Simulando um tempo de processamento
+        setTimeout(() => {
+            alert('Artigo científico publicado com sucesso!');
+            
+            // Limpar formulário
+            form.reset();
+            
+            // Fechar modal
+            const modalElement = document.getElementById('uploadArticleModal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) modal.hide();
+            
+            // Restaurar botão
+            this.innerHTML = btnText;
+            this.disabled = false;
+        }, 1500);
+    });
+}
+
+// Configurar editor rich text (se disponível)
+if (typeof ClassicEditor !== 'undefined') {
+    ClassicEditor.create(document.getElementById('article-content'))
+        .catch(error => {
+            console.error('Erro ao inicializar o editor:', error);
+        });
+}
+</script>
+
+<!-- Modal para artigos direto no HTML -->
+<div class="modal fade" id="directArticleModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Novo Artigo (Direto)</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="direct-article-form">
+            <div class="mb-3">
+              <label for="direct-title" class="form-label">Título</label>
+              <input type="text" class="form-control" id="direct-title" required>
+            </div>
+            <div class="mb-3">
+              <label for="direct-category" class="form-label">Categoria</label>
+              <select class="form-control" id="direct-category">
+                <option value="Medicina">Medicina</option>
+                <option value="Engenharias">Engenharias</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="save-direct-article">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>

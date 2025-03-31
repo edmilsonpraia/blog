@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engenharia Civil</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link id="theme-style" rel="stylesheet" href="../../css/themes/light.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="../../index.html">Engenharia</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../../index.html" data-translate="nav_home">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="englishDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_english">
+                                Inglês
+                            </a>
+                            <ul class="dropdown-menu">
+                        
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="medicineDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_medicine">
+                                Medicina
+                            </a>
+                            <ul class="dropdown-menu">
+                        
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="oilGasDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_oilgas">
+                                Petróleo e Gás
+                            </a>
+                            <ul class="dropdown-menu">
+                    
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="engineeringDropdown" role="button" data-bs-toggle="dropdown" data-translate="nav_engineering">
+                                Engenharias
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="computer.html">Computação</a></li>
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../misc/index.html" data-translate="nav_misc">Diversos</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary me-2">
+                            <span class="theme-icon">🌙</span>
+                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary active language-btn" data-lang="pt">PT</button>
+                            <button class="btn btn-sm btn-outline-primary language-btn" data-lang="en">EN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-4">
+        <!-- Cabeçalho da Página -->
+        <div class="page-header mb-4">
+            <h1 class="display-4">Engenharia Civil</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../../index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="index.html">Engenharias</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Civil</li>
+                </ol>
+            </nav>
+            <hr>
+        </div>
+
+        <!-- Introdução -->
+        <section class="mb-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h2 class="card-title">O que é Engenharia Civil?</h2>
+                            <p class="card-text">
+                                A Engenharia Civil é um dos ramos mais antigos da engenharia e engloba o planejamento, 
+                                projeto, construção e manutenção de estruturas e infraestruturas como edifícios, 
+                                pontes, barragens, estradas, redes de abastecimento de água e sistemas de tratamento de resíduos.
+                            </p>
+                            <p class="card-text">
+                                Nesta seção, você encontrará informações sobre áreas específicas da Engenharia Civil, 
+                                terminologia técnica em inglês e português, e recursos úteis para estudantes e profissionais.
+                            </p>
+                        </div>
+                        <div class="col-lg-4 d-flex align-items-center">
+                            <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" class="img-fluid rounded" alt="Engenharia Civil">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Áreas de Atuação -->
+        <section class="mb-5">
+            <h2 class="section-title">Principais Áreas de Atuação</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <!-- Área 1 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-building me-2 text-primary"></i>Estruturas</h5>
+                            <p class="card-text">Análise, projeto e construção de estruturas como edifícios, pontes e torres, garantindo resistência, estabilidade e segurança.</p>
+                            <a href="civil/structures.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 2 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-geo-alt me-2 text-primary"></i>Geotecnia</h5>
+                            <p class="card-text">Estudo do comportamento mecânico dos solos e rochas, aplicado em fundações, escavações, túneis e obras de terra.</p>
+                            <a href="civil/geotechnical.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 3 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-droplet me-2 text-primary"></i>Hidráulica</h5>
+                            <p class="card-text">Projeto e gestão de sistemas de abastecimento de água, drenagem, irrigação, controle de enchentes e aproveitamento energético.</p>
+                            <a href="civil/hydraulics.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 4 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-signpost-split me-2 text-primary"></i>Transportes</h5>
+                            <p class="card-text">Planejamento, projeto e operação de sistemas de transporte, incluindo estradas, ferrovias, aeroportos e portos.</p>
+                            <a href="civil/transportation.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 5 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-people me-2 text-primary"></i>Construção Civil</h5>
+                            <p class="card-text">Gestão e execução de obras, incluindo controle de qualidade, planejamento, orçamento e segurança no canteiro.</p>
+                            <a href="civil/construction.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área 6 -->
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-tree me-2 text-primary"></i>Ambiental</h5>
+                            <p class="card-text">Avaliação e mitigação dos impactos ambientais das obras civis, tratamento de resíduos e gestão sustentável de recursos.</p>
+                            <a href="civil/environmental.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Artigos em Destaque -->
+        <section class="mb-5">
+            <h2 class="section-title">Artigos em Destaque</h2>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Concreto de Alto Desempenho: Aplicações e Vantagens</h5>
+                            <p class="card-text">Uma análise das propriedades, aplicações e benefícios dos concretos de alto desempenho na construção moderna.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">15/02/2025</small>
+                                <a href="civil/articles/high-performance-concrete.html" class="btn btn-sm btn-outline-primary">Ler artigo</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Building Information Modeling (BIM): Guia Prático</h5>
+                            <p class="card-text">Como implementar a metodologia BIM em projetos de engenharia civil para aumentar a eficiência e reduzir erros.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">03/03/2025</small>
+                                <a href="civil/articles/bim-guide.html" class="btn btn-sm btn-outline-primary">Ler artigo</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Vocabulário Técnico -->
+        <section class="mb-5">
+            <h2 class="section-title">Vocabulário Técnico Essencial</h2>
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">
+                        Domine os principais termos técnicos em inglês utilizados na Engenharia Civil:
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Inglês</th>
+                                    <th>Português</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Beam</td>
+                                    <td>Viga</td>
+                                </tr>
+                                <tr>
+                                    <td>Column</td>
+                                    <td>Pilar</td>
+                                </tr>
+                                <tr>
+                                    <td>Foundation</td>
+                                    <td>Fundação</td>
+                                </tr>
+                                <tr>
+                                    <td>Reinforcement</td>
+                                    <td>Armadura</td>
+                                </tr>
+                                <tr>
+                                    <td>Formwork</td>
+                                    <td>Fôrma</td>
+                                </tr>
+                                <tr>
+                                    <td>Bearing Capacity</td>
+                                    <td>Capacidade de Carga</td>
+                                </tr>
+                                <tr>
+                                    <td>Structural Design</td>
+                                    <td>Dimensionamento Estrutural</td>
+                                </tr>
+                                <tr>
+                                    <td>Building Code</td>
+                                    <td>Norma Técnica</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="civil/vocabulary.html" class="btn btn-outline-primary">Ver glossário completo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Newsletter -->
+        <section class="newsletter-section bg-light p-4 rounded mb-5">
+            <h3>Receba conteúdo sobre Engenharia Civil</h3>
+            <p>Inscreva-se para receber artigos, dicas e novidades sobre Engenharia Civil.</p>
+            <form class="row g-3">
+                <div class="col-md-8">
+                    <input type="email" class="form-control" id="newsletterEmail" placeholder="Seu email">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Inscrever-se</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 data-translate="footer_about">Sobre o Blog</h5>
+                    <p data-translate="footer_about_text">Blog multilingue focado em compartilhar conhecimento especializado em diversas áreas.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 data-translate="footer_quicklinks">Links Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="../../index.html" class="text-light">Home</a></li>
+                        <li><a href="../../pages/contact.html" class="text-light">Contato</a></li>
+                        <li><a href="../../pages/privacy.html" class="text-light">Política de Privacidade</a></li>
+                        <li><a href="../../pages/terms.html" class="text-light">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 data-translate="footer_contact">Contato</h5>
+                    <p>Email: contato@blogmultilingue.com</p>
+                    <div class="social-media">
+                        <a href="#" class="text-light me-2">Facebook</a>
+                        <a href="#" class="text-light me-2">Twitter</a>
+                        <a href="#" class="text-light">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p>&copy; 2025 Justificações Acadêmicas. <span data-translate="footer_rights">Todos os direitos reservados.</span></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/components/translator.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+/**
+ * Tema claro para o Blog Multilingue
+ */
+
+ :root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --nav-bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --card-border: #dee2e6;
+    --input-bg: #ffffff;
+    --input-border: #ced4da;
+    --primary-color: #0056b3;
+    --secondary-color: #6c757d;
+    --link-color: #0056b3;
+    --link-hover: #003d7a;
+    --header-color: #212529;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.navbar {
+    background-color: var(--nav-bg) !important;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+.form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--header-color);
+}
+
+a {
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--link-hover);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--link-hover);
+    border-color: var(--link-hover);
+}
+
+.newsletter-section {
+    background-color: #f8f9fa;
+}
+
+.dropdown-menu {
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+.dropdown-item {
+    color: var(--text-color);
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}

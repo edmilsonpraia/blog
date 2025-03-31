@@ -1,0 +1,185 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="uploadEventModalLabel">Novo Evento</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="event-form">
+                <!-- Informações básicas do evento -->
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <label for="event-title" class="form-label required">Título do Evento</label>
+                        <input type="text" class="form-control" id="event-title" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="event-type" class="form-label required">Tipo de Evento</label>
+                        <select class="form-select" id="event-type" required>
+                            <option value="">Selecione um tipo</option>
+                            <option value="congress">Congresso</option>
+                            <option value="symposium">Simpósio</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="course">Curso</option>
+                            <option value="webinar">Webinar</option>
+                            <option value="conference">Conferência</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Datas e horários -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="event-start-date" class="form-label required">Data de Início</label>
+                        <input type="date" class="form-control" id="event-start-date" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="event-end-date" class="form-label">Data de Término</label>
+                        <input type="date" class="form-control" id="event-end-date">
+                        <small class="text-muted">Se for evento de um dia, deixe em branco</small>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="event-start-time" class="form-label">Horário Início</label>
+                        <input type="time" class="form-control" id="event-start-time">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="event-duration" class="form-label">Duração</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="event-duration" min="1" placeholder="4">
+                            <select class="form-select" id="event-duration-unit">
+                                <option value="hours">Horas</option>
+                                <option value="days">Dias</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mais campos aqui... -->
+                
+                <!-- Descrição do evento -->
+                <div class="mb-3">
+                    <label for="event-description" class="form-label required">Descrição</label>
+                    <textarea class="form-control" id="event-description" rows="4" maxlength="500" required></textarea>
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">Descrição breve do evento</small>
+                        <small id="event-description-counter" class="text-muted">0/500</small>
+                    </div>
+                </div>
+                
+                <!-- Local do evento -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="event-location" class="form-label required">Local</label>
+                        <input type="text" class="form-control" id="event-location" required>
+                        <small class="text-muted">Ex: São Paulo ou Online</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="event-address" class="form-label">Endereço Completo</label>
+                        <input type="text" class="form-control" id="event-address">
+                        <small class="text-muted">Para eventos presenciais</small>
+                    </div>
+                </div>
+                
+                <!-- Imagem do evento -->
+                <div class="mb-3">
+                    <label for="event-image" class="form-label required">Imagem do Evento</label>
+                    <input type="file" class="form-control" id="event-image" accept="image/*" required>
+                    <small class="text-muted">Recomendado: 800x450px, formato JPG ou PNG</small>
+                </div>
+                
+                <!-- Status -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="event-status" class="form-label">Status</label>
+                        <select class="form-select" id="event-status">
+                            <option value="published">Publicado</option>
+                            <option value="draft">Rascunho</option>
+                            <option value="scheduled">Agendado</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="save-event-btn">Publicar Evento</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contador de caracteres para a descrição
+    const eventDescTextarea = document.getElementById('event-description');
+    const eventDescCounter = document.getElementById('event-description-counter');
+    
+    if (eventDescTextarea && eventDescCounter) {
+        eventDescTextarea.addEventListener('input', function() {
+            const charCount = this.value.length;
+            const maxLength = this.getAttribute('maxlength');
+            eventDescCounter.textContent = `${charCount}/${maxLength}`;
+        });
+    }
+    
+    // Validar datas (data término depois de data início)
+    const eventStartDate = document.getElementById('event-start-date');
+    const eventEndDate = document.getElementById('event-end-date');
+    
+    if (eventStartDate && eventEndDate) {
+        eventEndDate.addEventListener('change', function() {
+            if (eventStartDate.value && this.value) {
+                if (new Date(this.value) < new Date(eventStartDate.value)) {
+                    alert('A data de término deve ser posterior à data de início.');
+                    this.value = '';
+                }
+            }
+        });
+    }
+    
+    // Botão de salvar evento
+    const saveEventBtn = document.getElementById('save-event-btn');
+    if (saveEventBtn) {
+        saveEventBtn.addEventListener('click', function() {
+            const form = document.getElementById('event-form');
+            
+            // Verificar se todos os campos obrigatórios estão preenchidos
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(function(field) {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (!isValid) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            // Simular envio
+            const btnText = this.textContent;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...';
+            this.disabled = true;
+            
+            // Simulando um tempo de processamento
+            setTimeout(() => {
+                alert('Evento publicado com sucesso!');
+                
+                // Limpar formulário
+                form.reset();
+                
+                // Fechar modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('uploadEventModal'));
+                modal.hide();
+                
+                // Restaurar botão
+                this.innerHTML = btnText;
+                this.disabled = false;
+            }, 1500);
+        });
+    }
+});
+</script>

@@ -1,0 +1,46 @@
+{
+    "articles": [
+      {
+        "id": "medicina-regenerativa",
+        "title": "Avanços na Medicina Regenerativa",
+        "slug": "avancos-medicina-regenerativa",
+        "category": "medicina",
+        "date": "2025-03-20",
+        "author": "Admin",
+        "status": "published",
+        "featured": true,
+        "image": "https://via.placeholder.com/600x300",
+        "summary": "Novas pesquisas mostram avanços promissores na área de medicina regenerativa...",
+        "content": "<p>A medicina regenerativa tem apresentado avanços significativos nos últimos anos, com pesquisas promissoras que podem revolucionar o tratamento de diversas condições médicas.</p><p>Neste artigo, exploraremos as mais recentes descobertas no campo da regeneração tecidual e celular, e como esses avanços podem impactar o futuro da medicina.</p><h2>O que é Medicina Regenerativa?</h2><p>A medicina regenerativa é um campo da pesquisa médica que se concentra no desenvolvimento de métodos para reparar ou substituir células, tecidos ou órgãos danificados ou disfuncionais.</p><p>Diferentemente dos tratamentos convencionais, que muitas vezes apenas aliviam os sintomas, a medicina regenerativa visa tratar a causa raiz da doença, restaurando a função normal do corpo.</p><h2>Principais Avanços Recentes</h2><p>Entre os avanços mais promissores na área, destacam-se:</p><ul><li>Desenvolvimento de organoides, que são versões miniaturizadas e simplificadas de órgãos produzidas in vitro</li><li>Novas técnicas de engenharia de tecidos para regeneração de cartilagem e ossos</li><li>Terapias com células-tronco para tratamento de doenças degenerativas</li><li>Bioimpressão 3D de tecidos e estruturas orgânicas</li></ul><p>Esses avanços estão abrindo novas possibilidades para o tratamento de condições anteriormente consideradas intratáveis.</p>",
+        "tags": ["medicina regenerativa", "células-tronco", "pesquisa médica", "biotecnologia"]
+      },
+      {
+        "id": "engenharia-civil-inovacoes",
+        "title": "Inovações em Engenharia Civil",
+        "slug": "inovacoes-engenharia-civil",
+        "category": "engenharias",
+        "date": "2025-03-18",
+        "author": "Admin",
+        "status": "published",
+        "featured": true,
+        "image": "https://via.placeholder.com/600x300",
+        "summary": "Conheça as novas técnicas de construção sustentável que estão revolucionando...",
+        "content": "<p>A engenharia civil está passando por uma transformação significativa com a introdução de novas tecnologias e métodos de construção sustentável.</p><p>Neste artigo, vamos explorar algumas das inovações mais impactantes que estão revolucionando a forma como projetamos e construímos estruturas.</p><h2>Construções Sustentáveis</h2><p>A sustentabilidade tornou-se uma prioridade na engenharia civil moderna. Novas técnicas e materiais estão sendo desenvolvidos para reduzir o impacto ambiental das construções.</p><p>Alguns exemplos incluem:</p><ul><li>Uso de concreto eco-friendly que absorve CO2</li><li>Sistemas avançados de captação e reuso de água</li><li>Integração de energia solar e eólica em projetos arquitetônicos</li><li>Técnicas de construção que minimizam resíduos</li></ul><h2>Tecnologias Digitais na Construção</h2><p>A digitalização está transformando o setor de construção civil, com tecnologias como:</p><ul><li>BIM (Building Information Modeling) para planejamento e gerenciamento de projetos</li><li>Drones para inspeção e monitoramento de obras</li><li>Realidade aumentada para visualização de projetos</li><li>IoT (Internet das Coisas) para monitoramento de estruturas</li></ul><p>Essas tecnologias estão melhorando a eficiência, precisão e segurança nos projetos de engenharia civil.</p>",
+        "tags": ["engenharia civil", "construção sustentável", "tecnologia", "inovação"]
+      },
+      {
+        "id": "vocabulario-petroleo-gas",
+        "title": "Vocabulário Técnico de Petróleo e Gás",
+        "slug": "vocabulario-tecnico-petroleo-gas",
+        "category": "petroleo-gas",
+        "date": "2025-03-15",
+        "author": "Admin",
+        "status": "published",
+        "featured": true,
+        "image": "https://via.placeholder.com/600x300",
+        "summary": "Guia completo com os termos mais importantes da indústria petrolífera em inglês...",
+        "content": "<p>A indústria de petróleo e gás utiliza um vocabulário técnico específico, especialmente em inglês, que é essencial para profissionais da área.</p><p>Este guia apresenta os termos mais importantes utilizados no setor, com traduções e explicações detalhadas.</p><h2>Termos de Exploração</h2><p>Vocabulário relacionado à fase de busca e identificação de reservas de petróleo e gás:</p><ul><li><strong>Drilling</strong>: Perfuração - Processo de criar um poço para extração de petróleo ou gás</li><li><strong>Wellhead</strong>: Cabeça de Poço - Componente instalado no topo do poço</li><li><strong>Offshore</strong>: Em alto mar - Exploração realizada no oceano</li><li><strong>Onshore</strong>: Em terra - Exploração realizada em terra firme</li><li><strong>Seismic Survey</strong>: Levantamento Sísmico - Método para estudar a geologia subsuperficial</li></ul><h2>Termos de Produção</h2><p>Vocabulário relacionado à extração e processamento:</p><ul><li><strong>Crude Oil</strong>: Petróleo Bruto - Óleo não refinado</li><li><strong>Natural Gas</strong>: Gás Natural - Combustível gasoso natural</li><li><strong>Refinery</strong>: Refinaria - Instalação onde o petróleo é processado</li><li><strong>Pipeline</strong>: Oleoduto/Gasoduto - Tubulação para transporte de petróleo ou gás</li><li><strong>Upstream</strong>: Exploração e Produção - Fase inicial da cadeia produtiva</li><li><strong>Downstream</strong>: Distribuição e Comercialização - Fase final da cadeia produtiva</li></ul>",
+        "tags": ["petróleo e gás", "vocabulário técnico", "inglês", "terminologia"]
+      }
+    ]
+  }

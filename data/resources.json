@@ -1,0 +1,92 @@
+{
+    "resources": [
+      {
+        "id": "glossario-medico",
+        "title": "Glossário Médico Inglês-Português",
+        "description": "Compilação de termos médicos com traduções e definições.",
+        "category": "medicina",
+        "type": "pdf",
+        "size": "2.4 MB",
+        "url": "resources/medicina/glossario-medico.pdf",
+        "downloads": 48,
+        "date": "2025-03-15"
+      },
+      {
+        "id": "dicionario-petroleo-gas",
+        "title": "Dicionário de Termos de Petróleo e Gás",
+        "description": "Mais de 500 termos técnicos da indústria de petróleo e gás.",
+        "category": "petroleo-gas",
+        "type": "pdf",
+        "size": "3.1 MB",
+        "url": "resources/petroleo-gas/dicionario-petroleo-gas.pdf",
+        "downloads": 36,
+        "date": "2025-03-12"
+      },
+      {
+        "id": "vocabulario-engenharia-civil",
+        "title": "Vocabulário de Engenharia Civil",
+        "description": "Termos técnicos de construção, materiais e projetos.",
+        "category": "engenharias",
+        "type": "pdf",
+        "size": "1.8 MB",
+        "url": "resources/engenharias/vocabulario-engenharia-civil.pdf",
+        "downloads": 22,
+        "date": "2025-03-10"
+      },
+      {
+        "id": "inglesa-negocios",
+        "title": "Inglês para Negócios",
+        "description": "Frases e vocabulário essencial para reuniões, apresentações e comunicação profissional.",
+        "category": "ingles",
+        "type": "pdf",
+        "size": "1.2 MB",
+        "url": "resources/ingles/ingles-negocios.pdf",
+        "downloads": 65,
+        "date": "2025-03-05"
+      },
+      {
+        "id": "ingles-profissionais-saude",
+        "title": "Inglês para Profissionais de Saúde",
+        "description": "Guia prático com frases e vocabulário para médicos e enfermeiros.",
+        "category": "medicina",
+        "type": "pdf",
+        "size": "2.0 MB",
+        "url": "resources/medicina/ingles-profissionais-saude.pdf",
+        "downloads": 42,
+        "date": "2025-03-08"
+      },
+      {
+        "id": "manual-engenheiros-petroleo",
+        "title": "Manual de Inglês para Engenheiros de Petróleo",
+        "description": "Guia completo com vocabulário, frases e expressões técnicas.",
+        "category": "petroleo-gas",
+        "type": "pdf",
+        "size": "4.5 MB",
+        "url": "resources/petroleo-gas/manual-engenheiros-petroleo.pdf",
+        "downloads": 28,
+        "date": "2025-03-18"
+      },
+      {
+        "id": "ingles-engenharia-eletrica",
+        "title": "Inglês para Engenharia Elétrica",
+        "description": "Guia com vocabulário específico para profissionais da área.",
+        "category": "engenharias",
+        "type": "pdf",
+        "size": "1.5 MB",
+        "url": "resources/engenharias/ingles-engenharia-eletrica.pdf",
+        "downloads": 18,
+        "date": "2025-03-14"
+      },
+      {
+        "id": "terminologia-engenharia-mecanica",
+        "title": "Terminologia de Engenharia Mecânica",
+        "description": "Compilação de termos usados em documentos técnicos e manuais.",
+        "category": "engenharias",
+        "type": "pdf",
+        "size": "2.2 MB",
+        "url": "resources/engenharias/terminologia-engenharia-mecanica.pdf",
+        "downloads": 15,
+        "date": "2025-03-09"
+      }
+    ]
+  }

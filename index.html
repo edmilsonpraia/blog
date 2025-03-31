@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Conhecimento Especializado</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link id="theme-style" rel="stylesheet" href="css/themes/light.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <!-- CSS adicional para e-books e artigos científicos -->
+    <style>
+        .publication-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        
+        .publication-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .publication-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+        
+        .journal-info {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+        }
+        
+        .publication-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .publication-authors {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .ebook-cover {
+            height: 180px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="assets/images/Logomarca_00.jpg" alt="Justificações Acadêmicas" height="100" class="d-inline-block align-top">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="englishDropdown" role="button" data-bs-toggle="dropdown">
+                                Inglês
+                            </a>
+                            <ul class="dropdown-menu">
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="medicineDropdown" role="button" data-bs-toggle="dropdown">
+                                Medicina
+                            </a>
+                            <ul class="dropdown-menu">
+            
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="oilGasDropdown" role="button" data-bs-toggle="dropdown">
+                                Petróleo e Gás
+                            </a>
+                            <ul class="dropdown-menu">
+                                
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="engineeringDropdown" role="button" data-bs-toggle="dropdown">
+                                Engenharias
+                            </a>
+                            <ul class="dropdown-menu">
+                    
+                                <li><a class="dropdown-item" href="pages/engineering/computer.html">Computação</a></li>
+                               
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="pages/misc/index.html">Diversos</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <button id="theme-toggle" class="btn btn-sm btn-outline-secondary me-2">
+                            <span class="theme-icon">🌙</span>
+                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary active language-btn" data-lang="pt">PT</button>
+                            <button class="btn btn-sm btn-outline-primary language-btn" data-lang="en">EN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-4">
+        <!-- Carrossel de artigos em destaque -->
+        <section class="featured-articles mb-5">
+            <h2 class="section-title">Artigos em Destaque</h2>
+            <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- Conteúdo carregado dinamicamente -->
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Seções do blog com imagens de fundo -->
+        <section class="blog-sections row">
+            <div class="col-md-4 mb-4">
+                <div class="card section-card text-white">
+                    <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img" alt="Inglês">
+                    <div class="card-img-overlay d-flex flex-column justify-content-between">
+                        <h3 class="card-title">Inglês</h3>
+                        <div>
+                            <p class="card-text">Recursos para aprendizado da língua inglesa, dicas de gramática e vocabulário.</p>
+                            <div class="d-flex gap-2">
+                                <a href="pages/english/index.html" class="btn btn-outline-light">Explorar</a>
+                                <a href="pages/english/publications.html" class="btn btn-outline-light">Publicações</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card section-card text-white">
+                    <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img" alt="Medicina">
+                    <div class="card-img-overlay d-flex flex-column justify-content-between">
+                        <h3 class="card-title">Medicina</h3>
+                        <div>
+                            <p class="card-text">Artigos técnicos, novidades e pesquisas na área médica.</p>
+                            <div class="d-flex gap-2">
+                                <a href="pages/medicine/index.html" class="btn btn-outline-light">Explorar</a>
+                                <a href="pages/medicine/publications.html" class="btn btn-outline-light">Publicações</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card section-card text-white">
+                    <img src="https://images.unsplash.com/photo-1602024242516-fbc9d4fda4b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img" alt="Petróleo e Gás">
+                    <div class="card-img-overlay d-flex flex-column justify-content-between">
+                        <h3 class="card-title">Petróleo e Gás</h3>
+                        <div>
+                            <p class="card-text">Terminologia técnica, indústria e inovações em Petróleo e Gás em inglês.</p>
+                            <div class="d-flex gap-2">
+                                <a href="pages/oil-gas/index.html" class="btn btn-outline-light">Explorar</a>
+                                <a href="pages/oil-gas/publications.html" class="btn btn-outline-light">Publicações</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card section-card text-white">
+                    <img src="https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img" alt="Engenharias">
+                    <div class="card-img-overlay d-flex flex-column justify-content-between">
+                        <h3 class="card-title">Engenharias</h3>
+                        <div>
+                            <p class="card-text">Diferentes especializações, avanços e tutoriais de engenharia.</p>
+                            <div class="d-flex gap-2">
+                                <a href="pages/engineering/computer.html" class="btn btn-outline-light">Explorar</a>
+                                <a href="pages/engineering/publications.html" class="btn btn-outline-light">Publicações</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card section-card text-white">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img" alt="Diversos">
+                    <div class="card-img-overlay d-flex flex-column justify-content-between">
+                        <h3 class="card-title">Diversos</h3>
+                        <div>
+                            <p class="card-text">Temas variados que não se encaixam nas outras categorias.</p>
+                            <div class="d-flex gap-2">
+                                <a href="pages/misc/index.html" class="btn btn-outline-light">Explorar</a>
+                                <a href="pages/misc/publications.html" class="btn btn-outline-light">Publicações</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- E-books em Destaque -->
+        <section class="ebooks-section mb-5">
+            <h2 class="section-title mb-4">E-books em Destaque</h2>
+            <div class="row">
+                <!-- Conteúdo carregado dinamicamente -->
+            </div>
+            <div class="text-center mt-3">
+                <a href="#" class="btn btn-outline-primary">Ver todos os e-books</a>
+            </div>
+        </section>
+
+        <!-- Artigos Científicos Recentes -->
+        <section class="papers-section mb-5">
+            <h2 class="section-title mb-4">Artigos Científicos Recentes</h2>
+            <!-- Conteúdo carregado dinamicamente -->
+        </section>
+
+        <!-- Newsletter -->
+        <section class="newsletter-section bg-light p-4 rounded">
+            <h3>Inscreva-se na nossa Newsletter</h3>
+            <p>Receba as últimas atualizações, e-books e artigos científicos diretamente no seu email.</p>
+            <form class="row g-3">
+                <div class="col-md-8">
+                    <input type="email" class="form-control" id="newsletterEmail" placeholder="Seu email">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Inscrever-se</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Sobre o Blog</h5>
+                    <p>Justificações Acadêmicas.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Links Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">Home</a></li>
+                        <li><a href="#" class="text-light">Contato</a></li>
+                        <li><a href="#" class="text-light">Política de Privacidade</a></li>
+                        <li><a href="#" class="text-light">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contato</h5>
+                    <p>Email: contato@blogmultilingue.com</p>
+                    <div class="social-media">
+                        <a href="#" class="text-light me-2">Facebook</a>
+                        <a href="#" class="text-light me-2">Twitter</a>
+                        <a href="#" class="text-light">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p>&copy; 2025 Justificações Acadêmicas. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/utils/content-loader.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/components/translator.js"></script>
+    
+    <!-- Script para conteúdo dinâmico -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Carregar dados do localStorage
+        function loadBlogData() {
+            const blogData = {
+                articles: JSON.parse(localStorage.getItem('blogArticles') || '[]'),
+                events: JSON.parse(localStorage.getItem('blogEvents') || '[]'),
+                materials: JSON.parse(localStorage.getItem('blogMaterials') || '[]')
+            };
+            return blogData;
+        }
+        
+        // Formatar data para exibição
+        function formatDate(dateStr) {
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('pt-BR');
+            } catch (error) {
+                return dateStr;
+            }
+        }
+        
+        // Carregar artigos em destaque no carrossel
+        function loadFeaturedArticles() {
+            const blogData = loadBlogData();
+            const articles = blogData.articles;
+            
+            // Verificar se há artigos para exibir
+            if (!articles || articles.length === 0) return;
+            
+            // Ordenar por data (mais recentes primeiro)
+            articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Pegar até 3 artigos mais recentes para o carrossel
+            const featuredArticles = articles.slice(0, 3);
+            
+            // Referência ao carrossel
+            const carouselInner = document.querySelector('#featuredCarousel .carousel-inner');
+            if (!carouselInner) return;
+            
+            // Limpar carrossel existente
+            carouselInner.innerHTML = '';
+            
+            // Adicionar artigos ao carrossel
+            featuredArticles.forEach((article, index) => {
+                const carouselItem = document.createElement('div');
+                carouselItem.className = `carousel-item ${index === 0 ? 'active' : ''}`;
+                
+                carouselItem.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${article.title}</h5>
+                            <p class="card-text">${article.abstract.substring(0, 150)}...</p>
+                            <a href="${article.fileLink}" target="_blank" class="btn btn-primary">Ler mais</a>
+                        </div>
+                    </div>
+                `;
+                
+                carouselInner.appendChild(carouselItem);
+            });
+        }
+        
+        // Carregar e-books em destaque
+        function loadFeaturedEbooks() {
+            const blogData = loadBlogData();
+            const materials = blogData.materials;
+            
+            // Verificar se há materiais para exibir
+            if (!materials || materials.length === 0) return;
+            
+            // Filtrar apenas ebooks
+            const ebooks = materials.filter(material => 
+                material.type === 'ebook' || material.type === 'guia' || material.type === 'manual'
+            );
+            
+            // Ordenar por data de criação (mais recentes primeiro)
+            ebooks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            // Pegar até 3 ebooks
+            const featuredEbooks = ebooks.slice(0, 3);
+            
+            // Referência ao container de ebooks
+            const ebooksContainer = document.querySelector('.ebooks-section .row');
+            if (!ebooksContainer) return;
+            
+            // Limpar container existente
+            ebooksContainer.innerHTML = '';
+            
+            // Se não há ebooks para exibir, mostrar mensagem
+            if (featuredEbooks.length === 0) {
+                ebooksContainer.innerHTML = '<div class="col-12"><div class="alert alert-info">Nenhum e-book disponível no momento.</div></div>';
+                return;
+            }
+            
+            // Adicionar ebooks ao container
+            featuredEbooks.forEach(ebook => {
+                const ebookCard = document.createElement('div');
+                ebookCard.className = 'col-md-4 mb-4';
+                
+                // Determinar se o ebook é gratuito
+                const badge = ebook.access === 'gratuito' 
+                    ? '<span class="badge bg-success publication-badge">Gratuito</span>' 
+                    : (ebook.access === 'pago' ? '<span class="badge bg-primary publication-badge">Pago</span>' : '');
+                
+                // Usar capa fornecida ou imagem padrão
+                const coverImage = ebook.coverLink || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+                
+                ebookCard.innerHTML = `
+                    <div class="card publication-card h-100">
+                        ${badge}
+                        <img src="${coverImage}" class="card-img-top ebook-cover" alt="${ebook.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${ebook.title}</h5>
+                            <p class="card-text">${ebook.description || 'Sem descrição disponível.'}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="${ebook.access === 'gratuito' ? 'text-success' : 'text-primary'} fw-bold">
+                                    ${ebook.access === 'gratuito' ? 'Download Gratuito' : (ebook.access === 'pago' ? 'Acesso Pago' : 'Acesso Restrito')}
+                                </span>
+                                <a href="${ebook.fileLink}" target="_blank" class="btn btn-outline-primary">
+                                    ${ebook.access === 'gratuito' ? 'Baixar PDF' : 'Ver Detalhes'}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                ebooksContainer.appendChild(ebookCard);
+            });
+        }
+        
+        // Carregar artigos científicos recentes
+        function loadRecentPapers() {
+            const blogData = loadBlogData();
+            const articles = blogData.articles;
+            
+            // Verificar se há artigos para exibir
+            if (!articles || articles.length === 0) return;
+            
+            // Ordenar por data (mais recentes primeiro)
+            articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Pegar até 3 artigos mais recentes
+            const recentPapers = articles.slice(0, 3);
+            
+            // Referência ao container de artigos
+            const papersContainer = document.querySelector('.papers-section');
+            if (!papersContainer) return;
+            
+            // Manter o título da seção
+            const sectionTitle = papersContainer.querySelector('.section-title');
+            const viewAllButton = `<div class="text-center mt-3">
+                <a href="#" class="btn btn-outline-primary">Ver todos os artigos científicos</a>
+            </div>`;
+            
+            // Limpar container existente (mantendo o título)
+            papersContainer.innerHTML = '';
+            papersContainer.appendChild(sectionTitle);
+            
+            // Se não há artigos para exibir, mostrar mensagem
+            if (recentPapers.length === 0) {
+                const alertElement = document.createElement('div');
+                alertElement.className = 'alert alert-info';
+                alertElement.textContent = 'Nenhum artigo científico disponível no momento.';
+                papersContainer.appendChild(alertElement);
+                papersContainer.innerHTML += viewAllButton;
+                return;
+            }
+            
+            // Adicionar artigos ao container
+            recentPapers.forEach(paper => {
+                const paperCard = document.createElement('div');
+                paperCard.className = 'card mb-4 publication-card';
+                
+                // Formatação de dados para exibição
+                const authors = paper.authors;
+                const journal = paper.journal || 'Preprint';
+                const date = formatDate(paper.date);
+                const doi = paper.doi || '';
+                
+                paperCard.innerHTML = `
+                    <div class="card-body">
+                        <h5 class="card-title">${paper.title}</h5>
+                        <p class="publication-authors">${authors} (${date.split('/')[2]})</p>
+                        ${journal ? `<p class="journal-info"><strong>Publicado em:</strong> ${journal}</p>` : ''}
+                        <p class="card-text">${paper.abstract}</p>
+                        <div class="publication-meta">
+                            ${doi ? `<span class="text-muted">DOI: ${doi}</span>` : '<span></span>'}
+                            <div>
+                                <a href="#" class="btn btn-sm btn-outline-primary me-2">Resumo</a>
+                                <a href="${paper.fileLink}" target="_blank" class="btn btn-sm btn-primary">PDF</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                papersContainer.appendChild(paperCard);
+            });
+            
+            // Adicionar botão "Ver todos"
+            papersContainer.innerHTML += viewAllButton;
+        }
+        
+        // Inicializar todos os componentes dinâmicos
+        function initDynamicContent() {
+            loadFeaturedArticles();
+            loadFeaturedEbooks();
+            loadRecentPapers();
+        }
+        
+        // Carregar conteúdo dinâmico
+        initDynamicContent();
+    });
+    </script>
+</body>
+</html>

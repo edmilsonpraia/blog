@@ -1,0 +1,213 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="uploadMaterialModalLabel">Novo Material Didático</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="material-form">
+                <!-- Informações básicas -->
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <label for="material-title" class="form-label required">Título do Material</label>
+                        <input type="text" class="form-control" id="material-title" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="material-type" class="form-label required">Tipo de Material</label>
+                        <select class="form-select" id="material-type" required>
+                            <option value="">Selecione um tipo</option>
+                            <option value="guide">Guia/Manual</option>
+                            <option value="ebook">E-book</option>
+                            <option value="case">Caso Clínico</option>
+                            <option value="tool">Ferramenta/Software</option>
+                            <option value="protocol">Protocolo</option>
+                            <option value="checklist">Checklist</option>
+                            <option value="infographic">Infográfico</option>
+                            <option value="template">Template</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Categorização -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="material-category" class="form-label required">Categoria Principal</label>
+                        <select class="form-select" id="material-category" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="medicine">Medicina</option>
+                            <option value="engineering">Engenharias</option>
+                            <option value="oil-gas">Petróleo e Gás</option>
+                            <option value="english">Inglês</option>
+                            <option value="misc">Diversos</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="material-subcategory" class="form-label">Subcategoria</label>
+                        <select class="form-select" id="material-subcategory">
+                            <option value="">Selecione uma subcategoria</option>
+                            <!-- As opções serão carregadas via JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Descrição -->
+                <div class="mb-3">
+                    <label for="material-description" class="form-label required">Descrição</label>
+                    <textarea class="form-control" id="material-description" rows="3" maxlength="300" required></textarea>
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">Descrição breve do material</small>
+                        <small id="material-description-counter" class="text-muted">0/300</small>
+                    </div>
+                </div>
+                
+                <!-- Upload do arquivo -->
+                <div class="mb-3">
+                    <label for="material-file" class="form-label required">Arquivo</label>
+                    <input type="file" class="form-control" id="material-file" required>
+                    <small class="text-muted">Formatos aceitos: PDF, DOCX, XLSX, PPTX, ZIP (max 50MB)</small>
+                </div>
+                
+                <!-- Imagem de capa -->
+                <div class="mb-3">
+                    <label for="material-cover" class="form-label required">Imagem de Capa</label>
+                    <input type="file" class="form-control" id="material-cover" accept="image/*" required>
+                    <small class="text-muted">Recomendado: 800x450px, formato JPG ou PNG</small>
+                </div>
+                
+                <!-- Status -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="material-status" class="form-label">Status</label>
+                        <select class="form-select" id="material-status">
+                            <option value="published">Publicado</option>
+                            <option value="draft">Rascunho</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="save-material-btn">Publicar Material</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contador de caracteres para a descrição
+    const materialDescTextarea = document.getElementById('material-description');
+    const materialDescCounter = document.getElementById('material-description-counter');
+    
+    if (materialDescTextarea && materialDescCounter) {
+        materialDescTextarea.addEventListener('input', function() {
+            const charCount = this.value.length;
+            const maxLength = this.getAttribute('maxlength');
+            materialDescCounter.textContent = `${charCount}/${maxLength}`;
+        });
+    }
+    
+    // Preencher subcategorias com base na categoria
+    const materialCategorySelect = document.getElementById('material-category');
+    const materialSubcategorySelect = document.getElementById('material-subcategory');
+    
+    if (materialCategorySelect && materialSubcategorySelect) {
+        const subcategories = {
+            'medicine': [
+                {value: 'clinical', text: 'Clínica'},
+                {value: 'research', text: 'Pesquisas'},
+                {value: 'education', text: 'Educação Médica'}
+            ],
+            'engineering': [
+                {value: 'civil', text: 'Civil'},
+                {value: 'mechanical', text: 'Mecânica'},
+                {value: 'electrical', text: 'Elétrica'},
+                {value: 'computer', text: 'Computação'}
+            ],
+            'oil-gas': [
+                {value: 'extraction', text: 'Extração'},
+                {value: 'processing', text: 'Processamento'},
+                {value: 'distribution', text: 'Distribuição'},
+                {value: 'environment', text: 'Meio Ambiente'}
+            ],
+            'english': [
+                {value: 'grammar', text: 'Gramática'},
+                {value: 'vocabulary', text: 'Vocabulário'},
+                {value: 'business', text: 'Inglês para Negócios'}
+            ],
+            'misc': [
+                {value: 'technology', text: 'Tecnologia'},
+                {value: 'business', text: 'Negócios'},
+                {value: 'culture', text: 'Cultura'},
+                {value: 'language', text: 'Idiomas'}
+            ]
+        };
+        
+        materialCategorySelect.addEventListener('change', function() {
+            // Limpar opções atuais
+            materialSubcategorySelect.innerHTML = '<option value="">Selecione uma subcategoria</option>';
+            
+            // Adicionar novas opções baseadas na categoria selecionada
+            const category = this.value;
+            if (category && subcategories[category]) {
+                subcategories[category].forEach(function(item) {
+                    const option = document.createElement('option');
+                    option.value = item.value;
+                    option.textContent = item.text;
+                    materialSubcategorySelect.appendChild(option);
+                });
+                materialSubcategorySelect.disabled = false;
+            } else {
+                materialSubcategorySelect.disabled = true;
+            }
+        });
+    }
+    
+    // Botão de salvar material
+    const saveMaterialBtn = document.getElementById('save-material-btn');
+    if (saveMaterialBtn) {
+        saveMaterialBtn.addEventListener('click', function() {
+            const form = document.getElementById('material-form');
+            
+            // Verificar campos obrigatórios
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(function(field) {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (!isValid) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            // Simular envio
+            const btnText = this.textContent;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...';
+            this.disabled = true;
+            
+            // Simulando um tempo de processamento
+            setTimeout(() => {
+                alert('Material publicado com sucesso!');
+                
+                // Limpar formulário
+                form.reset();
+                
+                // Fechar modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('uploadMaterialModal'));
+                modal.hide();
+                
+                // Restaurar botão
+                this.innerHTML = btnText;
+                this.disabled = false;
+            }, 1500);
+        });
+    }
+});
+</script>
