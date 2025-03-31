@@ -1,208 +1,250 @@
 /**
- * Utilitário para carregar conteúdo dinamicamente de arquivos JSON
- * para o Blog Multilingue
+ * content-loader.js
+ * Utilitário para carregar conteúdo dinâmico no site
  */
 
-// Função para carregar e exibir artigos em destaque no carrossel
+/**
+ * Carrega os dados do blog do armazenamento local
+ * @returns {Object} Dados do blog (artigos, eventos, materiais)
+ */
+function loadBlogData() {
+    try {
+        const blogData = {
+            articles: JSON.parse(localStorage.getItem('blogArticles') || '[]'),
+            events: JSON.parse(localStorage.getItem('blogEvents') || '[]'),
+            materials: JSON.parse(localStorage.getItem('blogMaterials') || '[]')
+        };
+        return blogData;
+    } catch (error) {
+        console.error('Erro ao carregar dados do blog:', error);
+        return {
+            articles: [],
+            events: [],
+            materials: []
+        };
+    }
+}
+
+/**
+ * Formata uma data para exibição (pt-BR)
+ * @param {string} dateStr - String de data para formatar
+ * @returns {string} Data formatada
+ */
+function formatDate(dateStr) {
+    try {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('pt-BR');
+    } catch (error) {
+        console.error('Erro ao formatar data:', error);
+        return dateStr;
+    }
+}
+
+/**
+ * Carrega artigos em destaque no carrossel
+ */
 function loadFeaturedArticles() {
-    fetch('data/articles.json')
-        .then(response => response.json())
-        .then(data => {
-            const featuredArticles = data.articles.filter(article => article.featured);
-            const carouselInner = document.querySelector('#featuredCarousel .carousel-inner');
-            
-            if (carouselInner) {
-                carouselInner.innerHTML = '';
-                
-                featuredArticles.forEach((article, index) => {
-                    const isActive = index === 0 ? 'active' : '';
-                    const articleHtml = `
-                        <div class="carousel-item ${isActive}">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">${article.title}</h5>
-                                    <p class="card-text">${article.summary}</p>
-                                    <a href="pages/${article.category}/${article.slug}.html" class="btn btn-primary">Ler mais</a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    carouselInner.innerHTML += articleHtml;
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao carregar artigos em destaque:', error);
-        });
+    const blogData = loadBlogData();
+    const articles = blogData.articles;
+    
+    // Verificar se há artigos para exibir
+    if (!articles || articles.length === 0) return;
+    
+    // Ordenar por data (mais recentes primeiro)
+    articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Pegar até 3 artigos mais recentes para o carrossel
+    const featuredArticles = articles.slice(0, 3);
+    
+    // Referência ao carrossel
+    const carouselInner = document.querySelector('#featuredCarousel .carousel-inner');
+    if (!carouselInner) return;
+    
+    // Limpar carrossel existente
+    carouselInner.innerHTML = '';
+    
+    // Adicionar artigos ao carrossel
+    featuredArticles.forEach((article, index) => {
+        const carouselItem = document.createElement('div');
+        carouselItem.className = `carousel-item ${index === 0 ? 'active' : ''}`;
+        
+        carouselItem.innerHTML = `
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">${article.title}</h5>
+                    <p class="card-text">${article.abstract?.substring(0, 150) || ''}...</p>
+                    <a href="${article.fileLink || '#'}" target="_blank" class="btn btn-primary">Ler mais</a>
+                </div>
+            </div>
+        `;
+        
+        carouselInner.appendChild(carouselItem);
+    });
 }
 
-// Função para carregar artigos por categoria
-function loadArticlesByCategory(category, containerId, limit = 5) {
-    fetch('data/articles.json')
-        .then(response => response.json())
-        .then(data => {
-            const categoryArticles = data.articles.filter(article => article.category === category);
-            const container = document.getElementById(containerId);
-            
-            if (container) {
-                container.innerHTML = '';
-                
-                const articlesToShow = categoryArticles.slice(0, limit);
-                
-                articlesToShow.forEach(article => {
-                    const articleHtml = `
-                        <div class="article-item mb-3">
-                            <h5><a href="pages/${article.category}/${article.slug}.html">${article.title}</a></h5>
-                            <p>${article.summary}</p>
-                            <small class="text-muted">Publicado em: ${formatDate(article.date)}</small>
-                        </div>
-                    `;
-                    container.innerHTML += articleHtml;
-                });
-            }
-        })
-        .catch(error => {
-            console.error(`Erro ao carregar artigos da categoria ${category}:`, error);
-        });
-}
-
-// Função para carregar um artigo específico
-function loadArticle(articleId, containerId) {
-    fetch('../../data/articles.json')
-        .then(response => response.json())
-        .then(data => {
-            const article = data.articles.find(a => a.id === articleId);
-            const container = document.getElementById(containerId);
-            
-            if (container && article) {
-                const articleHtml = `
-                    <article class="blog-post">
-                        <h1 class="blog-post-title">${article.title}</h1>
-                        <p class="blog-post-meta">
-                            ${formatDate(article.date)} por <a href="#">${article.author}</a>
-                        </p>
-                        <img src="${article.image}" alt="${article.title}" class="img-fluid mb-4">
-                        <div class="blog-post-content">
-                            ${article.content}
-                        </div>
-                        <div class="blog-post-tags mt-4">
-                            <h5>Tags:</h5>
-                            <div class="d-flex flex-wrap gap-2">
-                                ${article.tags.map(tag => `<a href="#" class="btn btn-sm btn-outline-secondary">${tag}</a>`).join('')}
-                            </div>
-                        </div>
-                    </article>
-                `;
-                container.innerHTML = articleHtml;
-            } else {
-                container.innerHTML = '<div class="alert alert-warning">Artigo não encontrado.</div>';
-            }
-        })
-        .catch(error => {
-            console.error(`Erro ao carregar artigo ${articleId}:`, error);
-            if (container) {
-                container.innerHTML = '<div class="alert alert-danger">Erro ao carregar o artigo. Por favor, tente novamente mais tarde.</div>';
-            }
-        });
-}
-
-// Função para carregar recursos (downloads)
-function loadResources(category, containerId, limit = 10) {
-    fetch('../../data/resources.json')
-        .then(response => response.json())
-        .then(data => {
-            let resources = data.resources;
-            
-            // Filtrar por categoria se especificada
-            if (category) {
-                resources = resources.filter(resource => resource.category === category);
-            }
-            
-            const container = document.getElementById(containerId);
-            
-            if (container) {
-                container.innerHTML = '';
-                
-                const resourcesToShow = resources.slice(0, limit);
-                
-                if (resourcesToShow.length === 0) {
-                    container.innerHTML = '<div class="alert alert-info">Nenhum recurso encontrado para esta categoria.</div>';
-                    return;
-                }
-                
-                resourcesToShow.forEach(resource => {
-                    const resourceHtml = `
-                        <div class="resource-item">
-                            <h5>${resource.title}</h5>
-                            <p>${resource.description}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge bg-primary">${resource.type.toUpperCase()}</span>
-                                <a href="${resource.url}" class="btn btn-sm btn-outline-primary" download>Download</a>
-                            </div>
-                            <hr>
-                        </div>
-                    `;
-                    container.innerHTML += resourceHtml;
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao carregar recursos:', error);
-            if (container) {
-                container.innerHTML = '<div class="alert alert-danger">Erro ao carregar os recursos. Por favor, tente novamente mais tarde.</div>';
-            }
-        });
-}
-
-// Função auxiliar para formatar datas
-function formatDate(dateString) {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR', options);
-}
-
-// Inicializar quando o documento estiver pronto
-document.addEventListener('DOMContentLoaded', function() {
-    // Verificar se estamos na página inicial
-    if (document.location.pathname === '/' || document.location.pathname.endsWith('index.html')) {
-        loadFeaturedArticles();
+/**
+ * Carrega e-books em destaque
+ */
+function loadFeaturedEbooks() {
+    const blogData = loadBlogData();
+    const materials = blogData.materials;
+    
+    // Verificar se há materiais para exibir
+    if (!materials || materials.length === 0) return;
+    
+    // Filtrar apenas ebooks
+    const ebooks = materials.filter(material => 
+        material.type === 'ebook' || material.type === 'guia' || material.type === 'manual'
+    );
+    
+    // Ordenar por data de criação (mais recentes primeiro)
+    ebooks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    // Pegar até 3 ebooks
+    const featuredEbooks = ebooks.slice(0, 3);
+    
+    // Referência ao container de ebooks
+    const ebooksContainer = document.querySelector('.ebooks-section .row');
+    if (!ebooksContainer) return;
+    
+    // Limpar container existente
+    ebooksContainer.innerHTML = '';
+    
+    // Se não há ebooks para exibir, mostrar mensagem
+    if (featuredEbooks.length === 0) {
+        ebooksContainer.innerHTML = '<div class="col-12"><div class="alert alert-info">Nenhum e-book disponível no momento.</div></div>';
+        return;
     }
     
-    // Carregar artigos por categoria se os containers existirem
-    const categoryContainers = {
-        'ingles': 'ingles-articles',
-        'medicina': 'medicina-articles',
-        'petroleo-gas': 'petroleo-gas-articles',
-        'engenharias': 'engenharias-articles',
-        'diversos': 'diversos-articles'
-    };
+    // Adicionar ebooks ao container
+    featuredEbooks.forEach(ebook => {
+        const ebookCard = document.createElement('div');
+        ebookCard.className = 'col-md-4 mb-4';
+        
+        // Determinar se o ebook é gratuito
+        const badge = ebook.access === 'gratuito' 
+            ? '<span class="badge bg-success publication-badge">Gratuito</span>' 
+            : (ebook.access === 'pago' ? '<span class="badge bg-primary publication-badge">Pago</span>' : '');
+        
+        // Usar capa fornecida ou imagem padrão
+        const coverImage = ebook.coverLink || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+        
+        ebookCard.innerHTML = `
+            <div class="card publication-card h-100">
+                ${badge}
+                <img src="${coverImage}" class="card-img-top ebook-cover" alt="${ebook.title}">
+                <div class="card-body">
+                    <h5 class="card-title">${ebook.title}</h5>
+                    <p class="card-text">${ebook.description || 'Sem descrição disponível.'}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="${ebook.access === 'gratuito' ? 'text-success' : 'text-primary'} fw-bold">
+                            ${ebook.access === 'gratuito' ? 'Download Gratuito' : (ebook.access === 'pago' ? 'Acesso Pago' : 'Acesso Restrito')}
+                        </span>
+                        <a href="${ebook.fileLink || '#'}" target="_blank" class="btn btn-outline-primary">
+                            ${ebook.access === 'gratuito' ? 'Baixar PDF' : 'Ver Detalhes'}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        ebooksContainer.appendChild(ebookCard);
+    });
+}
+
+/**
+ * Carrega artigos científicos recentes
+ */
+function loadRecentPapers() {
+    const blogData = loadBlogData();
+    const articles = blogData.articles;
     
-    Object.entries(categoryContainers).forEach(([category, containerId]) => {
-        const container = document.getElementById(containerId);
-        if (container) {
-            loadArticlesByCategory(category, containerId, 3);
-        }
+    // Verificar se há artigos para exibir
+    if (!articles || articles.length === 0) return;
+    
+    // Ordenar por data (mais recentes primeiro)
+    articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Pegar até 3 artigos mais recentes
+    const recentPapers = articles.slice(0, 3);
+    
+    // Referência ao container de artigos
+    const papersContainer = document.querySelector('.papers-section');
+    if (!papersContainer) return;
+    
+    // Manter o título da seção
+    const sectionTitle = papersContainer.querySelector('.section-title');
+    const viewAllButton = `<div class="text-center mt-3">
+        <a href="#" class="btn btn-outline-primary">Ver todos os artigos científicos</a>
+    </div>`;
+    
+    // Limpar container existente (mantendo o título)
+    if (sectionTitle) {
+        papersContainer.innerHTML = '';
+        papersContainer.appendChild(sectionTitle);
+    } else {
+        papersContainer.innerHTML = '<h2 class="section-title mb-4">Artigos Científicos Recentes</h2>';
+    }
+    
+    // Se não há artigos para exibir, mostrar mensagem
+    if (recentPapers.length === 0) {
+        const alertElement = document.createElement('div');
+        alertElement.className = 'alert alert-info';
+        alertElement.textContent = 'Nenhum artigo científico disponível no momento.';
+        papersContainer.appendChild(alertElement);
+        papersContainer.innerHTML += viewAllButton;
+        return;
+    }
+    
+    // Adicionar artigos ao container
+    recentPapers.forEach(paper => {
+        const paperCard = document.createElement('div');
+        paperCard.className = 'card mb-4 publication-card';
+        
+        // Formatação de dados para exibição
+        const authors = paper.authors || 'Autor desconhecido';
+        const journal = paper.journal || 'Preprint';
+        const date = formatDate(paper.date);
+        const doi = paper.doi || '';
+        
+        paperCard.innerHTML = `
+            <div class="card-body">
+                <h5 class="card-title">${paper.title}</h5>
+                <p class="publication-authors">${authors} (${date.split('/')[2] || '2025'})</p>
+                ${journal ? `<p class="journal-info"><strong>Publicado em:</strong> ${journal}</p>` : ''}
+                <p class="card-text">${paper.abstract || 'Resumo não disponível.'}</p>
+                <div class="publication-meta">
+                    ${doi ? `<span class="text-muted">DOI: ${doi}</span>` : '<span></span>'}
+                    <div>
+                        <a href="#" class="btn btn-sm btn-outline-primary me-2">Resumo</a>
+                        <a href="${paper.fileLink || '#'}" target="_blank" class="btn btn-sm btn-primary">PDF</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        papersContainer.appendChild(paperCard);
     });
     
-    // Verificar se estamos em uma página de artigo
-    const articleContainer = document.getElementById('article-content');
-    if (articleContainer) {
-        // Obter ID do artigo da URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const articleId = urlParams.get('id');
-        
-        if (articleId) {
-            loadArticle(articleId, 'article-content');
-        }
-    }
-    
-    // Verificar se estamos em uma página de recursos
-    const resourcesContainer = document.getElementById('resources-container');
-    if (resourcesContainer) {
-        // Obter categoria da URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const category = urlParams.get('category');
-        
-        loadResources(category, 'resources-container');
-    }
-});
+    // Adicionar botão "Ver todos"
+    papersContainer.innerHTML += viewAllButton;
+}
+
+/**
+ * Inicializa todos os componentes dinâmicos
+ */
+function initDynamicContent() {
+    loadFeaturedArticles();
+    loadFeaturedEbooks();
+    loadRecentPapers();
+}
+
+// Exportar funções
+window.contentLoader = {
+    loadBlogData,
+    formatDate,
+    loadFeaturedArticles,
+    loadFeaturedEbooks,
+    loadRecentPapers,
+    initDynamicContent
+};
