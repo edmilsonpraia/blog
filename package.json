@@ -5,8 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "lite-server",
-        "build": "webpack --mode production",
-        "dev": "webpack --mode development --watch"
+        "build": "echo 'No build required'"
     },
     "keywords": [
         "blog",
