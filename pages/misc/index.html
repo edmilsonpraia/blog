@@ -15,12 +15,15 @@
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
     <header class="main-header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" href="../../index.html">Diversos</a>
+                <a class="navbar-brand" href="../../index.html">
+                    <img src="../../assets/images/Logomarca_00.png" alt="Justificações Acadêmicas" height="60" class="d-inline-block align-top">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -106,61 +109,35 @@
                 <div class="row mb-4">
                     <div class="col-md-6 mb-4">
                         <div class="card h-100">
-                            <img src="https://via.placeholder.com/600x300" class="card-img-top" alt="Inteligência Artificial">
+                            <img src="https://images.unsplash.com/photo-1550432163-9cb326104944?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Inteligência Artificial" style="height: 200px; object-fit: cover;">
                             <div class="card-body">
-                                <h3 class="card-title">Inteligência Artificial: O Futuro é Agora</h3>
+                                <h3 class="card-title text-center">Inteligência Artificial: O Futuro é Agora</h3>
                                 <p class="card-text">Uma análise do impacto da IA em diferentes setores e como ela está transformando nossa sociedade.</p>
-                                <a href="#" class="btn btn-primary">Ler mais</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
                         <div class="card h-100">
-                            <img src="https://via.placeholder.com/600x300" class="card-img-top" alt="Produtividade">
+                            <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Produtividade" style="height: 200px; object-fit: cover;">
                             <div class="card-body">
-                                <h3 class="card-title">Técnicas de Produtividade para Profissionais</h3>
+                                <h3 class="card-title text-center">Técnicas de Produtividade para Profissionais</h3>
                                 <p class="card-text">Métodos comprovados para aumentar sua eficiência e equilibrar melhor trabalho e vida pessoal.</p>
-                                <a href="#" class="btn btn-primary">Ler mais</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Lista de artigos recentes -->
+                <!-- Lista de artigos recentes - Dinamicamente carregados -->
                 <div class="card mb-4">
                     <div class="card-header">
                         <h3>Artigos Recentes</h3>
                     </div>
                     <div class="card-body">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Sustentabilidade: Pequenas Mudanças, Grandes Impactos</h5>
-                                    <small class="text-muted">3 dias atrás</small>
-                                </div>
-                                <p class="mb-1">Práticas sustentáveis que qualquer pessoa pode adotar no dia a dia para contribuir com o meio ambiente.</p>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">O Poder dos Hábitos: Transformando sua Rotina</h5>
-                                    <small class="text-muted">1 semana atrás</small>
-                                </div>
-                                <p class="mb-1">Como pequenas mudanças nos hábitos diários podem levar a grandes transformações em sua vida pessoal e profissional.</p>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Viagens Culturais: Aprendendo com Diferentes Perspectivas</h5>
-                                    <small class="text-muted">2 semanas atrás</small>
-                                </div>
-                                <p class="mb-1">Relatos de experiências em diferentes culturas e como elas podem expandir nossa visão de mundo.</p>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Finanças Pessoais: Controlando seu Dinheiro</h5>
-                                    <small class="text-muted">3 semanas atrás</small>
-                                </div>
-                                <p class="mb-1">Dicas práticas para melhorar a gestão financeira e alcançar objetivos de longo prazo.</p>
-                            </a>
+                        <div class="list-group" id="recent-articles-container">
+                            <!-- Conteúdo será carregado dinamicamente -->
+                            <div class="text-center py-3" id="no-articles-message">
+                                <p class="text-muted">Nenhum artigo publicado recentemente.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,21 +198,19 @@
                     </div>
                 </div>
 
-                <!-- Newsletter -->
+                <!-- Contato via WhatsApp (substituindo a Newsletter) -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h3>Inscreva-se na Newsletter</h3>
+                        <h3>Entre em Contato Conosco</h3>
                     </div>
                     <div class="card-body">
-                        <p>Receba as últimas novidades diretamente em seu e-mail.</p>
-                        <form>
-                            <div class="mb-3">
-                                <input type="email" class="form-control" placeholder="Seu e-mail" required>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Inscrever-se</button>
-                            </div>
-                        </form>
+                        <p>Envie uma mensagem para tirar suas dúvidas ou solicitar informações.</p>
+                        <p>Estamos disponíveis para responder suas perguntas sobre nossos materiais e serviços.</p>
+                        <div class="d-grid">
+                            <a href="https://wa.me/+79961007408" target="_blank" class="btn btn-success">
+                                <i class="bi bi-whatsapp me-2"></i>Contato via WhatsApp
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -246,31 +221,42 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h5>Sobre o Blog</h5>
-                    <p>Blog multilingue focado em compartilhar conhecimento especializado em diversas áreas.</p>
+                    <h5>Justificações Acadêmicas</h5>
+                    <p>Somos eternos apendizes</p>
                 </div>
                 <div class="col-md-4">
                     <h5>Links Rápidos</h5>
                     <ul class="list-unstyled">
                         <li><a href="../../index.html" class="text-light">Home</a></li>
-                        <li><a href="#" class="text-light">Contato</a></li>
-                        <li><a href="#" class="text-light">Política de Privacidade</a></li>
-                        <li><a href="#" class="text-light">Termos de Uso</a></li>
+                        <li><a href="" class="text-light">contacto: +7 996 100 74 08</a></li>
+                        <li><a href="#" class="text-light"></a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Contato</h5>
-                    <p>Email: contato@blogmultilingue.com</p>
+                    <p>Email: justificacoesacademicas@gmail.com</p>
                     <div class="social-media">
-                        <a href="#" class="text-light me-2">Facebook</a>
-                        <a href="#" class="text-light me-2">Twitter</a>
-                        <a href="#" class="text-light">LinkedIn</a>
+                        <a href="https://www.facebook.com/share/19XAayVoKb/?mibextid=wwXIfr" class="text-light me-3" target="_blank">
+                            <i class="bi bi-facebook fs-4"></i>
+                        </a>
+                        <a href="https://www.instagram.com/justificacoes_academicas_?igsh=Ym9qa3F2cDU5YTlm&utm_source=qr" class="text-light me-3" target="_blank">
+                            <i class="bi bi-instagram fs-4"></i>
+                        </a>
+                        <a href="https://youtube.com/@justificacoesacademicas?si=asbgXUxZPTC-73wq" class="text-light me-3" target="_blank">
+                            <i class="bi bi-youtube fs-4"></i>
+                        </a>
+                        <a href="https://chat.whatsapp.com/EvNGxDj3fagINGtBsH6piL" class="text-light me-3" target="_blank">
+                            <i class="bi bi-whatsapp fs-4"></i>
+                        </a>
+                        <a href="https://justificacoesacademicas.org" class="text-light" target="_blank">
+                            <i class="bi bi-globe fs-4"></i>
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col text-center">
-                    <p>&copy; 2025 Justificações Acadêmicas. Todos os direitos reservados.</p>
+                    <p>&copy; 2025 Justificações Acadêmicas. <span data-translate="footer_rights">Todos os direitos reservados.</span></p>
                 </div>
             </div>
         </div>
@@ -281,5 +267,63 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/components/translator.js"></script>
+    
+    <!-- Script para carregamento dinâmico de artigos recentes -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Função para carregar artigos recentes
+        function loadRecentArticles() {
+            const recentArticlesContainer = document.getElementById('recent-articles-container');
+            const noArticlesMessage = document.getElementById('no-articles-message');
+            
+            // Tentar obter artigos do localStorage
+            const articlesData = JSON.parse(localStorage.getItem('blogArticles') || '[]');
+            
+            // Filtrar apenas artigos da categoria "diversos"
+            const diversArticles = articlesData.filter(article => 
+                article.category === 'diversos' || article.tags?.includes('diversos')
+            );
+            
+            // Ordenar por data (mais recentes primeiro)
+            diversArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Se há artigos para mostrar
+            if (diversArticles.length > 0) {
+                // Esconder mensagem de "nenhum artigo"
+                noArticlesMessage.style.display = 'none';
+                
+                // Limpar o container
+                recentArticlesContainer.innerHTML = '';
+                
+                // Mostrar até 4 artigos mais recentes
+                const recentArticles = diversArticles.slice(0, 4);
+                
+                recentArticles.forEach(article => {
+                    const date = new Date(article.date);
+                    const formattedDate = date.toLocaleDateString('pt-BR');
+                    
+                    const articleElement = document.createElement('a');
+                    articleElement.href = article.fileLink || '#';
+                    articleElement.className = 'list-group-item list-group-item-action';
+                    articleElement.innerHTML = `
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">${article.title}</h5>
+                            <small class="text-muted">${formattedDate}</small>
+                        </div>
+                        <p class="mb-1">${article.abstract?.substring(0, 120) || 'Sem resumo disponível'}...</p>
+                    `;
+                    
+                    recentArticlesContainer.appendChild(articleElement);
+                });
+            } else {
+                // Mostrar mensagem de "nenhum artigo"
+                noArticlesMessage.style.display = 'block';
+            }
+        }
+        
+        // Carregar artigos ao iniciar a página
+        loadRecentArticles();
+    });
+    </script>
 </body>
 </html>
