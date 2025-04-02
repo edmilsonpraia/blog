@@ -15,6 +15,7 @@
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
     <header class="main-header">
@@ -34,8 +35,8 @@
                                 Inglês
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="grammar.html">Gramática</a></li>
-                                <li><a class="dropdown-item" href="vocabulary.html">Vocabulário</a></li>
+                                <li><a class="dropdown-item" href="../english/grammar.html">Gramática</a></li>
+                                <li><a class="dropdown-item" href="../english/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -44,8 +45,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="../medicine/research.html">Pesquisas</a></li>
-                                <li><a class="dropdown-item" href="../medicine/techniques.html">Técnicas</a></li>
-                                <li><a class="dropdown-item" href="../medicine/glossary.html">Glossário</a></li>
+                                <li><a class="dropdown-item" href="../medicine/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -53,9 +53,8 @@
                                 Petróleo e Gás
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="../oil-gas/industry.html">Indústria</a></li>
-                                <li><a class="dropdown-item" href="../oil-gas/terminology.html">Terminologia</a></li>
                                 <li><a class="dropdown-item" href="../oil-gas/innovations.html">Inovações</a></li>
+                                <li><a class="dropdown-item" href="../oil-gas/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -63,10 +62,8 @@
                                 Engenharias
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="../engineering/civil.html">Civil</a></li>
-                                <li><a class="dropdown-item" href="../engineering/mechanical.html">Mecânica</a></li>
-                                <li><a class="dropdown-item" href="../engineering/electrical.html">Elétrica</a></li>
                                 <li><a class="dropdown-item" href="../engineering/computer.html">Computação</a></li>
+                                <li><a class="dropdown-item" href="../engineering/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -108,23 +105,15 @@
                         <h3>Artigos Recentes</h3>
                     </div>
                     <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <h4>Tempos Verbais em Inglês: Um Guia Completo</h4>
-                                <p>Aprenda a dominar os tempos verbais em inglês com este guia detalhado...</p>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
-                            </li>
-                            <li class="list-group-item">
-                                <h4>Vocabulário Técnico para Profissionais</h4>
-                                <p>Termos e expressões essenciais para profissionais de diversas áreas...</p>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
-                            </li>
-                            <li class="list-group-item">
-                                <h4>Dicas para Melhorar sua Pronúncia</h4>
-                                <p>Estratégias práticas para aperfeiçoar sua pronúncia em inglês...</p>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
-                            </li>
-                        </ul>
+                        <div id="recent-articles-container">
+                            <!-- Conteúdo será carregado dinamicamente -->
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Carregando...</span>
+                                </div>
+                                <p class="mt-2">Carregando artigos recentes...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,10 +128,6 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <a href="grammar.html" class="text-decoration-none">Gramática</a>
                                 <span class="badge bg-primary rounded-pill">12</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <a href="vocabulary.html" class="text-decoration-none">Vocabulário</a>
-                                <span class="badge bg-primary rounded-pill">8</span>
                             </li>
                         </ul>
                     </div>
@@ -169,6 +154,22 @@
                         </ul>
                     </div>
                 </div>
+
+                <!-- WhatsApp Contact -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Entre em Contato Conosco</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Envie uma mensagem para tirar suas dúvidas ou solicitar informações.</p>
+                        <p class="mb-3">Estamos disponíveis para responder suas perguntas sobre nossos materiais e serviços.</p>
+                        <div class="d-grid">
+                            <a href="https://wa.me/+79961007408" target="_blank" class="btn btn-success">
+                                <i class="bi bi-whatsapp me-2"></i>Contato via WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -177,25 +178,36 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h5>Sobre o Blog</h5>
-                    <p>Blog multilingue focado em compartilhar conhecimento especializado em diversas áreas.</p>
+                    <h5>Justificações Acadêmicas</h5>
+                    <p>Somos eternos apendizes</p>
                 </div>
                 <div class="col-md-4">
                     <h5>Links Rápidos</h5>
                     <ul class="list-unstyled">
                         <li><a href="../../index.html" class="text-light">Home</a></li>
-                        <li><a href="#" class="text-light">Contato</a></li>
-                        <li><a href="#" class="text-light">Política de Privacidade</a></li>
-                        <li><a href="#" class="text-light">Termos de Uso</a></li>
+                        <li><a href="" class="text-light">contacto: +7 996 100 74 08</a></li>
+                        <li><a href="#" class="text-light"></a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Contato</h5>
-                    <p>Email: contato@blogmultilingue.com</p>
+                    <p>Email: justificacoesacademicas@gmail.com</p>
                     <div class="social-media">
-                        <a href="#" class="text-light me-2">Facebook</a>
-                        <a href="#" class="text-light me-2">Twitter</a>
-                        <a href="#" class="text-light">LinkedIn</a>
+                        <a href="https://www.facebook.com/share/19XAayVoKb/?mibextid=wwXIfr" class="text-light me-3" target="_blank">
+                            <i class="bi bi-facebook fs-4"></i>
+                        </a>
+                        <a href="https://www.instagram.com/justificacoes_academicas_?igsh=Ym9qa3F2cDU5YTlm&utm_source=qr" class="text-light me-3" target="_blank">
+                            <i class="bi bi-instagram fs-4"></i>
+                        </a>
+                        <a href="https://youtube.com/@justificacoesacademicas?si=asbgXUxZPTC-73wq" class="text-light me-3" target="_blank">
+                            <i class="bi bi-youtube fs-4"></i>
+                        </a>
+                        <a href="https://chat.whatsapp.com/EvNGxDj3fagINGtBsH6piL" class="text-light me-3" target="_blank">
+                            <i class="bi bi-whatsapp fs-4"></i>
+                        </a>
+                        <a href="https://justificacoesacademicas.org" class="text-light" target="_blank">
+                            <i class="bi bi-globe fs-4"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -212,5 +224,86 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/components/translator.js"></script>
+    
+    <!-- Script para carregar artigos dinamicamente -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Carregar artigos recentes
+        loadRecentArticles();
+        
+        function loadRecentArticles() {
+            // Obter o container de artigos
+            const articlesContainer = document.getElementById('recent-articles-container');
+            if (!articlesContainer) return;
+            
+            // Tentar carregar artigos do localStorage
+            try {
+                const storedArticles = localStorage.getItem('blogArticles');
+                let articles = [];
+                
+                if (storedArticles) {
+                    articles = JSON.parse(storedArticles);
+                }
+                
+                // Filtrar artigos relacionados a inglês
+                const englishArticles = articles.filter(article => 
+                    article.category === 'ingles' || 
+                    article.tags?.includes('inglês') ||
+                    article.tags?.includes('ingles') ||
+                    article.tags?.includes('english')
+                );
+                
+                // Ordenar por data (mais recentes primeiro)
+                englishArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Limitar a 5 artigos mais recentes
+                const recentArticles = englishArticles.slice(0, 5);
+                
+                // Limpar container
+                articlesContainer.innerHTML = '';
+                
+                // Se não há artigos para exibir
+                if (recentArticles.length === 0) {
+                    articlesContainer.innerHTML = '<div class="alert alert-info">Nenhum artigo disponível no momento.</div>';
+                    return;
+                }
+                
+                // Criar uma lista para os artigos
+                const articleList = document.createElement('ul');
+                articleList.className = 'list-group list-group-flush';
+                
+                // Adicionar cada artigo à lista
+                recentArticles.forEach(article => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    
+                    // Formatar data
+                    const articleDate = new Date(article.date);
+                    const formattedDate = articleDate.toLocaleDateString('pt-BR');
+                    
+                    // Truncar abstract para exibição
+                    const shortAbstract = article.abstract 
+                        ? article.abstract.substring(0, 150) + (article.abstract.length > 150 ? '...' : '')
+                        : 'Sem descrição disponível.';
+                    
+                    listItem.innerHTML = `
+                        <h4>${article.title}</h4>
+                        <p class="text-muted small">${formattedDate} | por ${article.authors || 'Autor desconhecido'}</p>
+                        <p>${shortAbstract}</p>
+                        <a href="${article.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary">Ler mais</a>
+                    `;
+                    
+                    articleList.appendChild(listItem);
+                });
+                
+                articlesContainer.appendChild(articleList);
+                
+            } catch (error) {
+                console.error('Erro ao carregar artigos:', error);
+                articlesContainer.innerHTML = '<div class="alert alert-danger">Erro ao carregar artigos. Por favor, tente novamente mais tarde.</div>';
+            }
+        }
+    });
+    </script>
 </body>
 </html>

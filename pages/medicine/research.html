@@ -9,7 +9,7 @@
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link id="theme-style" rel="stylesheet" href="../../css/themes/light.css">
     
@@ -21,7 +21,7 @@
     <header class="main-header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" href="../../index.html">Blog Multilingue</a>
+                <a class="navbar-brand" href="../../index.html">Medicina</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -36,8 +36,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="../english/grammar.html">Gramática</a></li>
-                                
-                                
+                                <li><a class="dropdown-item" href="../english/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -45,10 +44,8 @@
                                 Medicina
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item active" href="research.html">Pesquisas</a></li>
-
-                                
-                                
+                                <li><a class="dropdown-item" href="../medicine/research.html">Pesquisas</a></li>
+                                <li><a class="dropdown-item" href="../medicine/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -57,8 +54,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="../oil-gas/innovations.html">Inovações</a></li>
-                                
-                                
+                                <li><a class="dropdown-item" href="../oil-gas/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -66,9 +62,8 @@
                                 Engenharias
                             </a>
                             <ul class="dropdown-menu">
-                                
                                 <li><a class="dropdown-item" href="../engineering/computer.html">Computação</a></li>
-                                
+                                <li><a class="dropdown-item" href="../engineering/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -102,183 +97,65 @@
 
         <div class="row">
             <div class="col-lg-8">
-                <!-- Artigo em Destaque -->
-                <div class="card mb-4 border-0 shadow">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                            <img src="https://images.unsplash.com/photo-1581093458791-9ageeb7a3b41?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-start h-100 object-fit-cover" alt="Medicina Regenerativa">
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card-body d-flex flex-column h-100">
-                                <span class="badge bg-primary mb-2">Em Destaque</span>
-                                <h2 class="card-title">Avanços na Medicina Regenerativa</h2>
-                                <p class="card-text">Novas pesquisas mostram resultados promissores na regeneração de tecidos cardíacos usando células-tronco modificadas, abrindo caminho para tratamentos revolucionários para pacientes com insuficiência cardíaca.</p>
-                                <div class="mt-auto">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">Publicado em 15/03/2025</small>
-                                        <a href="#" class="btn btn-primary">Ler mais</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filtros de Pesquisa -->
+                <!-- Introdução -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <label for="filter-category" class="form-label">Categoria</label>
-                                <select class="form-select" id="filter-category">
-                                    <option value="all" selected>Todas</option>
-                                    <option value="clinical-trials">Ensaios Clínicos</option>
-                                    <option value="discoveries">Descobertas Recentes</option>
-                                    <option value="technology">Tecnologia Médica</option>
-                                    <option value="diseases">Doenças e Tratamentos</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <label for="filter-year" class="form-label">Período</label>
-                                <select class="form-select" id="filter-year">
-                                    <option value="all" selected>Todos</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2023">2023</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 d-flex align-items-end">
-                                <button class="btn btn-primary w-100">Filtrar</button>
-                            </div>
-                        </div>
+                        <h2 class="card-title">Curiosidades da Medicina</h2>
+                        <p class="card-text">
+                            Nesta seção, compartilhamos fatos interessantes e descobertas fascinantes do mundo da medicina. 
+                            Descubra informações surpreendentes que demonstram a complexidade e a maravilha do corpo humano 
+                            e da ciência médica ao longo da história e na atualidade.
+                        </p>
                     </div>
                 </div>
 
-                <!-- Lista de Artigos de Pesquisa -->
+                <!-- Curiosidades da Medicina -->
                 <div class="card mb-4">
                     <div class="card-header bg-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="mb-0">Pesquisas Recentes</h3>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary active">Mais Recentes</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Mais Lidos</button>
-                            </div>
-                        </div>
+                        <h3 class="mb-0">Fatos Fascinantes</h3>
                     </div>
                     <div class="card-body">
-                        <!-- Artigo 1 -->
-                        <div class="row mb-4 pb-4 border-bottom">
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <img src="https://images.unsplash.com/photo-1597852074816-d933c7d2b988?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="img-fluid rounded" alt="Pesquisa sobre IA em Diagnósticos">
-                            </div>
-                            <div class="col-md-8">
-                                <span class="badge bg-success mb-1">Tecnologia Médica</span>
-                                <h4>IA Supera Médicos em Diagnóstico Precoce de Câncer de Pulmão</h4>
-                                <p>Nova pesquisa publicada no Journal of Medical AI mostra que algoritmos de inteligência artificial detectam nódulos pulmonares malignos com precisão 15% maior que radiologistas experientes.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">10/03/2025 | Por Dr. João Silva</small>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
-                                </div>
-                            </div>
+                        <div class="mb-4 pb-4 border-bottom">
+                            <span class="badge bg-primary mb-2">Anatomia</span>
+                            <h4>O Coração Humano</h4>
+                            <p>O coração bombeia cerca de 7.500 litros de sangue por dia, bate aproximadamente 100.000 vezes em 24 horas e cerca de 35 milhões de vezes em um ano. Em uma vida média, o coração baterá mais de 2,5 bilhões de vezes.</p>
                         </div>
-
-                        <!-- Artigo 2 -->
-                        <div class="row mb-4 pb-4 border-bottom">
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="img-fluid rounded" alt="Tratamento para Alzheimer">
-                            </div>
-                            <div class="col-md-8">
-                                <span class="badge bg-info mb-1">Descobertas Recentes</span>
-                                <h4>Novo Tratamento Promissor para Alzheimer Reduz Placas Amiloides</h4>
-                                <p>Estudo de fase 3 mostra que medicamento experimental consegue reduzir significativamente as placas amiloides no cérebro de pacientes com Alzheimer em estágio inicial, com melhora cognitiva moderada.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">02/03/2025 | Por Dra. Ana Oliveira</small>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
-                                </div>
-                            </div>
+                        
+                        <div class="mb-4 pb-4 border-bottom">
+                            <span class="badge bg-success mb-2">Neurociência</span>
+                            <h4>O Cérebro e a Informação</h4>
+                            <p>O cérebro humano processa uma quantidade incrível de informações. A cada segundo, estima-se que o cérebro processe mais de 11 milhões de bits de informação através de todos os nossos sentidos, mas estamos conscientes de apenas cerca de 40 bits.</p>
                         </div>
-
-                        <!-- Artigo 3 -->
-                        <div class="row mb-4 pb-4 border-bottom">
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <img src="https://images.unsplash.com/photo-1585435557343-3b092031a831?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="img-fluid rounded" alt="Mapa Genético do Câncer">
-                            </div>
-                            <div class="col-md-8">
-                                <span class="badge bg-danger mb-1">Doenças e Tratamentos</span>
-                                <h4>Mapeamento Genético Completo de 500 Tipos de Câncer Revela Novos Alvos Terapêuticos</h4>
-                                <p>Consórcio internacional de pesquisadores concluiu o maior estudo genômico de câncer até hoje, identificando mutações-chave que podem ser alvo de novos medicamentos personalizados.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">25/02/2025 | Por Dr. Carlos Santos</small>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
-                                </div>
-                            </div>
+                        
+                        <div class="mb-4 pb-4 border-bottom">
+                            <span class="badge bg-warning text-dark mb-2">Microbioma</span>
+                            <h4>As Bactérias em Nosso Corpo</h4>
+                            <p>Existem aproximadamente 30 trilhões de células humanas em nosso corpo, mas cerca de 39 trilhões de bactérias. Isso significa que temos mais células bacterianas do que células humanas, criando um ecossistema complexo que afeta nossa saúde de inúmeras maneiras.</p>
                         </div>
-
-                        <!-- Artigo 4 -->
-                        <div class="row mb-4 pb-4 border-bottom">
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <img src="https://images.unsplash.com/photo-1631811858221-e8d94cd6ba2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="img-fluid rounded" alt="Vacina Universal contra Gripe">
-                            </div>
-                            <div class="col-md-8">
-                                <span class="badge bg-warning text-dark mb-1">Ensaios Clínicos</span>
-                                <h4>Vacina Universal contra Gripe Mostra 89% de Eficácia em Teste de Fase 2</h4>
-                                <p>Científicos desenvolveram uma vacina que atinge proteínas conservadas do vírus influenza, potencialmente eliminando a necessidade de vacinas anuais contra a gripe.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">18/02/2025 | Por Dra. Patrícia Mendes</small>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
-                                </div>
-                            </div>
+                        
+                        <div class="mb-4 pb-4 border-bottom">
+                            <span class="badge bg-danger mb-2">Imunologia</span>
+                            <h4>O Sistema Imunológico</h4>
+                            <p>Se esticados e colocados em linha reta, todos os vasos sanguíneos do corpo humano dariam aproximadamente 2,5 voltas na Terra. A medula óssea produz cerca de 2,5 milhões de novas células sanguíneas a cada segundo para repor as que morrem naturalmente.</p>
                         </div>
-
-                        <!-- Artigo 5 -->
-                        <div class="row">
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <img src="https://images.unsplash.com/photo-1602052577122-f73b9988ba78?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="img-fluid rounded" alt="Microrrobôs Terapêuticos">
-                            </div>
-                            <div class="col-md-8">
-                                <span class="badge bg-success mb-1">Tecnologia Médica</span>
-                                <h4>Microrrobôs Terapêuticos Administram Medicamentos Diretamente em Tumores Cerebrais</h4>
-                                <p>Equipe multidisciplinar desenvolveu microrrobôs do tamanho de células que podem navegar pelo sistema circulatório e entregar medicamentos com precisão em tumores cerebrais de difícil acesso.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">10/02/2025 | Por Dr. Roberto Almeida</small>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
-                                </div>
-                            </div>
+                        
+                        <div class="mb-4 pb-4 border-bottom">
+                            <span class="badge bg-info mb-2">História da Medicina</span>
+                            <h4>Primeiras Cirurgias</h4>
+                            <p>Evidências de trepanações (cirurgias de crânio) foram encontradas em restos humanos datados de 6500 a.C. O que é mais surpreendente é que muitos dos pacientes sobreviveram, como indicado pela cicatrização óssea em volta dos orifícios criados.</p>
+                        </div>
+                        
+                        <div>
+                            <span class="badge bg-success mb-2">Tecnologia Médica</span>
+                            <h4>Impressão 3D na Medicina</h4>
+                            <p>A tecnologia de impressão 3D está revolucionando a medicina. Cientistas já conseguiram imprimir órgãos funcionais em miniatura, como fígados e rins, a partir de células do próprio paciente, reduzindo o risco de rejeição. Em breve, poderemos ter órgãos completos impressos para transplantes.</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Paginação -->
-                <nav aria-label="Navegação de páginas">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Próxima</a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
 
             <!-- Sidebar -->
             <div class="col-lg-4">
-                <!-- Busca -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h4 class="card-title">Buscar Pesquisas</h4>
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Palavra-chave...">
-                            <button class="btn btn-primary" type="button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Categorias -->
                 <div class="card mb-4">
                     <div class="card-header">
@@ -310,107 +187,19 @@
                     </div>
                 </div>
 
-                <!-- Artigos Populares -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Mais Lidos</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex mb-3">
-                            <div class="flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1584467735815-f778ca69ad8d?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Epigenética e Longevidade" class="rounded" width="75">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mt-0">Epigenética: A Chave para a Longevidade Humana?</h6>
-                                <small class="text-muted">15.423 visualizações</small>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <div class="flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1580281657702-257584239a42?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="CRISPR e Doenças Genéticas" class="rounded" width="75">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mt-0">CRISPR: Primeiros Pacientes Curados de Anemia Falciforme</h6>
-                                <small class="text-muted">12.780 visualizações</small>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <div class="flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Microbioma Intestinal" class="rounded" width="75">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mt-0">Microbioma Intestinal: O Segundo Cérebro e seu Impacto na Saúde Mental</h6>
-                                <small class="text-muted">10.562 visualizações</small>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img src="https://images.unsplash.com/photo-1476357471311-43c0db9fb2b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Exoesqueletos Médicos" class="rounded" width="75">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="mt-0">Exoesqueletos Médicos: A Nova Fronteira na Reabilitação Motora</h6>
-                                <small class="text-muted">9.871 visualizações</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Revistas e Jornais Científicos -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Fontes Confiáveis</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column gap-2">
-                            <a href="#" class="d-flex align-items-center text-decoration-none text-dark">
-                                <i class="bi bi-journal-medical text-primary me-2"></i>
-                                The New England Journal of Medicine
-                            </a>
-                            <a href="#" class="d-flex align-items-center text-decoration-none text-dark">
-                                <i class="bi bi-journal-medical text-primary me-2"></i>
-                                The Lancet
-                            </a>
-                            <a href="#" class="d-flex align-items-center text-decoration-none text-dark">
-                                <i class="bi bi-journal-medical text-primary me-2"></i>
-                                JAMA (Journal of the American Medical Association)
-                            </a>
-                            <a href="#" class="d-flex align-items-center text-decoration-none text-dark">
-                                <i class="bi bi-journal-medical text-primary me-2"></i>
-                                BMJ (British Medical Journal)
-                            </a>
-                            <a href="#" class="d-flex align-items-center text-decoration-none text-dark">
-                                <i class="bi bi-journal-medical text-primary me-2"></i>
-                                Nature Medicine
-                            </a>
-                            <a href="#" class="d-flex align-items-center text-decoration-none text-dark">
-                                <i class="bi bi-journal-medical text-primary me-2"></i>
-                                Science Translational Medicine
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Newsletter -->
+                <!-- WhatsApp Contact -->
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Newsletter de Pesquisas</h4>
+                        <h4 class="card-title mb-0">Entre em Contato Conosco</h4>
                     </div>
                     <div class="card-body">
-                        <p>Receba as últimas novidades sobre pesquisas médicas diretamente no seu e-mail:</p>
-                        <form>
-                            <div class="mb-3">
-                                <input type="email" class="form-control" placeholder="Seu e-mail" required>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="weeklyDigest" checked>
-                                <label class="form-check-label" for="weeklyDigest">
-                                    Resumo semanal
-                                </label>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Inscrever-se</button>
-                            </div>
-                        </form>
+                        <p>Envie uma mensagem para tirar suas dúvidas ou solicitar informações sobre pesquisas médicas.</p>
+                        <p class="mb-3">Estamos disponíveis para responder suas perguntas sobre nossos materiais e serviços.</p>
+                        <div class="d-grid">
+                            <a href="https://wa.me/+79961007408" target="_blank" class="btn btn-success">
+                                <i class="bi bi-whatsapp me-2"></i>Contato via WhatsApp
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -421,25 +210,36 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h5>Sobre o Blog</h5>
-                    <p>Blog multilingue focado em compartilhar conhecimento especializado em diversas áreas.</p>
+                    <h5>Justificações Acadêmicas</h5>
+                    <p>Somos eternos aprendizes</p>
                 </div>
                 <div class="col-md-4">
                     <h5>Links Rápidos</h5>
                     <ul class="list-unstyled">
                         <li><a href="../../index.html" class="text-light">Home</a></li>
-                        <li><a href="#" class="text-light">Contato</a></li>
-                        <li><a href="#" class="text-light">Política de Privacidade</a></li>
-                        <li><a href="#" class="text-light">Termos de Uso</a></li>
+                        <li><a href="" class="text-light">contacto: +7 996 100 74 08</a></li>
+                        <li><a href="#" class="text-light"></a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Contato</h5>
-                    <p>Email: contato@blogmultilingue.com</p>
+                    <p>Email: justificacoesacademicas@gmail.com</p>
                     <div class="social-media">
-                        <a href="#" class="text-light me-2">Facebook</a>
-                        <a href="#" class="text-light me-2">Twitter</a>
-                        <a href="#" class="text-light">LinkedIn</a>
+                        <a href="https://www.facebook.com/share/19XAayVoKb/?mibextid=wwXIfr" class="text-light me-3" target="_blank">
+                            <i class="bi bi-facebook fs-4"></i>
+                        </a>
+                        <a href="https://www.instagram.com/justificacoes_academicas_?igsh=Ym9qa3F2cDU5YTlm&utm_source=qr" class="text-light me-3" target="_blank">
+                            <i class="bi bi-instagram fs-4"></i>
+                        </a>
+                        <a href="https://youtube.com/@justificacoesacademicas?si=asbgXUxZPTC-73wq" class="text-light me-3" target="_blank">
+                            <i class="bi bi-youtube fs-4"></i>
+                        </a>
+                        <a href="https://chat.whatsapp.com/EvNGxDj3fagINGtBsH6piL" class="text-light me-3" target="_blank">
+                            <i class="bi bi-whatsapp fs-4"></i>
+                        </a>
+                        <a href="https://justificacoesacademicas.org" class="text-light" target="_blank">
+                            <i class="bi bi-globe fs-4"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -452,8 +252,8 @@
     </footer>
 
     <!-- JavaScript -->
-    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/components/translator.js"></script>
 </body>

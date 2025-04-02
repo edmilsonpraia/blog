@@ -35,8 +35,8 @@
                                 Inglês
                             </a>
                             <ul class="dropdown-menu">
-                                
-                                
+                                <li><a class="dropdown-item" href="../english/grammar.html">Gramática</a></li>
+                                <li><a class="dropdown-item" href="../english/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -44,8 +44,8 @@
                                 Medicina
                             </a>
                             <ul class="dropdown-menu">
-                                
-                                
+                                <li><a class="dropdown-item" href="../medicine/research.html">Pesquisas</a></li>
+                                <li><a class="dropdown-item" href="../medicine/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -53,8 +53,8 @@
                                 Petróleo e Gás
                             </a>
                             <ul class="dropdown-menu">
-                                
-                                
+                                <li><a class="dropdown-item" href="../oil-gas/innovations.html">Inovações</a></li>
+                                <li><a class="dropdown-item" href="../oil-gas/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -62,9 +62,8 @@
                                 Engenharias
                             </a>
                             <ul class="dropdown-menu">
-                             
                                 <li><a class="dropdown-item" href="../engineering/computer.html">Computação</a></li>
-                                
+                                <li><a class="dropdown-item" href="../engineering/publications.html">Publicações</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -119,7 +118,6 @@
                                     <div class="card-body">
                                         <h5 class="card-title">Avanços na Medicina Regenerativa</h5>
                                         <p class="card-text">Novas pesquisas mostram avanços promissores na área de medicina regenerativa e terapias celulares.</p>
-                                        <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
                                     </div>
                                 </div>
                             </div>
@@ -129,7 +127,6 @@
                                     <div class="card-body">
                                         <h5 class="card-title">IA em Diagnósticos Médicos</h5>
                                         <p class="card-text">Como a inteligência artificial está revolucionando a precisão e eficiência dos diagnósticos médicos.</p>
-                                        <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +139,6 @@
                                     <div class="card-body">
                                         <h5 class="card-title">Comunicação Médico-Paciente</h5>
                                         <p class="card-text">A importância de uma comunicação eficaz entre médicos e pacientes em contextos multilíngues.</p>
-                                        <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +148,6 @@
                                     <div class="card-body">
                                         <h5 class="card-title">Terminologia Médica em Inglês</h5>
                                         <p class="card-text">Guia completo dos termos médicos mais importantes em inglês para profissionais da saúde.</p>
-                                        <a href="#" class="btn btn-sm btn-outline-primary">Ler mais</a>
                                     </div>
                                 </div>
                             </div>
@@ -166,40 +161,15 @@
                         <h3>Artigos Recentes</h3>
                     </div>
                     <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Novas Diretrizes para Tratamento de Hipertensão</h5>
-                                    <small class="text-muted">3 dias atrás</small>
+                        <div id="recent-articles-container">
+                            <!-- Conteúdo será carregado dinamicamente -->
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Carregando...</span>
                                 </div>
-                                <p class="mb-1">Atualização das diretrizes internacionais para diagnóstico e tratamento da hipertensão arterial.</p>
-                                <a href="#" class="btn btn-sm btn-link">Ler mais</a>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Vocabulário Essencial para Emergências Médicas</h5>
-                                    <small class="text-muted">1 semana atrás</small>
-                                </div>
-                                <p class="mb-1">Lista de termos e frases importantes para comunicação em situações de emergência médica em inglês.</p>
-                                <a href="#" class="btn btn-sm btn-link">Ler mais</a>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Avanços em Cirurgias Minimamente Invasivas</h5>
-                                    <small class="text-muted">2 semanas atrás</small>
-                                </div>
-                                <p class="mb-1">Técnicas inovadoras que estão reduzindo tempo de recuperação e melhorando resultados cirúrgicos.</p>
-                                <a href="#" class="btn btn-sm btn-link">Ler mais</a>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Guia de Pronúncia para Termos Médicos em Inglês</h5>
-                                    <small class="text-muted">3 semanas atrás</small>
-                                </div>
-                                <p class="mb-1">Dicas para pronunciar corretamente termos médicos complexos em inglês durante apresentações e comunicações.</p>
-                                <a href="#" class="btn btn-sm btn-link">Ler mais</a>
-                            </li>
-                        </ul>
+                                <p class="mt-2">Carregando artigos recentes...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -215,17 +185,6 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <a href="research.html" class="text-decoration-none">Pesquisas</a>
                                 <span class="badge bg-primary rounded-pill">12</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <a href="techniques.html" class="text-decoration-none">Técnicas</a>
-                                <span class="badge bg-primary rounded-pill">8</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <a href="glossary.html" class="text-decoration-none">Glossário</a>
-                                <span class="badge bg-primary rounded-pill">15</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span class="badge bg-primary rounded-pill">6</span>
                             </li>
                         </ul>
                     </div>
@@ -272,7 +231,6 @@
                                     <div class="card-body p-2">
                                         <h5 class="card-title">Terminologia Médica em Inglês</h5>
                                         <p class="card-text"><small class="text-muted">40 horas | Nível Avançado</small></p>
-                                        <a href="courses.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
                                     </div>
                                 </div>
                             </div>
@@ -286,32 +244,26 @@
                                     <div class="card-body p-2">
                                         <h5 class="card-title">Comunicação com Pacientes</h5>
                                         <p class="card-text"><small class="text-muted">25 horas | Nível Intermediário</small></p>
-                                        <a href="courses.html" class="btn btn-sm btn-outline-primary">Saiba mais</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer text-center">
-                        <a href="courses.html" class="btn btn-primary">Ver todos os cursos</a>
-                    </div>
                 </div>
 
-                <!-- Newsletter -->
+                <!-- WhatsApp Contact (substituindo Newsletter) -->
                 <div class="card">
                     <div class="card-header">
-                        <h3>Newsletter</h3>
+                        <h3>Entre em Contato Conosco</h3>
                     </div>
                     <div class="card-body">
-                        <p>Receba novidades e atualizações da área médica diretamente no seu email.</p>
-                        <form>
-                            <div class="mb-3">
-                                <input type="email" class="form-control" placeholder="Seu e-mail" required>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Inscrever-se</button>
-                            </div>
-                        </form>
+                        <p>Envie uma mensagem para tirar suas dúvidas ou solicitar informações.</p>
+                        <p class="mb-3">Estamos disponíveis para responder suas perguntas sobre nossos materiais e serviços.</p>
+                        <div class="d-grid">
+                            <a href="https://wa.me/+79961007408" target="_blank" class="btn btn-success">
+                                <i class="bi bi-whatsapp me-2"></i>Contato via WhatsApp
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -322,25 +274,36 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h5>Sobre o Blog</h5>
-                    <p>Blog multilingue focado em compartilhar conhecimento especializado em diversas áreas.</p>
+                    <h5>Justificações Acadêmicas</h5>
+                    <p>Somos eternos aprendizes</p>
                 </div>
                 <div class="col-md-4">
                     <h5>Links Rápidos</h5>
                     <ul class="list-unstyled">
                         <li><a href="../../index.html" class="text-light">Home</a></li>
-                        <li><a href="#" class="text-light">Contato</a></li>
-                        <li><a href="#" class="text-light">Política de Privacidade</a></li>
-                        <li><a href="#" class="text-light">Termos de Uso</a></li>
+                        <li><a href="" class="text-light">contacto: +7 996 100 74 08</a></li>
+                        <li><a href="#" class="text-light"></a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Contato</h5>
-                    <p>Email: contato@blogmultilingue.com</p>
+                    <p>Email: justificacoesacademicas@gmail.com</p>
                     <div class="social-media">
-                        <a href="#" class="text-light me-2">Facebook</a>
-                        <a href="#" class="text-light me-2">Twitter</a>
-                        <a href="#" class="text-light">LinkedIn</a>
+                        <a href="https://www.facebook.com/share/19XAayVoKb/?mibextid=wwXIfr" class="text-light me-3" target="_blank">
+                            <i class="bi bi-facebook fs-4"></i>
+                        </a>
+                        <a href="https://www.instagram.com/justificacoes_academicas_?igsh=Ym9qa3F2cDU5YTlm&utm_source=qr" class="text-light me-3" target="_blank">
+                            <i class="bi bi-instagram fs-4"></i>
+                        </a>
+                        <a href="https://youtube.com/@justificacoesacademicas?si=asbgXUxZPTC-73wq" class="text-light me-3" target="_blank">
+                            <i class="bi bi-youtube fs-4"></i>
+                        </a>
+                        <a href="https://chat.whatsapp.com/EvNGxDj3fagINGtBsH6piL" class="text-light me-3" target="_blank">
+                            <i class="bi bi-whatsapp fs-4"></i>
+                        </a>
+                        <a href="https://justificacoesacademicas.org" class="text-light" target="_blank">
+                            <i class="bi bi-globe fs-4"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -357,5 +320,87 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/components/translator.js"></script>
+    
+    <!-- Script para carregar artigos dinamicamente -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Carregar artigos recentes
+        loadRecentArticles();
+        
+        function loadRecentArticles() {
+            // Obter o container de artigos
+            const articlesContainer = document.getElementById('recent-articles-container');
+            if (!articlesContainer) return;
+            
+            // Tentar carregar artigos do localStorage
+            try {
+                const storedArticles = localStorage.getItem('blogArticles');
+                let articles = [];
+                
+                if (storedArticles) {
+                    articles = JSON.parse(storedArticles);
+                }
+                
+                // Filtrar artigos relacionados a medicina
+                const medicalArticles = articles.filter(article => 
+                    article.category === 'medicina' || 
+                    article.tags?.includes('medicina') ||
+                    article.tags?.includes('medical') ||
+                    article.tags?.includes('saúde')
+                );
+                
+                // Ordenar por data (mais recentes primeiro)
+                medicalArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Limitar a 5 artigos mais recentes
+                const recentArticles = medicalArticles.slice(0, 5);
+                
+                // Limpar container
+                articlesContainer.innerHTML = '';
+                
+                // Se não há artigos para exibir
+                if (recentArticles.length === 0) {
+                    articlesContainer.innerHTML = '<div class="alert alert-info">Nenhum artigo disponível no momento.</div>';
+                    return;
+                }
+                
+                // Criar uma lista para os artigos
+                const articleList = document.createElement('ul');
+                articleList.className = 'list-group list-group-flush';
+                
+                // Adicionar cada artigo à lista
+                recentArticles.forEach(article => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    
+                    // Formatar data
+                    const articleDate = new Date(article.date);
+                    const formattedDate = articleDate.toLocaleDateString('pt-BR');
+                    
+                    // Truncar abstract para exibição
+                    const shortAbstract = article.abstract 
+                        ? article.abstract.substring(0, 150) + (article.abstract.length > 150 ? '...' : '')
+                        : 'Sem descrição disponível.';
+                    
+                    listItem.innerHTML = `
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">${article.title}</h5>
+                            <small class="text-muted">${formattedDate}</small>
+                        </div>
+                        <p class="mb-1">${shortAbstract}</p>
+                    `;
+                    
+                    articleList.appendChild(listItem);
+                });
+                
+                articlesContainer.appendChild(articleList);
+                
+            } catch (error) {
+                console.error('Erro ao carregar artigos:', error);
+                articlesContainer.innerHTML = '<div class="alert alert-danger">Erro ao carregar artigos. Por favor, tente novamente mais tarde.</div>';
+            }
+        }
+    });
+    </script>
 </body>
 </html>
