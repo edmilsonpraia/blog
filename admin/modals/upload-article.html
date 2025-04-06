@@ -1,4 +1,4 @@
-<!-- Modal para Upload de Artigos Científicos -->
+<!-- Modal para Upload de Artigos Científicos - Versão Supabase -->
  
 <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -8,6 +8,9 @@
         </div>
         <div class="modal-body">
             <form id="scientific-article-form">
+                <!-- Campo oculto para ID (usado na edição) -->
+                <input type="hidden" id="article-id" value="">
+                
                 <!-- Informações básicas -->
                 <div class="row mb-3">
                     <div class="col-md-8">
@@ -80,17 +83,17 @@
                     </div>
                 </div>
                 
-                <!-- Arquivo e imagem em destaque -->
+                <!-- Links de arquivo e imagem em destaque -->
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label for="article-file" class="form-label required">Arquivo do Artigo (PDF)</label>
-                        <input type="file" class="form-control" id="article-file" accept=".pdf" required>
-                        <small class="text-muted">Tamanho máximo: 10MB</small>
+                        <label for="article-file-link" class="form-label required">Link do Artigo (PDF)</label>
+                        <input type="url" class="form-control" id="article-file-link" placeholder="https://drive.google.com/file/d/..." required>
+                        <small class="text-muted">Cole o link compartilhável do Google Drive, Dropbox, etc.</small>
                     </div>
                     <div class="col-md-6">
-                        <label for="article-thumbnail" class="form-label">Imagem em Destaque</label>
-                        <input type="file" class="form-control" id="article-thumbnail" accept="image/*">
-                        <small class="text-muted">Recomendado: 800x400px, formato JPG ou PNG</small>
+                        <label for="article-thumbnail-link" class="form-label">Link da Imagem em Destaque</label>
+                        <input type="url" class="form-control" id="article-thumbnail-link" placeholder="https://i.imgur.com/...">
+                        <small class="text-muted">Cole o link direto da imagem (JPG, PNG, etc.)</small>
                     </div>
                 </div>
                 
@@ -140,7 +143,10 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" id="save-article-btn">Publicar Artigo</button>
+            <button type="button" class="btn btn-primary" id="save-article-btn">
+                <span id="save-article-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                Publicar Artigo
+            </button>
         </div>
     </div>
 </div>
@@ -217,8 +223,9 @@ if (categorySelect && subcategorySelect) {
 // Salvar artigo
 const saveArticleBtn = document.getElementById('save-article-btn');
 if (saveArticleBtn) {
-    saveArticleBtn.addEventListener('click', function() {
+    saveArticleBtn.addEventListener('click', async function() {
         const form = document.getElementById('scientific-article-form');
+        const spinner = document.getElementById('save-article-spinner');
         
         // Verificar se todos os campos obrigatórios estão preenchidos
         const requiredFields = form.querySelectorAll('[required]');
@@ -238,27 +245,78 @@ if (saveArticleBtn) {
             return;
         }
         
-        // Simular envio
-        const btnText = this.textContent;
-        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...';
+        // Mostrar spinner de carregamento
         this.disabled = true;
+        spinner.classList.remove('d-none');
         
-        // Simulando um tempo de processamento
-        setTimeout(() => {
-            alert('Artigo científico publicado com sucesso!');
+        try {
+            // Obter o ID (se estiver editando)
+            const articleId = document.getElementById('article-id').value;
+            
+            // Coletar dados do formulário
+            const articleData = {
+                title: document.getElementById('article-title').value,
+                date: document.getElementById('article-date').value,
+                authors: document.getElementById('article-authors').value,
+                category: document.getElementById('article-category').value,
+                subcategory: document.getElementById('article-subcategory').value || '',
+                journal: document.getElementById('article-journal').value || '',
+                doi: document.getElementById('article-doi').value || '',
+                badge: document.getElementById('article-badge').value || 'standard',
+                abstract: document.getElementById('article-abstract').value,
+                fileLink: document.getElementById('article-file-link').value,
+                thumbnailLink: document.getElementById('article-thumbnail-link').value || '',
+                content: document.getElementById('article-content').value || '',
+                status: document.getElementById('article-status').value || 'published',
+                language: document.getElementById('article-language').value || 'pt',
+                access: document.getElementById('article-access').value || 'public',
+                tags: document.getElementById('article-tags').value || ''
+            };
+            
+            // Verificar se AdminData está disponível
+            if (typeof AdminData === 'undefined' || typeof AdminData.articles === 'undefined') {
+                throw new Error('Sistema de gerenciamento de dados não está disponível.');
+            }
+            
+            if (articleId) {
+                // Editar artigo existente
+                await AdminData.articles.update(articleId, articleData);
+                showSuccessAlert('Artigo atualizado com sucesso!');
+            } else {
+                // Adicionar novo artigo
+                await AdminData.articles.add(articleData);
+                showSuccessAlert('Artigo publicado com sucesso!');
+            }
             
             // Limpar formulário
             form.reset();
+            document.getElementById('article-id').value = '';
             
             // Fechar modal
             const modalElement = document.getElementById('uploadArticleModal');
             const modal = bootstrap.Modal.getInstance(modalElement);
             if (modal) modal.hide();
             
+            // Atualizar interface
+            if (typeof updateDashboardCounts === 'function') {
+                await updateDashboardCounts();
+            }
+            
+            if (typeof refreshRecentArticlesList === 'function') {
+                refreshRecentArticlesList();
+            }
+            
+            if (typeof updateArticlesList === 'function') {
+                updateArticlesList();
+            }
+        } catch (error) {
+            console.error('Erro ao salvar artigo:', error);
+            showErrorAlert('Erro ao salvar artigo: ' + error.message);
+        } finally {
             // Restaurar botão
-            this.innerHTML = btnText;
             this.disabled = false;
-        }, 1500);
+            spinner.classList.add('d-none');
+        }
     });
 }
 
@@ -268,6 +326,38 @@ if (typeof ClassicEditor !== 'undefined') {
         .catch(error => {
             console.error('Erro ao inicializar o editor:', error);
         });
+}
+
+// Função auxiliar para mostrar alertas de sucesso
+function showSuccessAlert(message) {
+    const successAlert = document.createElement('div');
+    successAlert.className = 'alert alert-success alert-dismissible fade show fixed-bottom mx-4 mb-4';
+    successAlert.innerHTML = `
+        <strong>Sucesso!</strong> ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    document.body.appendChild(successAlert);
+    
+    // Remover alerta após 5 segundos
+    setTimeout(() => {
+        successAlert.remove();
+    }, 5000);
+}
+
+// Função auxiliar para mostrar alertas de erro
+function showErrorAlert(message) {
+    const errorAlert = document.createElement('div');
+    errorAlert.className = 'alert alert-danger alert-dismissible fade show fixed-bottom mx-4 mb-4';
+    errorAlert.innerHTML = `
+        <strong>Erro!</strong> ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    document.body.appendChild(errorAlert);
+    
+    // Remover alerta após 7 segundos
+    setTimeout(() => {
+        errorAlert.remove();
+    }, 7000);
 }
 </script>
 
@@ -281,6 +371,9 @@ if (typeof ClassicEditor !== 'undefined') {
         </div>
         <div class="modal-body">
           <form id="direct-article-form">
+            <!-- Campo oculto para ID (usado na edição) -->
+            <input type="hidden" id="direct-article-id" value="">
+            
             <div class="mb-3">
               <label for="direct-title" class="form-label">Título</label>
               <input type="text" class="form-control" id="direct-title" required>
@@ -296,7 +389,10 @@ if (typeof ClassicEditor !== 'undefined') {
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="save-direct-article">Salvar</button>
+          <button type="button" class="btn btn-primary" id="save-direct-article">
+            <span id="direct-article-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            Salvar
+          </button>
         </div>
       </div>
     </div>

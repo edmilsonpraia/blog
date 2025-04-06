@@ -246,6 +246,8 @@
             </div>
         </div>
     </footer>
+    <!-- Adicionar script do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
@@ -253,66 +255,231 @@
     <script src="../../js/main.js"></script>
     <script src="../../js/components/translator.js"></script>
     
-    <!-- Script para carregamento dinâmico de artigos recentes -->
+    <!-- Script para carregamento de artigos de Petróleo e Gás -->
     <script>
+    // Configuração do Supabase
+    const SUPABASE_URL = 'https://lvegldhtgalibbkmhzfz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2ZWdsZGh0Z2FsaWJia21oemZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2ODQzOTcsImV4cCI6MjA1OTI2MDM5N30.mS069eiTid0_l067PRZPD_3a7v-GJrvxQNCTCRuNpYw';
+    let supabase = null;
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Função para carregar artigos recentes
-        function loadRecentArticles() {
-            const recentArticlesContainer = document.getElementById('recent-articles-container');
-            const noArticlesMessage = document.getElementById('no-articles-message');
+        console.log('Iniciando carregamento de conteúdo específico de Petróleo e Gás');
+        
+        // Inicializar o cliente Supabase
+        initializeSupabase();
+        
+        // Carregar dados do localStorage como fallback
+        loadArticlesFromLocalStorage();
+    });
+
+    /**
+     * Inicializa o cliente Supabase
+     */
+    function initializeSupabase() {
+        console.log('Inicializando cliente Supabase para página de Petróleo e Gás');
+        
+        try {
+            // Verificar se o Supabase já está disponível no window global
+            if (window.supabase) {
+                console.log('Objeto supabase já disponível globalmente');
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                loadArticlesFromSupabase();
+                return;
+            }
             
-            // Tentar obter artigos do localStorage
+            // Verificar outras formas de acesso
+            if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
+                console.log('Usando window.supabase.createClient');
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                loadArticlesFromSupabase();
+                return;
+            } 
+            else if (typeof createClient === 'function') {
+                console.log('Usando createClient global');
+                supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+                loadArticlesFromSupabase();
+                return;
+            }
+            
+            console.error('Biblioteca Supabase não encontrada ou não inicializada corretamente');
+        } catch (error) {
+            console.error('Erro ao inicializar o cliente Supabase:', error);
+        }
+    }
+
+    /**
+     * Carrega artigos recentes do Supabase
+     */
+    async function loadArticlesFromSupabase() {
+        console.log('Carregando artigos recentes de Petróleo e Gás do Supabase');
+        
+        try {
+            if (!supabase) {
+                console.error('Cliente Supabase não inicializado');
+                return;
+            }
+            
+            // Buscar artigos da categoria petróleo e gás
+            const { data: articles, error } = await supabase
+                .from('articles')
+                .select('*')
+                .eq('status', 'publicado')
+                .eq('category', 'petroleo-gas')
+                .order('date', { ascending: false })
+                .limit(4);
+            
+            if (error) {
+                console.error('Erro ao buscar artigos do Supabase:', error);
+                return;
+            }
+            
+            console.log(`Carregados ${articles?.length || 0} artigos do Supabase`);
+            
+            // Exibir artigos na página
+            if (articles && articles.length > 0) {
+                displayArticles(articles);
+            }
+        } catch (error) {
+            console.error('Erro ao carregar artigos do Supabase:', error);
+        }
+    }
+
+    /**
+     * Carrega artigos do localStorage (como fallback)
+     */
+    function loadArticlesFromLocalStorage() {
+        console.log('Buscando artigos do localStorage (fallback)');
+        
+        try {
+            // Obter artigos do localStorage
             const articlesData = JSON.parse(localStorage.getItem('blogArticles') || '[]');
             
             // Filtrar apenas artigos da categoria "petróleo e gás"
             const oilGasArticles = articlesData.filter(article => 
                 article.category === 'oilgas' || 
                 article.category === 'petroleo' || 
+                article.category === 'petroleo-gas' ||
                 article.tags?.includes('petroleo') || 
                 article.tags?.includes('gas') || 
                 article.tags?.includes('oil') || 
                 article.tags?.includes('gas')
             );
             
-            // Ordenar por data (mais recentes primeiro)
-            oilGasArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            console.log(`Encontrados ${oilGasArticles.length} artigos no localStorage`);
             
-            // Se há artigos para mostrar
-            if (oilGasArticles.length > 0) {
-                // Esconder mensagem de "nenhum artigo"
-                noArticlesMessage.style.display = 'none';
-                
-                // Limpar o container
-                recentArticlesContainer.innerHTML = '';
+            // Se há artigos para mostrar e ainda não carregamos do Supabase
+            if (oilGasArticles.length > 0 && !document.querySelector('#recent-articles-container .article-from-supabase')) {
+                // Ordenar por data (mais recentes primeiro)
+                oilGasArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
                 // Mostrar até 4 artigos mais recentes
                 const recentArticles = oilGasArticles.slice(0, 4);
-                
-                recentArticles.forEach(article => {
-                    const date = new Date(article.date);
-                    const formattedDate = date.toLocaleDateString('pt-BR');
-                    
-                    const articleElement = document.createElement('div');
-                    articleElement.className = 'list-group-item';
-                    articleElement.innerHTML = `
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">${article.title}</h5>
-                            <small class="text-muted">${formattedDate}</small>
-                        </div>
-                        <p class="mb-1">${article.abstract?.substring(0, 120) || 'Sem resumo disponível'}...</p>
-                    `;
-                    
-                    recentArticlesContainer.appendChild(articleElement);
-                });
-            } else {
-                // Mostrar mensagem de "nenhum artigo"
-                noArticlesMessage.style.display = 'block';
+                displayArticles(recentArticles, false);
             }
+        } catch (error) {
+            console.error('Erro ao carregar artigos do localStorage:', error);
+        }
+    }
+
+    /**
+     * Exibe os artigos na página
+     */
+    function displayArticles(articles, fromSupabase = true) {
+        const recentArticlesContainer = document.getElementById('recent-articles-container');
+        const noArticlesMessage = document.getElementById('no-articles-message');
+        
+        if (!recentArticlesContainer || !noArticlesMessage) {
+            console.error('Elementos do DOM não encontrados');
+            return;
         }
         
-        // Carregar artigos ao iniciar a página
-        loadRecentArticles();
-    });
+        // Se há artigos para mostrar
+        if (articles && articles.length > 0) {
+            // Esconder mensagem de "nenhum artigo"
+            noArticlesMessage.style.display = 'none';
+            
+            // Limpar o container apenas se os artigos vierem do Supabase (fonte primária)
+            if (fromSupabase) {
+                recentArticlesContainer.innerHTML = '';
+            }
+            
+            // Processar cada artigo
+            articles.forEach(article => {
+                // Verificar se o artigo já está sendo exibido (evitar duplicações)
+                const existingArticle = document.querySelector(`[data-article-id="${article.id}"]`);
+                if (existingArticle) {
+                    return; // Pular este artigo se já estiver exibido
+                }
+                
+                const date = new Date(article.date);
+                const formattedDate = date.toLocaleDateString('pt-BR');
+                
+                const articleElement = document.createElement('div');
+                articleElement.className = 'list-group-item';
+                
+                // Adicionar classes e atributos para identificação
+                if (fromSupabase) {
+                    articleElement.classList.add('article-from-supabase');
+                } else {
+                    articleElement.classList.add('article-from-localstorage');
+                }
+                
+                // Adicionar ID do artigo como atributo de dados
+                articleElement.setAttribute('data-article-id', article.id || `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+                
+                // Criar e adicionar o conteúdo do artigo
+                articleElement.innerHTML = `
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">${article.title || 'Sem título'}</h5>
+                        <small class="text-muted">${formattedDate}</small>
+                    </div>
+                    <p class="mb-1">${article.abstract?.substring(0, 120) || 'Sem resumo disponível'}...</p>
+                    <div class="mt-2">
+                        <a href="${article.file_link || '#'}" class="btn btn-sm btn-outline-primary" target="_blank">
+                            <i class="bi bi-file-earmark-text"></i> Ler artigo
+                        </a>
+                        ${article.subcategory ? `<span class="badge bg-info ms-2">${article.subcategory}</span>` : ''}
+                    </div>
+                `;
+                
+                recentArticlesContainer.appendChild(articleElement);
+            });
+            
+            // Atualizar contadores de artigos
+            updateCategoryCounts();
+        } else if (recentArticlesContainer.childElementCount === 0) {
+            // Mostrar mensagem de "nenhum artigo" apenas se não houver nenhum artigo
+            noArticlesMessage.style.display = 'block';
+        }
+    }
+
+    /**
+     * Atualiza os contadores de artigos nas categorias
+     */
+    function updateCategoryCounts() {
+        try {
+            // Obter dados do Supabase
+            if (supabase) {
+                // Buscar contagens para cada categoria
+                supabase
+                    .from('articles')
+                    .select('category', { count: 'exact', head: true })
+                    .eq('category', 'petroleo-gas')
+                    .then(({ count }) => {
+                        // Atualizar contador na UI
+                        const publicationsCounter = document.querySelector('a[href="publications.html"] + .badge');
+                        if (publicationsCounter) {
+                            publicationsCounter.textContent = count || '0';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao obter contagem de artigos:', error);
+                    });
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar contadores:', error);
+        }
+    }
     </script>
 </body>
 </html>

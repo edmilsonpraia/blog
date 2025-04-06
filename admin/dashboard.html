@@ -20,35 +20,354 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Adicionar o script do Supabase (versão corrigida) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        window.onload = function() {
-            console.log('Página carregada, verificando AdminData...');
-            
-            // Verificar autenticação
-            if (!localStorage.getItem('adminLoggedIn')) {
-                window.location.href = 'login.html';
-                return;
+        // Função para inicializar o Supabase
+        function initializeSupabase() {
+            const supabaseUrl = 'https://lvegldhtgalibbkmhzfz.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2ZWdsZGh0Z2FsaWJia21oemZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2ODQzOTcsImV4cCI6MjA1OTI2MDM5N30.mS069eiTid0_l067PRZPD_3a7v-GJrvxQNCTCRuNpYw';
+            window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+            if (!window.supabaseClient) {
+                console.error('Erro ao inicializar o cliente Supabase');
+            } else {
+                console.log('Cliente Supabase inicializado com sucesso');
             }
-            
-            // Verificar expiração do login
-            const expirationTime = localStorage.getItem('adminLoginExpires');
-            if (expirationTime && Date.now() > parseInt(expirationTime)) {
-                // Login expirado
-                localStorage.removeItem('adminLoggedIn');
-                localStorage.removeItem('adminLoginExpires');
-                localStorage.removeItem('adminRemembered');
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            setTimeout(function() {
-                if (typeof window.BlogData !== 'undefined') {
-                    console.log('BlogData está disponível globalmente!');
-                } else {
-                    console.error('BlogData não está disponível globalmente!');
+
+            // Definir o BlogData para interagir com o Supabase
+            window.BlogData = {
+                // Buscar todos os artigos
+                fetchArticles: async function() {
+                    try {
+                        const { data, error } = await window.supabaseClient
+                            .from('articles')
+                            .select('*')
+                            .order('created_at', { ascending: false });
+                        if (error) throw error;
+                        return data || [];
+                    } catch (error) {
+                        console.error('Erro ao buscar artigos:', error);
+                        throw error;
+                    }
+                },
+
+                // Buscar todos os eventos
+                fetchEvents: async function() {
+                    try {
+                        const { data, error } = await window.supabaseClient
+                            .from('events')
+                            .select('*')
+                            .order('created_at', { ascending: false });
+                        if (error) throw error;
+                        return data || [];
+                    } catch (error) {
+                        console.error('Erro ao buscar eventos:', error);
+                        throw error;
+                    }
+                },
+
+                // Buscar todos os materiais
+                fetchMaterials: async function() {
+                    try {
+                        const { data, error } = await window.supabaseClient
+                            .from('materials')
+                            .select('*')
+                            .order('created_at', { ascending: false });
+                        if (error) throw error;
+                        return data || [];
+                    } catch (error) {
+                        console.error('Erro ao buscar materiais:', error);
+                        throw error;
+                    }
+                },
+
+                // Adicionar um novo artigo
+                addArticle: async function(article) {
+                    try {
+                        const articleData = {
+                            title: article.title,
+                            date: article.date,
+                            authors: article.authors,
+                            category: article.category,
+                            subcategory: article.subcategory,
+                            journal: article.journal,
+                            doi: article.doi,
+                            abstract: article.abstract,
+                            file_link: article.fileLink,
+                            thumbnail_link: article.thumbnailLink,
+                            content: article.content,
+                            status: article.status,
+                            language: article.language,
+                            access: article.access,
+                            tags: article.tags,
+                            created_at: new Date().toISOString()
+                        };
+
+                        const { data, error } = await window.supabaseClient
+                            .from('articles')
+                            .insert([articleData])
+                            .select();
+                        if (error) throw error;
+                        return data[0];
+                    } catch (error) {
+                        console.error('Erro ao adicionar artigo:', error);
+                        throw error;
+                    }
+                },
+
+                // Atualizar um artigo existente
+                updateArticle: async function(id, article) {
+                    try {
+                        const articleData = {
+                            title: article.title,
+                            date: article.date,
+                            authors: article.authors,
+                            category: article.category,
+                            subcategory: article.subcategory,
+                            journal: article.journal,
+                            doi: article.doi,
+                            abstract: article.abstract,
+                            file_link: article.fileLink,
+                            thumbnail_link: article.thumbnailLink,
+                            content: article.content,
+                            status: article.status,
+                            language: article.language,
+                            access: article.access,
+                            tags: article.tags,
+                            updated_at: new Date().toISOString()
+                        };
+
+                        const { data, error } = await window.supabaseClient
+                            .from('articles')
+                            .update(articleData)
+                            .eq('id', id)
+                            .select();
+                        if (error) throw error;
+                        return data[0];
+                    } catch (error) {
+                        console.error('Erro ao atualizar artigo:', error);
+                        throw error;
+                    }
+                },
+
+                // Excluir um artigo
+                deleteArticle: async function(id) {
+                    try {
+                        const { error } = await window.supabaseClient
+                            .from('articles')
+                            .delete()
+                            .eq('id', id);
+                        if (error) throw error;
+                        return true;
+                    } catch (error) {
+                        console.error('Erro ao excluir artigo:', error);
+                        throw error;
+                    }
+                },
+
+                // Adicionar um novo evento
+                addEvent: async function(event) {
+                    try {
+                        const eventData = {
+                            title: event.title,
+                            event_date: event.eventDate,
+                            location: event.location,
+                            category: event.category,
+                            event_type: event.eventType,
+                            description: event.description,
+                            image_link: event.imageLink,
+                            link: event.link,
+                            created_at: new Date().toISOString()
+                        };
+
+                        const { data, error } = await window.supabaseClient
+                            .from('events')
+                            .insert([eventData])
+                            .select();
+                        if (error) throw error;
+                        return data[0];
+                    } catch (error) {
+                        console.error('Erro ao adicionar evento:', error);
+                        throw error;
+                    }
+                },
+
+                // Atualizar um evento existente
+                updateEvent: async function(id, event) {
+                    try {
+                        const eventData = {
+                            title: event.title,
+                            event_date: event.eventDate,
+                            location: event.location,
+                            category: event.category,
+                            event_type: event.eventType,
+                            description: event.description,
+                            image_link: event.imageLink,
+                            link: event.link,
+                            updated_at: new Date().toISOString()
+                        };
+
+                        const { data, error } = await window.supabaseClient
+                            .from('events')
+                            .update(eventData)
+                            .eq('id', id)
+                            .select();
+                        if (error) throw error;
+                        return data[0];
+                    } catch (error) {
+                        console.error('Erro ao atualizar evento:', error);
+                        throw error;
+                    }
+                },
+
+                // Excluir um evento
+                deleteEvent: async function(id) {
+                    try {
+                        const { error } = await window.supabaseClient
+                            .from('events')
+                            .delete()
+                            .eq('id', id);
+                        if (error) throw error;
+                        return true;
+                    } catch (error) {
+                        console.error('Erro ao excluir evento:', error);
+                        throw error;
+                    }
+                },
+
+                // Adicionar um novo material
+                addMaterial: async function(material) {
+                    try {
+                        const materialData = {
+                            title: material.title,
+                            type: material.type,
+                            category: material.category,
+                            access: material.access,
+                            description: material.description,
+                            file_link: material.fileLink,
+                            cover_link: material.coverLink,
+                            created_at: new Date().toISOString()
+                        };
+
+                        const { data, error } = await window.supabaseClient
+                            .from('materials')
+                            .insert([materialData])
+                            .select();
+                        if (error) throw error;
+                        return data[0];
+                    } catch (error) {
+                        console.error('Erro ao adicionar material:', error);
+                        throw error;
+                    }
+                },
+
+                // Atualizar um material existente
+                updateMaterial: async function(id, material) {
+                    try {
+                        const materialData = {
+                            title: material.title,
+                            type: material.type,
+                            category: material.category,
+                            access: material.access,
+                            description: material.description,
+                            file_link: material.fileLink,
+                            cover_link: material.coverLink,
+                            updated_at: new Date().toISOString()
+                        };
+
+                        const { data, error } = await window.supabaseClient
+                            .from('materials')
+                            .update(materialData)
+                            .eq('id', id)
+                            .select();
+                        if (error) throw error;
+                        return data[0];
+                    } catch (error) {
+                        console.error('Erro ao atualizar material:', error);
+                        throw error;
+                    }
+                },
+
+                // Excluir um material
+                deleteMaterial: async function(id) {
+                    try {
+                        const { error } = await window.supabaseClient
+                            .from('materials')
+                            .delete()
+                            .eq('id', id);
+                        if (error) throw error;
+                        return true;
+                    } catch (error) {
+                        console.error('Erro ao excluir material:', error);
+                        throw error;
+                    }
+                },
+
+                // Obter contagens de artigos, eventos e materiais
+                getCounts: async function() {
+                    try {
+                        const [articlesRes, eventsRes, materialsRes] = await Promise.all([
+                            window.supabaseClient.from('articles').select('id', { count: 'exact', head: true }),
+                            window.supabaseClient.from('events').select('id', { count: 'exact', head: true }),
+                            window.supabaseClient.from('materials').select('id', { count: 'exact', head: true })
+                        ]);
+
+                        return {
+                            articles: articlesRes.count || 0,
+                            events: eventsRes.count || 0,
+                            materials: materialsRes.count || 0
+                        };
+                    } catch (error) {
+                        console.error('Erro ao obter contagens:', error);
+                        return { articles: 0, events: 0, materials: 0 };
+                    }
+                },
+
+                // Função para verificar credenciais de administrador
+                checkAdminCredentials: async function(username, password) {
+                    try {
+                        const { data, error } = await window.supabaseClient
+                            .from('admins')
+                            .select('*')
+                            .eq('username', username)
+                            .eq('password', password)
+                            .single();
+                        if (error) throw error;
+                        return data;
+                    } catch (error) {
+                        console.error('Erro ao verificar credenciais:', error);
+                        return null;
+                    }
                 }
-            }, 500);
-        };
+            };
+
+            // Alias para compatibilidade
+            window.AdminData = window.BlogData;
+
+            // Após a inicialização, chamar funções que dependem do BlogData
+            updateDashboardCounts();
+            refreshRecentArticlesList();
+        }
+
+        // Chamar a inicialização do Supabase quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof supabase === 'undefined') {
+                console.error('Biblioteca Supabase não carregada');
+                alert('Erro ao carregar as bibliotecas necessárias. Por favor, recarregue a página.');
+                return;
+            }
+            
+            try {
+                initializeSupabase();
+            } catch (error) {
+                console.error('Erro ao inicializar o Supabase:', error);
+                alert('Ocorreu um erro ao conectar com o banco de dados. Por favor, recarregue a página.');
+            }
+        });
     </script>
 
     <div class="container-fluid">
@@ -116,7 +435,7 @@
                                 </thead>
                                 <tbody id="recent-articles-list">
                                     <tr>
-                                        <td colspan="4" class="text-center">Nenhum artigo encontrado</td>
+                                        <td colspan="4" class="text-center">Carregando...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -132,7 +451,7 @@
                     </div>
                     
                     <div id="articles-list-container">
-                        <div class="alert alert-info">Nenhum artigo encontrado. Clique em "Novo Artigo" para adicionar um.</div>
+                        <div class="alert alert-info">Carregando artigos...</div>
                     </div>
                 </div>
 
@@ -384,7 +703,8 @@
                                         <label class="form-label">Tema</label>
                                         <div class="d-flex">
                                             <div class="form-check me-3">
-                                                <input class="form-check-input" type="radio" name="theme" id="theme-light" value="light" checked>
+                                                <input class="form-check-input" type="radio" name="theme" id="theme-light" value="light"
+                                                checked>
                                                 <label class="form-check-label" for="theme-light">
                                                     Claro
                                                 </label>
@@ -534,7 +854,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="save-article-btn">Salvar Artigo</button>
+                    <button type="button" class="btn btn-primary" id="save-article-btn">
+                        <span id="save-article-btn-text">Salvar Artigo</span>
+                        <span id="save-article-btn-loading" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -609,7 +932,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" id="save-event-btn">Salvar Evento</button>
+                    <button type="button" class="btn btn-success" id="save-event-btn">
+                        <span id="save-event-btn-text">Salvar Evento</span>
+                        <span id="save-event-btn-loading" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -686,124 +1012,24 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info text-white" id="save-material-btn">Salvar Material</button>
+                    <button type="button" class="btn btn-info text-white" id="save-material-btn">
+                        <span id="save-material-btn-text">Salvar Material</span>
+                        <span id="save-material-btn-loading" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- JavaScript -->
-    <script>
-        // Definir o AdminData diretamente no HTML para garantir que esteja disponível
-        window.BlogData = {
-            articles: [],
-            events: [],
-            materials: [],
-            
-            // Inicializar dados do localStorage
-            init: function() {
-                console.log('BlogData.init() chamado');
-                
-                // Carregar dados do localStorage
-                try {
-                    const storedArticles = localStorage.getItem('blogArticles');
-                    if (storedArticles) {
-                        this.articles = JSON.parse(storedArticles);
-                    }
-                    
-                    const storedEvents = localStorage.getItem('blogEvents');
-                    if (storedEvents) {
-                        this.events = JSON.parse(storedEvents);
-                    }
-                    
-                    const storedMaterials = localStorage.getItem('blogMaterials');
-                    if (storedMaterials) {
-                        this.materials = JSON.parse(storedMaterials);
-                    }
-                    
-                    console.log('Dados carregados do localStorage');
-                } catch (error) {
-                    console.error('Erro ao carregar dados:', error);
-                    
-                    // Inicializar com arrays vazios em caso de erro
-                    this.articles = [];
-                    this.events = [];
-                    this.materials = [];
-                }
-            },
-            
-            // Salvar dados no localStorage
-            save: function() {
-                try {
-                    localStorage.setItem('blogArticles', JSON.stringify(this.articles));
-                    localStorage.setItem('blogEvents', JSON.stringify(this.events));
-                    localStorage.setItem('blogMaterials', JSON.stringify(this.materials));
-                    console.log('Dados salvos no localStorage');
-                } catch (error) {
-                    console.error('Erro ao salvar dados:', error);
-                }
-            },
-            
-            // Adicionar um artigo
-            addArticle: function(article) {
-                // Adicionar ID e data de criação
-                article.id = Date.now().toString();
-                article.createdAt = new Date().toISOString();
-                
-                // Adicionar ao array
-                this.articles.push(article);
-                
-                // Salvar no localStorage
-                this.save();
-                
-                return article;
-            },
-            
-            // Excluir um artigo
-            deleteArticle: function(id) {
-                const index = this.articles.findIndex(article => article.id === id);
-                if (index !== -1) {
-                    this.articles.splice(index, 1);
-                    this.save();
-                    return true;
-                }
-                return false;
-            },
-            
-            // Obter contagens
-            getCounts: function() {
-                return {
-                    articles: this.articles.length,
-                    events: this.events ? this.events.length : 0,
-                    materials: this.materials ? this.materials.length : 0
-                };
-            }
-        };
-        
-        // Inicializar ao carregar a página
-        window.BlogData.init();
-        
-        // Alias para compatibilidade, caso existam referências a AdminData
-        window.AdminData = window.BlogData;
-    </script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script>
         // Função para verificar autenticação
         function checkAuthentication() {
-            // Verificar se o usuário está logado
             if (!localStorage.getItem('adminLoggedIn')) {
-                // Redirecionar para a página de login se não estiver autenticado
                 window.location.href = 'login.html';
                 return false;
             }
             
-            // Verificar expiração do login
             const expirationTime = localStorage.getItem('adminLoginExpires');
             if (expirationTime && Date.now() > parseInt(expirationTime)) {
-                // Login expirado
                 localStorage.removeItem('adminLoggedIn');
                 localStorage.removeItem('adminLoginExpires');
                 localStorage.removeItem('adminRemembered');
@@ -816,1181 +1042,698 @@
         
         // Função de logout
         function logout() {
-            // Remover credenciais do localStorage
             localStorage.removeItem('adminLoggedIn');
             localStorage.removeItem('adminLoginExpires');
             localStorage.removeItem('adminRemembered');
-            
-            // Redirecionar para a página de login com mensagem de sucesso
             localStorage.setItem('logoutMessage', 'Logout realizado com sucesso!');
             window.location.href = 'login.html';
         }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Verificar autenticação primeiro
-            if (!checkAuthentication()) return;
-            
-            console.log('DOM carregado, inicializando funções');
-            
-            // Configurar o botão de logout
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function() {
-                    logout();
-                });
-            }
-            
-            // Atualizar contadores
-            updateDashboardCounts();
-            
-            // Atualizar lista de artigos recentes
-            refreshRecentArticlesList();
-            
-            // Inicializar eventos para categoria
-            const categorySelect = document.getElementById('article-category');
-            if (categorySelect) {
-                categorySelect.addEventListener('change', function() {
-                    const subcategorySelect = document.getElementById('article-subcategory');
-                    if (!subcategorySelect) return;
-                    
-                    // Limpar opções atuais
-                    subcategorySelect.innerHTML = '<option value="">Selecione</option>';
-                    
-                    // Subcategorias específicas para cada categoria
-                    const subcategories = {
-                        'medicina': [
-                            {value: 'cardiologia', text: 'Cardiologia'},
-                            {value: 'neurologia', text: 'Neurologia'},
-                            {value: 'pediatria', text: 'Pediatria'},
-                            {value: 'oncologia', text: 'Oncologia'}
-                        ],
-                        'engenharia': [
-                            {value: 'civil', text: 'Civil'},
-                            {value: 'mecanica', text: 'Mecânica'},
-                            {value: 'eletrica', text: 'Elétrica'},
-                            {value: 'computacao', text: 'Computação'}
-                        ],
-                        'petroleo-gas': [
-                            {value: 'extracao', text: 'Extração'},
-                            {value: 'processamento', text: 'Processamento'},
-                            {value: 'distribuicao', text: 'Distribuição'}
-                        ],
-                        'ingles': [
-                            {value: 'gramatica', text: 'Gramática'},
-                            {value: 'vocabulario', text: 'Vocabulário'},
-                            {value: 'negocios', text: 'Inglês para Negócios'}
-                        ],
-                        'diversos': [
-                            {value: 'tecnologia', text: 'Tecnologia'},
-                            {value: 'cultura', text: 'Cultura'},
-                            {value: 'arte', text: 'Arte'}
-                        ]
-                    };
-                    
-                    // Adicionar opções com base na categoria selecionada
-                    if (this.value && subcategories[this.value]) {
-                        subcategories[this.value].forEach(option => {
-                            const optionElement = document.createElement('option');
-                            optionElement.value = option.value;
-                            optionElement.textContent = option.text;
-                            subcategorySelect.appendChild(optionElement);
-                        });
-                    }
-                });
-            }
-            
-            // Inicializar contador de caracteres para o abstract
-            const abstractTextarea = document.getElementById('article-abstract');
-            const abstractCounter = document.getElementById('abstract-counter');
-            if (abstractTextarea && abstractCounter) {
-                abstractTextarea.addEventListener('input', function() {
-                    const charCount = this.value.length;
-                    const maxLength = this.getAttribute('maxlength');
-                    abstractCounter.textContent = `${charCount}/${maxLength}`;
-                });
-            }
-            
-            // Botão Novo Artigo
-            const newArticleBtn = document.getElementById('new-article-btn');
-            if (newArticleBtn) {
-                newArticleBtn.addEventListener('click', function() {
-                    const modal = new bootstrap.Modal(document.getElementById('uploadArticleModal'));
-                    modal.show();
-                });
-            }
-            
-            const pubArticleBtn = document.getElementById('pub-article-btn');
-            if (pubArticleBtn) {
-                pubArticleBtn.addEventListener('click', function() {
-                    const modal = new bootstrap.Modal(document.getElementById('uploadArticleModal'));
-                    modal.show();
-                });
-            }
-            
-            // Botão salvar artigo
-            const saveArticleBtn = document.getElementById('save-article-btn');
-            if (saveArticleBtn) {
-                saveArticleBtn.addEventListener('click', function() {
-                    console.log('Botão salvar artigo clicado');
-                    
-                    // Validar formulário
-                    const form = document.getElementById('scientific-article-form');
-                    if (!form) {
-                        console.error('Formulário não encontrado');
-                        return;
-                    }
-                    
-                    const titleInput = document.getElementById('article-title');
-                    const dateInput = document.getElementById('article-date');
-                    const authorsInput = document.getElementById('article-authors');
-                    const categorySelect = document.getElementById('article-category');
-                    const abstractTextarea = document.getElementById('article-abstract');
-                    const fileLinkInput = document.getElementById('article-file-link');
-                    
-                    // Verificar campos obrigatórios
-                    let isValid = true;
-                    
-                    if (!titleInput.value.trim()) {
-                        titleInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        titleInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!dateInput.value) {
-                        dateInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        dateInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!authorsInput.value.trim()) {
-                        authorsInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        authorsInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!categorySelect.value) {
-                        categorySelect.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        categorySelect.classList.remove('is-invalid');
-                    }
-                    
-                    if (!abstractTextarea.value.trim()) {
-                        abstractTextarea.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        abstractTextarea.classList.remove('is-invalid');
-                    }
-                    
-                    if (!fileLinkInput.value.trim()) {
-                        fileLinkInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        fileLinkInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!isValid) {
-                        alert('Por favor, preencha todos os campos obrigatórios.');
-                        return;
-                    }
-                    
-                    // Coletar dados do formulário
-                    const articleData = {
-                        title: titleInput.value,
-                        date: dateInput.value,
-                        authors: authorsInput.value,
-                        category: categorySelect.value,
-                        subcategory: document.getElementById('article-subcategory').value || '',
-                        journal: document.getElementById('article-journal').value || '',
-                        doi: document.getElementById('article-doi').value || '',
-                        abstract: abstractTextarea.value,
-                        fileLink: fileLinkInput.value,
-                        thumbnailLink: document.getElementById('article-thumbnail-link').value || '',
-                        content: document.getElementById('article-content').value || '',
-                        status: document.getElementById('article-status').value || 'publicado',
-                        language: document.getElementById('article-language').value || 'pt',
-                        access: document.getElementById('article-access').value || 'publico',
-                        tags: document.getElementById('article-tags').value || ''
-                    };
-                    
-                    try {
-                        // Adicionar artigo
-                        window.BlogData.addArticle(articleData);
-                        
-                        // Mostrar mensagem de sucesso
-                        const successAlert = document.createElement('div');
-                        successAlert.className = 'alert alert-success alert-dismissible fade show fixed-bottom mx-4 mb-4';
-                        successAlert.innerHTML = `
-                            <strong>Sucesso!</strong> Artigo científico publicado com sucesso.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        `;
-                        document.body.appendChild(successAlert);
-                        
-                        // Remover alerta após 5 segundos
-                        setTimeout(() => {
-                            successAlert.remove();
-                        }, 5000);
-                        
-                        // Fechar modal
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('uploadArticleModal'));
-                        modal.hide();
-                        
-                        // Limpar formulário
-                        form.reset();
-                        
-                        // Atualizar contadores e lista
-                        updateDashboardCounts();
-                        refreshRecentArticlesList();
-                        
-                        // Atualizar a lista de artigos na seção Artigos
-                        updateArticlesList();
-                    } catch (error) {
-                        console.error('Erro ao salvar artigo:', error);
-                        alert('Erro ao salvar artigo: ' + error.message);
-                    }
-                });
-            }
 
-            // Botões de evento e material
-            const pubEventBtn = document.getElementById('pub-event-btn');
-            if (pubEventBtn) {
-                pubEventBtn.addEventListener('click', function() {
-                    const modal = new bootstrap.Modal(document.getElementById('uploadEventModal'));
-                    modal.show();
-                });
-            }
+        // Função para exibir mensagem de erro
+        function showErrorAlert(message) {
+            const errorAlert = document.createElement('div');
+            errorAlert.className = 'alert alert-danger alert-dismissible fade show fixed-bottom mx-4 mb-4';
+            errorAlert.innerHTML = `
+                <strong>Erro!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.body.appendChild(errorAlert);
             
-            // Botão novo evento
-            const newEventBtn = document.getElementById('new-event-btn');
-            if (newEventBtn) {
-                newEventBtn.addEventListener('click', function() {
-                    // Limpar formulário e resetar título do modal
-                    document.getElementById('event-form').reset();
-                    delete document.getElementById('event-form').dataset.editId;
-                    document.getElementById('uploadEventModalLabel').textContent = 'Novo Evento';
-                    const modal = new bootstrap.Modal(document.getElementById('uploadEventModal'));
-                    modal.show();
-                });
-            }
+            setTimeout(() => {
+                errorAlert.remove();
+            }, 5000);
+        }
+
+        // Função para exibir mensagem de sucesso
+        function showSuccessAlert(message) {
+            const successAlert = document.createElement('div');
+            successAlert.className = 'alert alert-success alert-dismissible fade show fixed-bottom mx-4 mb-4';
+            successAlert.innerHTML = `
+                <strong>Sucesso!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.body.appendChild(successAlert);
             
-            // Botão salvar evento
-            const saveEventBtn = document.getElementById('save-event-btn');
-            if (saveEventBtn) {
-                saveEventBtn.addEventListener('click', function() {
-                    console.log('Botão salvar evento clicado');
-                    
-                    // Validar formulário
-                    const form = document.getElementById('event-form');
-                    if (!form) {
-                        console.error('Formulário não encontrado');
-                        return;
-                    }
-                    
-                    const titleInput = document.getElementById('event-title');
-                    const dateInput = document.getElementById('event-date');
-                    const locationInput = document.getElementById('event-location');
-                    const categorySelect = document.getElementById('event-category');
-                    
-                    // Verificar campos obrigatórios
-                    let isValid = true;
-                    
-                    if (!titleInput.value.trim()) {
-                        titleInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        titleInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!dateInput.value) {
-                        dateInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        dateInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!locationInput.value.trim()) {
-                        locationInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        locationInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!categorySelect.value) {
-                        categorySelect.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        categorySelect.classList.remove('is-invalid');
-                    }
-                    
-                    if (!isValid) {
-                        alert('Por favor, preencha todos os campos obrigatórios.');
-                        return;
-                    }
-                    
-                    // Coletar dados do formulário
-                    const eventData = {
-                        title: titleInput.value,
-                        eventDate: dateInput.value,
-                        location: locationInput.value,
-                        category: categorySelect.value,
-                        eventType: document.getElementById('event-type').value || 'congresso',
-                        description: document.getElementById('event-description').value || '',
-                        imageLink: document.getElementById('event-image-link').value || '',
-                        link: document.getElementById('event-link').value || ''
-                    };
-                    
-                    try {
-                        // Verificar se é uma edição ou um novo evento
-                        const editId = form.dataset.editId;
-                        
-                        if (editId) {
-                            // Edição de evento existente
-                            const index = window.BlogData.events.findIndex(e => e.id === editId);
-                            if (index !== -1) {
-                                // Manter ID e data de criação originais
-                                eventData.id = editId;
-                                eventData.createdAt = window.BlogData.events[index].createdAt;
-                                // Atualizar dados
-                                window.BlogData.events[index] = eventData;
-                                window.BlogData.save();
-                                showSuccessAlert('Evento atualizado com sucesso.');
-                            }
-                        } else {
-                            // Novo evento
-                            if (!window.BlogData.events) {
-                                window.BlogData.events = [];
-                            }
-                            
-                            // Adicionar ID e data de criação
-                            eventData.id = Date.now().toString();
-                            eventData.createdAt = new Date().toISOString();
-                            
-                            // Adicionar ao array
-                            window.BlogData.events.push(eventData);
-                            window.BlogData.save();
-                            showSuccessAlert('Evento publicado com sucesso.');
-                        }
-                        
-                        // Fechar modal
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('uploadEventModal'));
-                        modal.hide();
-                        
-                        // Limpar formulário e remover data-edit-id
-                        form.reset();
-                        delete form.dataset.editId;
-                        
-                        // Atualizar contadores e listas
-                        updateDashboardCounts();
-                        updateEventsList();
-                    } catch (error) {
-                        console.error('Erro ao salvar evento:', error);
-                        alert('Erro ao salvar evento: ' + error.message);
-                    }
-                });
+            setTimeout(() => {
+                successAlert.remove();
+            }, 5000);
+        }
+
+        // Função para formatar datas
+        function formatDate(dateStr) {
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('pt-BR');
+            } catch (error) {
+                return dateStr;
             }
+        }
+
+        // Função para mostrar seções
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
             
-            const pubMaterialBtn = document.getElementById('pub-material-btn');
-            if (pubMaterialBtn) {
-                pubMaterialBtn.addEventListener('click', function() {
-                    const modal = new bootstrap.Modal(document.getElementById('uploadMaterialModal'));
-                    modal.show();
-                });
-            }
-            
-            // Botão novo material
-            const newMaterialBtn = document.getElementById('new-material-btn');
-            if (newMaterialBtn) {
-                newMaterialBtn.addEventListener('click', function() {
-                    // Limpar formulário e resetar título do modal
-                    document.getElementById('material-form').reset();
-                    delete document.getElementById('material-form').dataset.editId;
-                    document.getElementById('uploadMaterialModalLabel').textContent = 'Novo Material';
-                    const modal = new bootstrap.Modal(document.getElementById('uploadMaterialModal'));
-                    modal.show();
-                });
-            }
-            
-            // Botão salvar material
-            const saveMaterialBtn = document.getElementById('save-material-btn');
-            if (saveMaterialBtn) {
-                saveMaterialBtn.addEventListener('click', function() {
-                    console.log('Botão salvar material clicado');
-                    
-                    // Validar formulário
-                    const form = document.getElementById('material-form');
-                    if (!form) {
-                        console.error('Formulário não encontrado');
-                        return;
-                    }
-                    
-                    const titleInput = document.getElementById('material-title');
-                    const typeSelect = document.getElementById('material-type');
-                    const categorySelect = document.getElementById('material-category');
-                    const fileLinkInput = document.getElementById('material-file-link');
-                    
-                    // Verificar campos obrigatórios
-                    let isValid = true;
-                    
-                    if (!titleInput.value.trim()) {
-                        titleInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        titleInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!typeSelect.value) {
-                        typeSelect.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        typeSelect.classList.remove('is-invalid');
-                    }
-                    
-                    if (!categorySelect.value) {
-                        categorySelect.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        categorySelect.classList.remove('is-invalid');
-                    }
-                    
-                    if (!fileLinkInput.value.trim()) {
-                        fileLinkInput.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        fileLinkInput.classList.remove('is-invalid');
-                    }
-                    
-                    if (!isValid) {
-                        alert('Por favor, preencha todos os campos obrigatórios.');
-                        return;
-                    }
-                    
-                    // Coletar dados do formulário
-                    const materialData = {
-                        title: titleInput.value,
-                        type: typeSelect.value,
-                        category: categorySelect.value,
-                        access: document.getElementById('material-access').value || 'gratuito',
-                        description: document.getElementById('material-description').value || '',
-                        fileLink: fileLinkInput.value,
-                        coverLink: document.getElementById('material-cover-link').value || ''
-                    };
-                    
-                    try {
-                        // Verificar se é uma edição ou um novo material
-                        const editId = form.dataset.editId;
-                        
-                        if (editId) {
-                            // Edição de material existente
-                            const index = window.BlogData.materials.findIndex(m => m.id === editId);
-                            if (index !== -1) {
-                                // Manter ID e data de criação originais
-                                materialData.id = editId;
-                                materialData.createdAt = window.BlogData.materials[index].createdAt;
-                                // Atualizar dados
-                                window.BlogData.materials[index] = materialData;
-                                window.BlogData.save();
-                                showSuccessAlert('Material atualizado com sucesso.');
-                            }
-                        } else {
-                            // Novo material
-                            if (!window.BlogData.materials) {
-                                window.BlogData.materials = [];
-                            }
-                            
-                            // Adicionar ID e data de criação
-                            materialData.id = Date.now().toString();
-                            materialData.createdAt = new Date().toISOString();
-                            
-                            // Adicionar ao array
-                            window.BlogData.materials.push(materialData);
-                            window.BlogData.save();
-                            showSuccessAlert('Material publicado com sucesso.');
-                        }
-                        
-                        // Fechar modal
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('uploadMaterialModal'));
-                        modal.hide();
-                        
-                        // Limpar formulário e remover data-edit-id
-                        form.reset();
-                        delete form.dataset.editId;
-                        
-                        // Atualizar contadores e listas
-                        updateDashboardCounts();
-                        updateMaterialsList();
-                    } catch (error) {
-                        console.error('Erro ao salvar material:', error);
-                        alert('Erro ao salvar material: ' + error.message);
-                    }
-                });
-            }
-            
-            // Mostrar/ocultar seções
-            const showSection = function(sectionId) {
-                // Ocultar todas as seções
-                document.querySelectorAll('.content-section').forEach(section => {
-                    section.style.display = 'none';
-                });
+            const targetSection = document.getElementById(sectionId + '-content');
+            if (targetSection) {
+                targetSection.style.display = 'block';
                 
-                // Mostrar a seção solicitada
-                const targetSection = document.getElementById(sectionId + '-content');
-                if (targetSection) {
-                    targetSection.style.display = 'block';
-                    
-                    // Carregar os dados adequados para a seção
-                    if (sectionId === 'articles') {
-                        updateArticlesList();
-                    } else if (sectionId === 'resources') {
-                        updateMaterialsList();
-                    } else if (sectionId === 'events') {
-                        updateEventsList();
-                    }
+                if (sectionId === 'articles') {
+                    loadArticles();
+                } else if (sectionId === 'resources') {
+                    loadMaterials();
+                } else if (sectionId === 'events') {
+                    loadEvents();
                 }
-            };
-            
-            // Configurar preferências de tema
-            const savePreferencesBtn = document.getElementById('save-preferences-btn');
-            if (savePreferencesBtn) {
-                // Carregar preferências salvas
-                const savedTheme = localStorage.getItem('blogAdminTheme') || 'light';
-                document.getElementById('theme-' + savedTheme).checked = true;
-                
-                // Aplicar tema ao carregar
-                document.getElementById('theme-style').href = '../css/themes/' + savedTheme + '.css';
-                
-                // Salvar preferências
-                savePreferencesBtn.addEventListener('click', function() {
-                    const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
-                    localStorage.setItem('blogAdminTheme', selectedTheme);
-                    
-                    // Aplicar tema
-                    document.getElementById('theme-style').href = '../css/themes/' + selectedTheme + '.css';
-                    
-                    showSuccessAlert('Preferências salvas com sucesso!');
-                });
             }
+        }
+
+        // Função para carregar artigos
+        async function loadArticles() {
+            const container = document.getElementById('articles-list-container');
+            if (!container) return;
             
-            // Atualizar lista de artigos na seção Artigos
-            function updateArticlesList() {
-                const container = document.getElementById('articles-list-container');
-                if (!container) return;
-                
-                // Limpar container
-                container.innerHTML = '';
-                
-                // Obter artigos
-                const articles = window.BlogData.articles;
+            container.innerHTML = '<div class="alert alert-info">Carregando artigos...</div>';
+            
+            try {
+                const articles = await window.BlogData.fetchArticles();
                 
                 if (!articles || articles.length === 0) {
                     container.innerHTML = '<div class="alert alert-info">Nenhum artigo encontrado. Clique em "Novo Artigo" para adicionar um.</div>';
                     return;
                 }
                 
-                // Ordenar por data (mais recentes primeiro)
-                articles.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                // Criar tabela
-                const tableHTML = `
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Título</th>
-                                    <th>Categoria</th>
-                                    <th>Data</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="articles-table-body">
-                            </tbody>
-                        </table>
-                    </div>
+                const table = document.createElement('div');
+                table.className = 'table-responsive';
+                table.innerHTML = `
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Categoria</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="articles-list"></tbody>
+                    </table>
                 `;
+                container.innerHTML = '';
+                container.appendChild(table);
                 
-                container.innerHTML = tableHTML;
-                
-                const tableBody = document.getElementById('articles-table-body');
-                
-                // Adicionar artigos à tabela
+                const tbody = document.getElementById('articles-list');
                 articles.forEach(article => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
                         <td>${article.title}</td>
                         <td>${article.category}${article.subcategory ? ' / ' + article.subcategory : ''}</td>
                         <td>${formatDate(article.date)}</td>
                         <td><span class="badge ${article.status === 'publicado' ? 'bg-success' : 'bg-warning'}">${article.status}</span></td>
                         <td>
-                            <div class="btn-group">
-                                <a href="${article.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver artigo">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger delete-article-btn" data-id="${article.id}" title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
+                            <button class="btn btn-sm btn-primary me-1 edit-article-btn" data-id="${article.id}">Editar</button>
+                            <a href="${article.file_link}" target="_blank" class="btn btn-sm btn-info text-white me-1">Ver</a>
+                            <button class="btn btn-sm btn-danger delete-article-btn" data-id="${article.id}">Excluir</button>
                         </td>
                     `;
-                    tableBody.appendChild(row);
+                    tbody.appendChild(tr);
                 });
-                
-                // Adicionar eventos aos botões de exclusão
-                tableBody.querySelectorAll('.delete-article-btn').forEach(btn => {
+
+                // Adicionar eventos aos botões de edição e exclusão
+                document.querySelectorAll('.edit-article-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const articleId = this.getAttribute('data-id');
+                        editArticle(articleId);
+                    });
+                });
+
+                document.querySelectorAll('.delete-article-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const articleId = this.getAttribute('data-id');
                         if (confirm('Tem certeza que deseja excluir este artigo?')) {
-                            window.BlogData.deleteArticle(articleId);
-                            updateArticlesList();
-                            refreshRecentArticlesList();
-                            updateDashboardCounts();
+                            try {
+                                await window.BlogData.deleteArticle(articleId);
+                                loadArticles();
+                                refreshRecentArticlesList();
+                                updateDashboardCounts();
+                                showSuccessAlert('Artigo excluído com sucesso.');
+                            } catch (error) {
+                                showErrorAlert('Erro ao excluir artigo: ' + (error.message || 'Tente novamente.'));
+                            }
                         }
                     });
                 });
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-danger">Erro ao carregar artigos: ' + (error.message || 'Tente novamente.') + '</div>';
             }
-            
-            // Função para atualizar a lista de eventos
-            function updateEventsList() {
-                const container = document.getElementById('events-list-container');
-                if (!container) return;
-                
-                // Obter eventos
-                const events = window.BlogData.events || [];
-                
-                if (events.length === 0) {
+        }
+
+        // Função para editar artigo
+        async function editArticle(articleId) {
+            try {
+                const articles = await window.BlogData.fetchArticles();
+                const article = articles.find(a => a.id === articleId);
+                if (!article) {
+                    showErrorAlert('Artigo não encontrado.');
+                    return;
+                }
+
+                // Preencher o formulário com os dados do artigo
+                document.getElementById('article-title').value = article.title;
+                document.getElementById('article-date').value = article.date;
+                document.getElementById('article-authors').value = article.authors;
+                document.getElementById('article-category').value = article.category;
+
+                // Disparar o evento change para carregar subcategorias
+                const categoryEvent = new Event('change');
+                document.getElementById('article-category').dispatchEvent(categoryEvent);
+
+                document.getElementById('article-subcategory').value = article.subcategory || '';
+                document.getElementById('article-journal').value = article.journal || '';
+                document.getElementById('article-doi').value = article.doi || '';
+                document.getElementById('article-abstract').value = article.abstract;
+                document.getElementById('article-file-link').value = article.file_link;
+                document.getElementById('article-thumbnail-link').value = article.thumbnail_link || '';
+                document.getElementById('article-content').value = article.content || '';
+                document.getElementById('article-status').value = article.status || 'publicado';
+                document.getElementById('article-language').value = article.language || 'pt';
+                document.getElementById('article-access').value = article.access || 'publico';
+                document.getElementById('article-tags').value = article.tags || '';
+
+                // Atualizar o contador de caracteres do resumo
+                const abstractEvent = new Event('input');
+                document.getElementById('article-abstract').dispatchEvent(abstractEvent);
+
+                // Definir o ID do artigo no formulário para edição
+                document.getElementById('scientific-article-form').dataset.articleId = articleId;
+                document.getElementById('uploadArticleModalLabel').textContent = 'Editar Artigo';
+
+                // Abrir o modal
+                const modal = new bootstrap.Modal(document.getElementById('uploadArticleModal'));
+                modal.show();
+            } catch (error) {
+                showErrorAlert('Erro ao carregar artigo para edição: ' + (error.message || 'Tente novamente.'));
+            }
+        }
+
+        // Função para carregar eventos
+        async function loadEvents() {
+            const container = document.getElementById('events-list-container');
+            if (!container) return;
+
+            container.innerHTML = '<div class="alert alert-info">Carregando eventos...</div>';
+
+            try {
+                const events = await window.BlogData.fetchEvents();
+
+                if (!events || events.length === 0) {
                     container.innerHTML = '<div class="alert alert-info">Nenhum evento encontrado. Clique em "Novo Evento" para adicionar um.</div>';
                     return;
                 }
-                
-                // Ordenar por data (mais recentes primeiro)
-                events.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
-                
-                // Criar tabela
-                const tableHTML = `
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Título</th>
-                                    <th>Categoria</th>
-                                    <th>Data</th>
-                                    <th>Local</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="events-table-body">
-                            </tbody>
-                        </table>
-                    </div>
+
+                const table = document.createElement('div');
+                table.className = 'table-responsive';
+                table.innerHTML = `
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Categoria</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-list"></tbody>
+                    </table>
                 `;
-                
-                container.innerHTML = tableHTML;
-                
-                const tableBody = document.getElementById('events-table-body');
-                
-                // Adicionar eventos à tabela
+                container.innerHTML = '';
+                container.appendChild(table);
+
+                const tbody = document.getElementById('events-list');
                 events.forEach(event => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
                         <td>${event.title}</td>
                         <td>${event.category}</td>
-                        <td>${formatDate(event.eventDate)}</td>
+                        <td>${formatDate(event.event_date)}</td>
                         <td>${event.location}</td>
                         <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-secondary edit-event-btn" data-id="${event.id}" title="Editar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <a href="${event.link || '#'}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver evento" ${!event.link ? 'disabled' : ''}>
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger delete-event-btn" data-id="${event.id}" title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
+                            <button class="btn btn-sm btn-primary me-1 edit-event-btn" data-id="${event.id}">Editar</button>
+                            <a href="${event.link || '#'}" target="_blank" class="btn btn-sm btn-info text-white me-1 ${!event.link ? 'disabled' : ''}">Ver</a>
+                            <button class="btn btn-sm btn-danger delete-event-btn" data-id="${event.id}">Excluir</button>
                         </td>
                     `;
-                    tableBody.appendChild(row);
+                    tbody.appendChild(tr);
                 });
-                
-                // Adicionar eventos aos botões
-                addEventButtonListeners();
-            }
-            
-            // Adicionar listeners aos botões de eventos
-            function addEventButtonListeners() {
-                // Botões de editar evento
+
+                // Adicionar eventos aos botões de edição e exclusão
                 document.querySelectorAll('.edit-event-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const eventId = this.getAttribute('data-id');
                         editEvent(eventId);
                     });
                 });
-                
-                // Botões de excluir evento
+
                 document.querySelectorAll('.delete-event-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
+                    btn.addEventListener('click', async function() {
                         const eventId = this.getAttribute('data-id');
                         if (confirm('Tem certeza que deseja excluir este evento?')) {
-                            deleteEvent(eventId);
+                            try {
+                                await window.BlogData.deleteEvent(eventId);
+                                loadEvents();
+                                updateDashboardCounts();
+                                showSuccessAlert('Evento excluído com sucesso.');
+                            } catch (error) {
+                                showErrorAlert('Erro ao excluir evento: ' + (error.message || 'Tente novamente.'));
+                            }
                         }
                     });
                 });
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-danger">Erro ao carregar eventos: ' + (error.message || 'Tente novamente.') + '</div>';
             }
-            
-            // Função para editar um evento
-            function editEvent(eventId) {
-                // Encontrar o evento pelo ID
-                const event = window.BlogData.events.find(e => e.id === eventId);
+        }
+
+        // Função para editar evento
+        async function editEvent(eventId) {
+            try {const events = await window.BlogData.fetchEvents();
+                const event = events.find(e => e.id === eventId);
                 if (!event) {
-                    console.error('Evento não encontrado');
+                    showErrorAlert('Evento não encontrado.');
                     return;
                 }
-                
+
                 // Preencher o formulário com os dados do evento
                 document.getElementById('event-title').value = event.title;
-                document.getElementById('event-date').value = event.eventDate;
+                document.getElementById('event-date').value = event.event_date;
                 document.getElementById('event-location').value = event.location;
                 document.getElementById('event-category').value = event.category;
-                document.getElementById('event-type').value = event.eventType || 'congresso';
+                document.getElementById('event-type').value = event.event_type || 'congresso';
                 document.getElementById('event-description').value = event.description || '';
-                document.getElementById('event-image-link').value = event.imageLink || '';
+                document.getElementById('event-image-link').value = event.image_link || '';
                 document.getElementById('event-link').value = event.link || '';
-                
-                // Adicionar o ID ao formulário para identificar que é uma edição
-                document.getElementById('event-form').dataset.editId = eventId;
-                
-                // Alterar o título do modal
+
+                // Definir o ID do evento no formulário para edição
+                document.getElementById('event-form').dataset.eventId = eventId;
                 document.getElementById('uploadEventModalLabel').textContent = 'Editar Evento';
-                
+
                 // Abrir o modal
                 const modal = new bootstrap.Modal(document.getElementById('uploadEventModal'));
                 modal.show();
+            } catch (error) {
+                showErrorAlert('Erro ao carregar evento para edição: ' + (error.message || 'Tente novamente.'));
             }
-            
-            // Função para excluir um evento
-            function deleteEvent(eventId) {
-                const index = window.BlogData.events.findIndex(e => e.id === eventId);
-                if (index !== -1) {
-                    window.BlogData.events.splice(index, 1);
-                    window.BlogData.save();
-                    
-                    // Atualizar a interface
-                    updateEventsList();
-                    updateDashboardCounts();
-                    
-                    // Mostrar mensagem de sucesso
-                    showSuccessAlert('Evento excluído com sucesso.');
-                }
-            }
-            
-            // Função para atualizar a lista de materiais
-            function updateMaterialsList() {
-                const container = document.getElementById('materials-list-container');
-                if (!container) return;
-                
-                // Obter materiais
-                const materials = window.BlogData.materials || [];
-                
-                if (materials.length === 0) {
+        }
+
+        // Função para carregar materiais
+        async function loadMaterials() {
+            const container = document.getElementById('materials-list-container');
+            if (!container) return;
+
+            container.innerHTML = '<div class="alert alert-info">Carregando materiais...</div>';
+
+            try {
+                const materials = await window.BlogData.fetchMaterials();
+
+                if (!materials || materials.length === 0) {
                     container.innerHTML = '<div class="alert alert-info">Nenhum material encontrado. Clique em "Novo Material" para adicionar um.</div>';
                     return;
                 }
-                
-                // Ordenar por data de criação (mais recentes primeiro)
-                materials.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                
-                // Criar tabela
-                const tableHTML = `
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Título</th>
-                                    <th>Tipo</th>
-                                    <th>Categoria</th>
-                                    <th>Acesso</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="materials-table-body">
-                            </tbody>
-                        </table>
-                    </div>
+
+                const table = document.createElement('div');
+                table.className = 'table-responsive';
+                table.innerHTML = `
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Categoria</th>
+                                <th>Acesso</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materials-list"></tbody>
+                    </table>
                 `;
-                
-                container.innerHTML = tableHTML;
-                
-                const tableBody = document.getElementById('materials-table-body');
-                
-                // Adicionar materiais à tabela
+                container.innerHTML = '';
+                container.appendChild(table);
+
+                const tbody = document.getElementById('materials-list');
                 materials.forEach(material => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                    const tr = document.createElement('tr');
+                    const accessBadgeClass = material.access === 'gratuito' ? 'bg-success' : material.access === 'pago' ? 'bg-warning text-dark' : 'bg-danger';
+                    tr.innerHTML = `
                         <td>${material.title}</td>
                         <td>${material.type}</td>
                         <td>${material.category}</td>
-                        <td><span class="badge ${getBadgeClass(material.access)}">${material.access}</span></td>
+                        <td><span class="badge ${accessBadgeClass}">${material.access}</span></td>
                         <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-secondary edit-material-btn" data-id="${material.id}" title="Editar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <a href="${material.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver material">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger delete-material-btn" data-id="${material.id}" title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
+                            <button class="btn btn-sm btn-primary me-1 edit-material-btn" data-id="${material.id}">Editar</button>
+                            <a href="${material.file_link}" target="_blank" class="btn btn-sm btn-info text-white me-1">Ver</a>
+                            <button class="btn btn-sm btn-danger delete-material-btn" data-id="${material.id}">Excluir</button>
                         </td>
                     `;
-                    tableBody.appendChild(row);
+                    tbody.appendChild(tr);
                 });
-                
-                // Adicionar eventos aos botões
-                addMaterialButtonListeners();
-            }
-            
-            // Helper para determinar a classe do badge baseado no acesso
-            function getBadgeClass(access) {
-                switch(access) {
-                    case 'gratuito': return 'bg-success';
-                    case 'pago': return 'bg-warning text-dark';
-                    case 'restrito': return 'bg-danger';
-                    default: return 'bg-secondary';
-                }
-            }
-            
-            // Adicionar listeners aos botões de materiais
-            function addMaterialButtonListeners() {
-                // Botões de editar material
+
+                // Adicionar eventos aos botões de edição e exclusão
                 document.querySelectorAll('.edit-material-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const materialId = this.getAttribute('data-id');
                         editMaterial(materialId);
                     });
                 });
-                
-                // Botões de excluir material
+
                 document.querySelectorAll('.delete-material-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
+                    btn.addEventListener('click', async function() {
                         const materialId = this.getAttribute('data-id');
                         if (confirm('Tem certeza que deseja excluir este material?')) {
-                            deleteMaterial(materialId);
+                            try {
+                                await window.BlogData.deleteMaterial(materialId);
+                                loadMaterials();
+                                updateDashboardCounts();
+                                showSuccessAlert('Material excluído com sucesso.');
+                            } catch (error) {
+                                showErrorAlert('Erro ao excluir material: ' + (error.message || 'Tente novamente.'));
+                            }
                         }
                     });
                 });
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-danger">Erro ao carregar materiais: ' + (error.message || 'Tente novamente.') + '</div>';
             }
-            
-            // Função para editar um material
-            function editMaterial(materialId) {
-                // Encontrar o material pelo ID
-                const material = window.BlogData.materials.find(m => m.id === materialId);
+        }
+
+        // Função para editar material
+        async function editMaterial(materialId) {
+            try {
+                const materials = await window.BlogData.fetchMaterials();
+                const material = materials.find(m => m.id === materialId);
                 if (!material) {
-                    console.error('Material não encontrado');
+                    showErrorAlert('Material não encontrado.');
                     return;
                 }
-                
+
                 // Preencher o formulário com os dados do material
                 document.getElementById('material-title').value = material.title;
                 document.getElementById('material-type').value = material.type;
                 document.getElementById('material-category').value = material.category;
                 document.getElementById('material-access').value = material.access || 'gratuito';
                 document.getElementById('material-description').value = material.description || '';
-                document.getElementById('material-file-link').value = material.fileLink;
-                document.getElementById('material-cover-link').value = material.coverLink || '';
-                
-                // Adicionar o ID ao formulário para identificar que é uma edição
-                document.getElementById('material-form').dataset.editId = materialId;
-                
-                // Alterar o título do modal
+                document.getElementById('material-file-link').value = material.file_link;
+                document.getElementById('material-cover-link').value = material.cover_link || '';
+
+                // Definir o ID do material no formulário para edição
+                document.getElementById('material-form').dataset.materialId = materialId;
                 document.getElementById('uploadMaterialModalLabel').textContent = 'Editar Material';
-                
+
                 // Abrir o modal
                 const modal = new bootstrap.Modal(document.getElementById('uploadMaterialModal'));
                 modal.show();
+            } catch (error) {
+                showErrorAlert('Erro ao carregar material para edição: ' + (error.message || 'Tente novamente.'));
             }
-            
-            // Função para excluir um material
-            function deleteMaterial(materialId) {
-                const index = window.BlogData.materials.findIndex(m => m.id === materialId);
-                if (index !== -1) {
-                    window.BlogData.materials.splice(index, 1);
-                    window.BlogData.save();
-                    
-                    // Atualizar a interface
-                    updateMaterialsList();
-                    updateDashboardCounts();
-                    
-                    // Mostrar mensagem de sucesso
-                    showSuccessAlert('Material excluído com sucesso.');
+        }
+
+        // Função para atualizar contadores no dashboard
+        async function updateDashboardCounts() {
+            try {
+                const counts = await window.BlogData.getCounts();
+
+                document.querySelector('#dashboard-content .card:nth-child(1) .card-text').textContent = counts.articles;
+                document.querySelector('#dashboard-content .card:nth-child(2) .card-text').textContent = counts.events;
+                document.querySelector('#dashboard-content .card:nth-child(3) .card-text').textContent = counts.materials;
+
+                document.getElementById('pub-articles-count').textContent = counts.articles;
+                document.getElementById('pub-events-count').textContent = counts.events;
+                document.getElementById('pub-materials-count').textContent = counts.materials;
+            } catch (error) {
+                console.error('Erro ao atualizar contadores:', error);
+            }
+        }
+
+        // Função para atualizar a lista de artigos recentes
+        async function refreshRecentArticlesList() {
+            const container = document.getElementById('recent-articles-list');
+            if (!container) return;
+
+            container.innerHTML = '<tr><td colspan="4" class="text-center">Carregando...</td></tr>';
+
+            try {
+                const articles = await window.BlogData.fetchArticles();
+                container.innerHTML = '';
+
+                if (!articles || articles.length === 0) {
+                    container.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum artigo encontrado.</td></tr>';
+                    return;
                 }
-            }
-            
-            // Função para exibir mensagem de sucesso
-            function showSuccessAlert(message) {
-                const successAlert = document.createElement('div');
-                successAlert.className = 'alert alert-success alert-dismissible fade show fixed-bottom mx-4 mb-4';
-                successAlert.innerHTML = `
-                    <strong>Sucesso!</strong> ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                `;
-                document.body.appendChild(successAlert);
-                
-                // Remover alerta após 5 segundos
-                setTimeout(() => {
-                    successAlert.remove();
-                }, 5000);
-            }
-            
-            // Botões para navegar entre seções
-            document.querySelectorAll('.show-section-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const section = this.getAttribute('data-section');
-                    showSection(section);
-                    
-                    // Atualizar menu lateral
-                    document.querySelectorAll('.nav-link').forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('data-section') === section) {
-                            link.classList.add('active');
+
+                const recentArticles = articles.slice(0, 3);
+                recentArticles.forEach(article => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${article.title}</td>
+                        <td>${article.category}</td>
+                        <td>${formatDate(article.date)}</td>
+                        <td>
+                            <a href="${article.file_link}" target="_blank" class="btn btn-sm btn-info text-white me-1">Ver</a>
+                            <button class="btn btn-sm btn-danger delete-article-btn" data-id="${article.id}">Excluir</button>
+                        </td>
+                    `;
+                    container.appendChild(tr);
+                });
+
+                // Adicionar eventos aos botões de exclusão
+                document.querySelectorAll('.delete-article-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const articleId = this.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir este artigo?')) {
+                            try {
+                                await window.BlogData.deleteArticle(articleId);
+                                refreshRecentArticlesList();
+                                updateDashboardCounts();
+                                loadArticles();
+                                showSuccessAlert('Artigo excluído com sucesso.');
+                            } catch (error) {
+                                showErrorAlert('Erro ao excluir artigo: ' + (error.message || 'Tente novamente.'));
+                            }
                         }
                     });
                 });
-            });
-            
-            // Inicializar filtros para eventos
-            const applyEventFiltersBtn = document.getElementById('apply-event-filters');
-            if (applyEventFiltersBtn) {
-                applyEventFiltersBtn.addEventListener('click', function() {
-                    filterEvents();
-                });
+            } catch (error) {
+                container.innerHTML = '<tr><td colspan="4" class="text-center">Erro ao carregar artigos: ' + (error.message || 'Tente novamente.') + '</td></tr>';
             }
-            
-            const clearEventFiltersBtn = document.getElementById('clear-event-filters');
-            if (clearEventFiltersBtn) {
-                clearEventFiltersBtn.addEventListener('click', function() {
-                    document.getElementById('event-filter-category').value = '';
-                    document.getElementById('event-filter-type').value = '';
-                    document.getElementById('event-filter-date').value = '';
-                    updateEventsList();
-                });
-            }
-            
-            // Inicializar filtros para materiais
-            const applyMaterialFiltersBtn = document.getElementById('apply-material-filters');
-            if (applyMaterialFiltersBtn) {
-                applyMaterialFiltersBtn.addEventListener('click', function() {
-                    filterMaterials();
-                });
-            }
-            
-            const clearMaterialFiltersBtn = document.getElementById('clear-material-filters');
-            if (clearMaterialFiltersBtn) {
-                clearMaterialFiltersBtn.addEventListener('click', function() {
-                    document.getElementById('material-filter-category').value = '';
-                    document.getElementById('material-filter-type').value = '';
-                    document.getElementById('material-filter-access').value = '';
-                    updateMaterialsList();
-                });
-            }
-            
-            // Função para filtrar eventos
-            function filterEvents() {
-                const categoryFilter = document.getElementById('event-filter-category').value;
-                const typeFilter = document.getElementById('event-filter-type').value;
-                const dateFilter = document.getElementById('event-filter-date').value;
-                
-                // Obter todos os eventos
-                const events = window.BlogData.events || [];
-                
-                // Aplicar filtros
-                let filteredEvents = [...events];
-                
-                if (categoryFilter) {
-                    filteredEvents = filteredEvents.filter(event => event.category === categoryFilter);
+        }
+
+        // Função para filtrar eventos
+        async function filterEvents() {
+            const category = document.getElementById('event-filter-category').value;
+            const type = document.getElementById('event-filter-type').value;
+            const dateFilter = document.getElementById('event-filter-date').value;
+
+            const container = document.getElementById('events-list-container');
+            container.innerHTML = '<div class="alert alert-info">Carregando eventos...</div>';
+
+            try {
+                let query = window.supabaseClient
+                    .from('events')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (category) {
+                    query = query.eq('category', category);
                 }
-                
-                if (typeFilter) {
-                    filteredEvents = filteredEvents.filter(event => event.eventType === typeFilter);
+                if (type) {
+                    query = query.eq('event_type', type);
                 }
-                
                 if (dateFilter) {
-                    const today = new Date();
+                    const today = new Date().toISOString().split('T')[0];
                     if (dateFilter === 'upcoming') {
-                        filteredEvents = filteredEvents.filter(event => new Date(event.eventDate) >= today);
+                        query = query.gte('event_date', today);
                     } else if (dateFilter === 'past') {
-                        filteredEvents = filteredEvents.filter(event => new Date(event.eventDate) < today);
+                        query = query.lt('event_date', today);
                     }
                 }
-                
-                // Ordenar por data (mais recentes primeiro)
-                filteredEvents.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
-                
-                // Atualizar a tabela com os eventos filtrados
-                updateEventsTable(filteredEvents);
-            }
-            
-            // Função auxiliar para atualizar a tabela de eventos com os resultados filtrados
-            function updateEventsTable(events) {
-                const container = document.getElementById('events-list-container');
-                if (!container) return;
-                
-                if (events.length === 0) {
-                    container.innerHTML = '<div class="alert alert-info">Nenhum evento encontrado com os filtros aplicados.</div>';
+
+                const { data: events, error } = await query;
+                if (error) throw error;
+
+                if (!events || events.length === 0) {
                     container.innerHTML = '<div class="alert alert-info">Nenhum evento encontrado com os filtros aplicados.</div>';
                     return;
                 }
-                
-                // Criar tabela
-                const tableHTML = `
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Título</th>
-                                    <th>Categoria</th>
-                                    <th>Data</th>
-                                    <th>Local</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="events-table-body">
-                            </tbody>
-                        </table>
-                    </div>
+
+                const table = document.createElement('div');
+                table.className = 'table-responsive';
+                table.innerHTML = `
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Categoria</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-list"></tbody>
+                    </table>
                 `;
-                
-                container.innerHTML = tableHTML;
-                
-                const tableBody = document.getElementById('events-table-body');
-                
-                // Adicionar eventos à tabela
+                container.innerHTML = '';
+                container.appendChild(table);
+
+                const tbody = document.getElementById('events-list');
                 events.forEach(event => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
                         <td>${event.title}</td>
                         <td>${event.category}</td>
-                        <td>${formatDate(event.eventDate)}</td>
+                        <td>${formatDate(event.event_date)}</td>
                         <td>${event.location}</td>
                         <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-secondary edit-event-btn" data-id="${event.id}" title="Editar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <a href="${event.link || '#'}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver evento" ${!event.link ? 'disabled' : ''}>
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger delete-event-btn" data-id="${event.id}" title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
+                            <button class="btn btn-sm btn-primary me-1 edit-event-btn" data-id="${event.id}">Editar</button>
+                            <a href="${event.link || '#'}" target="_blank" class="btn btn-sm btn-info text-white me-1 ${!event.link ? 'disabled' : ''}">Ver</a>
+                            <button class="btn btn-sm btn-danger delete-event-btn" data-id="${event.id}">Excluir</button>
                         </td>
                     `;
-                    tableBody.appendChild(row);
+                    tbody.appendChild(tr);
                 });
-                
-                // Adicionar eventos aos botões
-                addEventButtonListeners();
+
+                // Adicionar eventos aos botões de edição e exclusão
+                document.querySelectorAll('.edit-event-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const eventId = this.getAttribute('data-id');
+                        editEvent(eventId);
+                    });
+                });
+
+                document.querySelectorAll('.delete-event-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const eventId = this.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir este evento?')) {
+                            try {
+                                await window.BlogData.deleteEvent(eventId);
+                                filterEvents();
+                                updateDashboardCounts();
+                                showSuccessAlert('Evento excluído com sucesso.');
+                            } catch (error) {
+                                showErrorAlert('Erro ao excluir evento: ' + (error.message || 'Tente novamente.'));
+                            }
+                        }
+                    });
+                });
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-danger">Erro ao filtrar eventos: ' + (error.message || 'Tente novamente.') + '</div>';
             }
-            
-            // Função para filtrar materiais
-            function filterMaterials() {
-                const categoryFilter = document.getElementById('material-filter-category').value;
-                const typeFilter = document.getElementById('material-filter-type').value;
-                const accessFilter = document.getElementById('material-filter-access').value;
-                
-                // Obter todos os materiais
-                const materials = window.BlogData.materials || [];
-                
-                // Aplicar filtros
-                let filteredMaterials = [...materials];
-                
-                if (categoryFilter) {
-                    filteredMaterials = filteredMaterials.filter(material => material.category === categoryFilter);
+        }
+
+        // Função para filtrar materiais
+        async function filterMaterials() {
+            const category = document.getElementById('material-filter-category').value;
+            const type = document.getElementById('material-filter-type').value;
+            const access = document.getElementById('material-filter-access').value;
+
+            const container = document.getElementById('materials-list-container');
+            container.innerHTML = '<div class="alert alert-info">Carregando materiais...</div>';
+
+            try {
+                let query = window.supabaseClient
+                    .from('materials')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (category) {
+                    query = query.eq('category', category);
                 }
-                
-                if (typeFilter) {
-                    filteredMaterials = filteredMaterials.filter(material => material.type === typeFilter);
+                if (type) {
+                    query = query.eq('type', type);
                 }
-                
-                if (accessFilter) {
-                    filteredMaterials = filteredMaterials.filter(material => material.access === accessFilter);
+                if (access) {
+                    query = query.eq('access', access);
                 }
-                
-                // Ordenar por data de criação (mais recentes primeiro)
-                filteredMaterials.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                
-                // Atualizar a tabela com os materiais filtrados
-                updateMaterialsTable(filteredMaterials);
-            }
-            
-            // Função auxiliar para atualizar a tabela de materiais com os resultados filtrados
-            function updateMaterialsTable(materials) {
-                const container = document.getElementById('materials-list-container');
-                if (!container) return;
-                
-                if (materials.length === 0) {
+
+                const { data: materials, error } = await query;
+                if (error) throw error;
+
+                if (!materials || materials.length === 0) {
                     container.innerHTML = '<div class="alert alert-info">Nenhum material encontrado com os filtros aplicados.</div>';
                     return;
                 }
-                
-                // Criar tabela
-                const tableHTML = `
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Título</th>
-                                    <th>Tipo</th>
-                                    <th>Categoria</th>
-                                    <th>Acesso</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="materials-table-body">
-                            </tbody>
-                        </table>
-                    </div>
+
+                const table = document.createElement('div');
+                table.className = 'table-responsive';
+                table.innerHTML = `
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Categoria</th>
+                                <th>Acesso</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materials-list"></tbody>
+                    </table>
                 `;
-                
-                container.innerHTML = tableHTML;
-                
-                const tableBody = document.getElementById('materials-table-body');
-                
-                // Adicionar materiais à tabela
+                container.innerHTML = '';
+                container.appendChild(table);
+
+                const tbody = document.getElementById('materials-list');
                 materials.forEach(material => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+                    const tr = document.createElement('tr');
+                    const accessBadgeClass = material.access === 'gratuito' ? 'bg-success' : material.access === 'pago' ? 'bg-warning text-dark' : 'bg-danger';
+                    tr.innerHTML = `
                         <td>${material.title}</td>
                         <td>${material.type}</td>
                         <td>${material.category}</td>
-                        <td><span class="badge ${getBadgeClass(material.access)}">${material.access}</span></td>
+                        <td><span class="badge ${accessBadgeClass}">${material.access}</span></td>
                         <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-secondary edit-material-btn" data-id="${material.id}" title="Editar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <a href="${material.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary" title="Ver material">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <button class="btn btn-sm btn-outline-danger delete-material-btn" data-id="${material.id}" title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
+                            <button class="btn btn-sm btn-primary me-1 edit-material-btn" data-id="${material.id}">Editar</button>
+                            <a href="${material.file_link}" target="_blank" class="btn btn-sm btn-info text-white me-1">Ver</a>
+                            <button class="btn btn-sm btn-danger delete-material-btn" data-id="${material.id}">Excluir</button>
                         </td>
                     `;
-                    tableBody.appendChild(row);
+                    tbody.appendChild(tr);
                 });
-                
-                // Adicionar eventos aos botões
-                addMaterialButtonListeners();
+
+                // Adicionar eventos aos botões de edição e exclusão
+                document.querySelectorAll('.edit-material-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const materialId = this.getAttribute('data-id');
+                        editMaterial(materialId);
+                    });
+                });
+
+                document.querySelectorAll('.delete-material-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const materialId = this.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir este material?')) {
+                            try {
+                                await window.BlogData.deleteMaterial(materialId);
+                                filterMaterials();
+                                updateDashboardCounts();
+                                showSuccessAlert('Material excluído com sucesso.');
+                            } catch (error) {
+                                showErrorAlert('Erro ao excluir material: ' + (error.message || 'Tente novamente.'));
+                            }
+                        }
+                    });
+                });
+            } catch (error) {
+                container.innerHTML = '<div class="alert alert-danger">Erro ao filtrar materiais: ' + (error.message || 'Tente novamente.') + '</div>';
             }
-            
-            // Carregar sidebar
+        }
+
+        // Verificar autenticação e configurar interface
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar autenticação
+            if (!checkAuthentication()) return;
+
+            // Configurar a sidebar
             const sidebarContainer = document.getElementById('sidebar-container');
             if (sidebarContainer) {
                 sidebarContainer.innerHTML = `
@@ -2037,7 +1780,6 @@
                                     </a>
                                 </li>
                             </ul>
-                            
                             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                                 <span>CONFIGURAÇÕES</span>
                             </h6>
@@ -2047,151 +1789,309 @@
                                         <i class="bi bi-gear"></i> Configurações
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#" id="logout-link">
-                                        <i class="bi bi-box-arrow-right"></i> Sair
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </nav>
                 `;
-                
-                // Adicionar eventos aos links da sidebar
-                sidebarContainer.querySelectorAll('.nav-link').forEach(link => {
+
+                // Adicionar eventos de clique para os links da sidebar
+                document.querySelectorAll('#sidebar .nav-link').forEach(link => {
                     link.addEventListener('click', function(e) {
                         e.preventDefault();
-                        
-                        // Verificar se é o link de logout
-                        if (this.id === 'logout-link') {
-                            logout();
-                            return;
-                        }
-                        
-                        // Remover classe active de todos os links
-                        sidebarContainer.querySelectorAll('.nav-link').forEach(l => {
-                            l.classList.remove('active');
-                        });
-                        
-                        // Adicionar classe active ao link clicado
-                        this.classList.add('active');
-                        
-                        // Mostrar seção correspondente
                         const section = this.getAttribute('data-section');
-                        if (section) {
-                            showSection(section);
-                        }
+                        showSection(section);
+
+                        // Atualizar a classe active
+                        document.querySelectorAll('#sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
                     });
                 });
             }
-            
-            // Exibir data do último acesso
-            const lastLoginDate = document.getElementById('last-login-date');
-            if (lastLoginDate) {
-                // Obter data do último login ou usar a data atual
-                const lastLogin = localStorage.getItem('adminLastLogin') || new Date().toISOString();
-                const formattedDate = formatDate(lastLogin);
-                lastLoginDate.textContent = formattedDate;
-                
-                // Salvar a data de acesso atual
-                localStorage.setItem('adminLastLogin', new Date().toISOString());
-            }
-            
-            // Mostrar seção inicial (dashboard)
+
+            // Mostrar a seção inicial (dashboard)
             showSection('dashboard');
-        });
-        
-        // Funções para atualizar dashboard
-        function updateDashboardCounts() {
-            try {
-                const counts = window.BlogData.getCounts();
-                
-                const articleCount = document.querySelector('#dashboard-content .card:nth-child(1) .card-text');
-                const eventCount = document.querySelector('#dashboard-content .card:nth-child(2) .card-text');
-                const materialCount = document.querySelector('#dashboard-content .card:nth-child(3) .card-text');
-                
-                if (articleCount) articleCount.textContent = counts.articles;
-                if (eventCount) eventCount.textContent = counts.events;
-                if (materialCount) materialCount.textContent = counts.materials;
-                
-                // Atualizar contadores na página de publicações
-                const pubArticlesCount = document.getElementById('pub-articles-count');
-                const pubEventsCount = document.getElementById('pub-events-count');
-                const pubMaterialsCount = document.getElementById('pub-materials-count');
-                
-                if (pubArticlesCount) pubArticlesCount.textContent = counts.articles;
-                if (pubEventsCount) pubEventsCount.textContent = counts.events;
-                if (pubMaterialsCount) pubMaterialsCount.textContent = counts.materials;
-            } catch (error) {
-                console.error('Erro ao atualizar contadores:', error);
-            }
-        }
-        
-        function refreshRecentArticlesList() {
-            try {
-                const articlesTable = document.getElementById('recent-articles-list');
-                if (!articlesTable) return;
-                
-                // Limpar tabela
-                articlesTable.innerHTML = '';
-                
-                // Obter artigos
-                if (!window.BlogData || !window.BlogData.articles) {
-                    articlesTable.innerHTML = '<tr><td colspan="4" class="text-center">Erro ao carregar artigos</td></tr>';
-                    return;
-                }
-                
-                const articles = window.BlogData.articles;
-                
-                if (articles.length === 0) {
-                    articlesTable.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum artigo encontrado</td></tr>';
-                    return;
-                }
-                
-                // Ordenar por data (mais recentes primeiro)
-                articles.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                // Exibir os 3 mais recentes
-                const recentArticles = articles.slice(0, 3);
-                
-                recentArticles.forEach(article => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${article.title}</td>
-                        <td>${article.category}</td>
-                        <td>${formatDate(article.date)}</td>
-                        <td>
-                            <a href="${article.fileLink}" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a>
-                            <button class="btn btn-sm btn-outline-danger delete-article-btn" data-id="${article.id}">Excluir</button>
-                        </td>
-                    `;
-                    articlesTable.appendChild(row);
+
+            // Configurar eventos para os botões de seção
+            document.querySelectorAll('.show-section-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    showSection(section);
+
+                    // Atualizar a classe active na sidebar
+                    document.querySelectorAll('#sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                    const sidebarLink = document.querySelector(`#sidebar .nav-link[data-section="${section}"]`);
+                    if (sidebarLink) {
+                        sidebarLink.classList.add('active');
+                    }
                 });
-                
-                // Adicionar eventos aos botões
-                articlesTable.querySelectorAll('.delete-article-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const articleId = this.getAttribute('data-id');
-                        if (confirm('Tem certeza que deseja excluir este artigo?')) {
-                            window.BlogData.deleteArticle(articleId);
-                            refreshRecentArticlesList();
-                            updateDashboardCounts();
-                        }
+            });
+
+            // Configurar o botão de logout
+            document.getElementById('logout-btn').addEventListener('click', logout);
+
+            // Configurar o tema
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.getElementById('theme-style').setAttribute('href', `../css/themes/${savedTheme}.css`);
+            document.getElementById(`theme-${savedTheme}`).checked = true;
+
+            document.getElementById('save-preferences-btn').addEventListener('click', function() {
+                const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+                localStorage.setItem('theme', selectedTheme);
+                document.getElementById('theme-style').setAttribute('href', `../css/themes/${selectedTheme}.css`);
+                showSuccessAlert('Preferências salvas com sucesso!');
+            });
+
+            // Configurar o contador de caracteres do resumo
+            const abstractInput = document.getElementById('article-abstract');
+            const abstractCounter = document.getElementById('abstract-counter');
+            abstractInput.addEventListener('input', function() {
+                const length = this.value.length;
+                abstractCounter.textContent = `${length}/500`;
+                if (length > 500) {
+                    abstractCounter.classList.add('text-danger');
+                } else {
+                    abstractCounter.classList.remove('text-danger');
+                }
+            });
+
+            // Configurar subcategorias dinâmicas
+            const subcategories = {
+                'medicina': ['Cardiologia', 'Neurologia', 'Oncologia'],
+                'engenharia': ['Civil', 'Mecânica', 'Elétrica'],
+                'petroleo-gas': ['Exploração', 'Produção', 'Refino'],
+                'ingles': ['Gramática', 'Vocabulário', 'Conversação'],
+                'diversos': ['Tecnologia', 'Educação', 'Cultura']
+            };
+
+            const categorySelect = document.getElementById('article-category');
+            const subcategorySelect = document.getElementById('article-subcategory');
+            categorySelect.addEventListener('change', function() {
+                const category = this.value;
+                subcategorySelect.innerHTML = '<option value="">Selecione</option>';
+                if (category && subcategories[category]) {
+                    subcategories[category].forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub;
+                        option.textContent = sub;
+                        subcategorySelect.appendChild(option);
                     });
-                });
-            } catch (error) {
-                console.error('Erro ao atualizar lista de artigos:', error);
-            }
-        }
-        
-        function formatDate(dateStr) {
-            try {
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('pt-BR');
-            } catch (error) {
-                return dateStr;
-            }
-        }
+                }
+            });
+
+            // Configurar o botão de novo artigo
+            document.getElementById('new-article-btn').addEventListener('click', function() {
+                document.getElementById('scientific-article-form').reset();
+                document.getElementById('scientific-article-form').dataset.articleId = '';
+                document.getElementById('uploadArticleModalLabel').textContent = 'Novo Artigo Científico';
+                const modal = new bootstrap.Modal(document.getElementById('uploadArticleModal'));
+                modal.show();
+            });
+
+            // Configurar o botão de salvar artigo
+            document.getElementById('save-article-btn').addEventListener('click', async function() {
+                const form = document.getElementById('scientific-article-form');
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                const saveBtnText = document.getElementById('save-article-btn-text');
+                const saveBtnLoading = document.getElementById('save-article-btn-loading');
+                saveBtnText.classList.add('d-none');
+                saveBtnLoading.classList.remove('d-none');
+                this.disabled = true;
+
+                try {
+                    const article = {
+                        title: document.getElementById('article-title').value,
+                        date: document.getElementById('article-date').value,
+                        authors: document.getElementById('article-authors').value,
+                        category: document.getElementById('article-category').value,
+                        subcategory: document.getElementById('article-subcategory').value,
+                        journal: document.getElementById('article-journal').value,
+                        doi: document.getElementById('article-doi').value,
+                        abstract: document.getElementById('article-abstract').value,
+                        fileLink: document.getElementById('article-file-link').value,
+                        thumbnailLink: document.getElementById('article-thumbnail-link').value,
+                        content: document.getElementById('article-content').value,
+                        status: document.getElementById('article-status').value,
+                        language: document.getElementById('article-language').value,
+                        access: document.getElementById('article-access').value,
+                        tags: document.getElementById('article-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag)
+                    };
+
+                    const articleId = form.dataset.articleId;
+                    if (articleId) {
+                        await window.BlogData.updateArticle(articleId, article);
+                        showSuccessAlert('Artigo atualizado com sucesso!');
+                    } else {
+                        await window.BlogData.addArticle(article);
+                        showSuccessAlert('Artigo adicionado com sucesso!');
+                    }
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('uploadArticleModal'));
+                    modal.hide();
+                    loadArticles();
+                    refreshRecentArticlesList();
+                    updateDashboardCounts();
+                } catch (error) {
+                    showErrorAlert('Erro ao salvar artigo: ' + (error.message || 'Tente novamente.'));
+                } finally {
+                    saveBtnText.classList.remove('d-none');
+                    saveBtnLoading.classList.add('d-none');
+                    this.disabled = false;
+                }
+            });
+
+            // Configurar o botão de novo evento
+            document.getElementById('new-event-btn').addEventListener('click', function() {
+                document.getElementById('event-form').reset();
+                document.getElementById('event-form').dataset.eventId = '';
+                document.getElementById('uploadEventModalLabel').textContent = 'Novo Evento';
+                const modal = new bootstrap.Modal(document.getElementById('uploadEventModal'));
+                modal.show();
+            });
+
+            // Configurar o botão de salvar evento
+            document.getElementById('save-event-btn').addEventListener('click', async function() {
+                const form = document.getElementById('event-form');
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                const saveBtnText = document.getElementById('save-event-btn-text');
+                const saveBtnLoading = document.getElementById('save-event-btn-loading');
+                saveBtnText.classList.add('d-none');
+                saveBtnLoading.classList.remove('d-none');
+                this.disabled = true;
+
+                try {
+                    const event = {
+                        title: document.getElementById('event-title').value,
+                        eventDate: document.getElementById('event-date').value,
+                        location: document.getElementById('event-location').value,
+                        category: document.getElementById('event-category').value,
+                        eventType: document.getElementById('event-type').value,
+                        description: document.getElementById('event-description').value,
+                        imageLink: document.getElementById('event-image-link').value,
+                        link: document.getElementById('event-link').value
+                    };
+
+                    const eventId = form.dataset.eventId;
+                    if (eventId) {
+                        await window.BlogData.updateEvent(eventId, event);
+                        showSuccessAlert('Evento atualizado com sucesso!');
+                    } else {
+                        await window.BlogData.addEvent(event);
+                        showSuccessAlert('Evento adicionado com sucesso!');
+                    }
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('uploadEventModal'));
+                    modal.hide();
+                    loadEvents();
+                    updateDashboardCounts();
+                } catch (error) {
+                    showErrorAlert('Erro ao salvar evento: ' + (error.message || 'Tente novamente.'));
+                } finally {
+                    saveBtnText.classList.remove('d-none');
+                    saveBtnLoading.classList.add('d-none');
+                    this.disabled = false;
+                }
+            });
+
+            // Configurar o botão de novo material
+            document.getElementById('new-material-btn').addEventListener('click', function() {
+                document.getElementById('material-form').reset();
+                document.getElementById('material-form').dataset.materialId = '';
+                document.getElementById('uploadMaterialModalLabel').textContent = 'Novo Material';
+                const modal = new bootstrap.Modal(document.getElementById('uploadMaterialModal'));
+                modal.show();
+            });
+
+            // Configurar o botão de salvar material
+            document.getElementById('save-material-btn').addEventListener('click', async function() {
+                const form = document.getElementById('material-form');
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                const saveBtnText = document.getElementById('save-material-btn-text');
+                const saveBtnLoading = document.getElementById('save-material-btn-loading');
+                saveBtnText.classList.add('d-none');
+                saveBtnLoading.classList.remove('d-none');
+                this.disabled = true;
+
+                try {
+                    const material = {
+                        title: document.getElementById('material-title').value,
+                        type: document.getElementById('material-type').value,
+                        category: document.getElementById('material-category').value,
+                        access: document.getElementById('material-access').value,
+                        description: document.getElementById('material-description').value,
+                        fileLink: document.getElementById('material-file-link').value,
+                        coverLink: document.getElementById('material-cover-link').value
+                    };
+
+                    const materialId = form.dataset.materialId;
+                    if (materialId) {
+                        await window.BlogData.updateMaterial(materialId, material);
+                        showSuccessAlert('Material atualizado com sucesso!');
+                    } else {
+                        await window.BlogData.addMaterial(material);
+                        showSuccessAlert('Material adicionado com sucesso!');
+                    }
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('uploadMaterialModal'));
+                    modal.hide();
+                    loadMaterials();
+                    updateDashboardCounts();
+                } catch (error) {
+                    showErrorAlert('Erro ao salvar material: ' + (error.message || 'Tente novamente.'));
+                } finally {
+                    saveBtnText.classList.remove('d-none');
+                    saveBtnLoading.classList.add('d-none');
+                    this.disabled = false;
+                }
+            });
+
+            // Configurar botões da seção de publicações
+            document.getElementById('pub-article-btn').addEventListener('click', function() {
+                document.getElementById('new-article-btn').click();
+            });
+
+            document.getElementById('pub-event-btn').addEventListener('click', function() {
+                document.getElementById('new-event-btn').click();
+            });
+
+            document.getElementById('pub-material-btn').addEventListener('click', function() {
+                document.getElementById('new-material-btn').click();
+            });
+
+            // Configurar filtros de eventos
+            document.getElementById('apply-event-filters').addEventListener('click', filterEvents);
+            document.getElementById('clear-event-filters').addEventListener('click', function() {
+                document.getElementById('event-filter-category').value = '';
+                document.getElementById('event-filter-type').value = '';
+                document.getElementById('event-filter-date').value = '';
+                loadEvents();
+            });
+
+            // Configurar filtros de materiais
+            document.getElementById('apply-material-filters').addEventListener('click', filterMaterials);
+            document.getElementById('clear-material-filters').addEventListener('click', function() {
+                document.getElementById('material-filter-category').value = '';
+                document.getElementById('material-filter-type').value = '';
+                document.getElementById('material-filter-access').value = '';
+                loadMaterials();
+            });
+
+            // Atualizar a data do último login
+            const lastLogin = localStorage.getItem('lastLogin') || new Date().toISOString();
+            document.getElementById('last-login-date').textContent = formatDate(lastLogin);
+            localStorage.setItem('lastLogin', new Date().toISOString());
+        });
     </script>
 </body>
 </html>

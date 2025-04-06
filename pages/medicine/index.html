@@ -317,11 +317,89 @@
         </div>
     </footer>
 
+    <!-- Adicionar script do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/components/translator.js"></script>
+    
+    <!-- Script para adicionar artigos de exemplo ao localStorage -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar se já existem artigos no localStorage
+        if (!localStorage.getItem('blogArticles')) {
+            // Adicionar artigos de exemplo ao localStorage
+            const sampleArticles = [
+                {
+                    id: 1,
+                    title: "Avanços em Técnicas de Diagnóstico por Imagem",
+                    abstract: "Este artigo discute os recentes avanços na área de diagnóstico por imagem, incluindo novas técnicas de ressonância magnética e tomografia computadorizada que permitem diagnósticos mais precisos e menos invasivos.",
+                    date: "2025-03-15",
+                    authors: "Dr. Carlos Silva",
+                    category: "medicina",
+                    tags: ["medicina", "diagnóstico", "tecnologia", "saúde"],
+                    fileLink: "#artigo-diagnostico"
+                },
+                {
+                    id: 2,
+                    title: "O Impacto da Telemedicina na Saúde Rural",
+                    abstract: "Uma análise detalhada sobre como a telemedicina está transformando o acesso à saúde em áreas rurais, reduzindo desigualdades e melhorando o atendimento médico em regiões remotas.",
+                    date: "2025-03-10",
+                    authors: "Dra. Ana Rodrigues",
+                    category: "medicina",
+                    tags: ["medicina", "telemedicina", "saúde rural", "saúde"],
+                    fileLink: "#artigo-telemedicina"
+                },
+                {
+                    id: 3,
+                    title: "Uso do Inglês Técnico em Conferências Médicas Internacionais",
+                    abstract: "Guia prático para profissionais da saúde que desejam participar de conferências médicas internacionais, focando no vocabulário técnico e expressões específicas em inglês mais utilizadas.",
+                    date: "2025-03-05",
+                    authors: "Prof. Ricardo Almeida",
+                    category: "ingles",
+                    tags: ["inglês", "medicina", "conferências"],
+                    fileLink: "#artigo-ingles-medico"
+                },
+                {
+                    id: 4,
+                    title: "Novas Abordagens em Terapias Genéticas",
+                    abstract: "Pesquisa sobre os avanços recentes em terapias genéticas e seu potencial para o tratamento de doenças hereditárias, incluindo estudos de caso e resultados preliminares.",
+                    date: "2025-02-28",
+                    authors: "Dra. Juliana Martins",
+                    category: "medicina",
+                    tags: ["medicina", "genética", "pesquisa", "saúde"],
+                    fileLink: "#artigo-terapias-geneticas"
+                },
+                {
+                    id: 5,
+                    title: "Saúde Mental na Prática Médica",
+                    abstract: "Uma análise sobre a importância da integração de cuidados de saúde mental na prática médica geral, destacando estratégias e benefícios para pacientes e profissionais.",
+                    date: "2025-02-20",
+                    authors: "Dr. Fernando Costa",
+                    category: "medicina",
+                    tags: ["medicina", "saúde mental", "prática médica", "saúde"],
+                    fileLink: "#artigo-saude-mental"
+                },
+                {
+                    id: 6,
+                    title: "Glossário Bilíngue de Termos Cardiológicos",
+                    abstract: "Um extenso glossário português-inglês com os principais termos utilizados em cardiologia, incluindo pronúncia, contextos de uso e dicas para comunicação profissional.",
+                    date: "2025-02-15",
+                    authors: "Prof. Marcos Oliveira",
+                    category: "ingles",
+                    tags: ["inglês", "medicina", "cardiologia", "glossário"],
+                    fileLink: "#artigo-glossario-cardio"
+                }
+            ];
+            
+            // Salvar no localStorage
+            localStorage.setItem('blogArticles', JSON.stringify(sampleArticles));
+        }
+    });
+    </script>
     
     <!-- Script para carregar artigos dinamicamente -->
     <script>

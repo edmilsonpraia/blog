@@ -262,11 +262,99 @@
         </div>
     </footer>
 
+    <!-- Adicionar script do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../js/main.js"></script>
     <script src="../../js/components/translator.js"></script>
+    
+    <!-- Script para adicionar artigos de exemplo ao localStorage -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar se já existem artigos no localStorage
+        if (!localStorage.getItem('blogArticles')) {
+            // Adicionar artigos de exemplo ao localStorage
+            const sampleArticles = [
+                {
+                    id: 1,
+                    title: "Avanços em Técnicas de Diagnóstico por Imagem",
+                    abstract: "Este artigo discute os recentes avanços na área de diagnóstico por imagem, incluindo novas técnicas de ressonância magnética e tomografia computadorizada que permitem diagnósticos mais precisos e menos invasivos.",
+                    date: "2025-03-15",
+                    authors: "Dr. Carlos Silva",
+                    category: "medicina",
+                    tags: ["medicina", "diagnóstico", "tecnologia", "saúde"],
+                    fileLink: "#artigo-diagnostico"
+                },
+                {
+                    id: 2,
+                    title: "O Impacto da Telemedicina na Saúde Rural",
+                    abstract: "Uma análise detalhada sobre como a telemedicina está transformando o acesso à saúde em áreas rurais, reduzindo desigualdades e melhorando o atendimento médico em regiões remotas.",
+                    date: "2025-03-10",
+                    authors: "Dra. Ana Rodrigues",
+                    category: "medicina",
+                    tags: ["medicina", "telemedicina", "saúde rural", "saúde"],
+                    fileLink: "#artigo-telemedicina"
+                },
+                {
+                    id: 7,
+                    title: "O Futuro do Trabalho na Era da Automação",
+                    abstract: "Uma análise sobre como a automação e a inteligência artificial estão transformando o mercado de trabalho e quais habilidades serão mais valorizadas nas próximas décadas.",
+                    date: "2025-03-12",
+                    authors: "Prof. Renato Souza",
+                    category: "diversos",
+                    tags: ["tecnologia", "carreira", "futuro", "diversos"],
+                    fileLink: "#artigo-futuro-trabalho"
+                },
+                {
+                    id: 8,
+                    title: "Minimalismo Digital: Como Simplificar Sua Vida Online",
+                    abstract: "Guia prático para reduzir a sobrecarga digital, organizar arquivos e simplificar sua presença online, aumentando produtividade e reduzindo o estresse tecnológico.",
+                    date: "2025-03-08",
+                    authors: "Dra. Marina Costa",
+                    category: "diversos",
+                    tags: ["tecnologia", "produtividade", "bem-estar", "diversos"],
+                    fileLink: "#artigo-minimalismo-digital"
+                },
+                {
+                    id: 9,
+                    title: "Finanças Pessoais para Profissionais Acadêmicos",
+                    abstract: "Estratégias de planejamento financeiro voltadas para o ambiente acadêmico, com dicas de investimento, gestão de recursos de pesquisa e preparação para aposentadoria.",
+                    date: "2025-02-25",
+                    authors: "Prof. Eduardo Santos",
+                    category: "diversos",
+                    tags: ["finanças", "carreira", "academia", "diversos"],
+                    fileLink: "#artigo-financas-academicas"
+                },
+                {
+                    id: 10,
+                    title: "Técnicas de Estudo Baseadas em Neurociência",
+                    abstract: "Métodos de aprendizado fundamentados em pesquisas recentes sobre o funcionamento do cérebro, incluindo técnicas de memorização, intervalos de estudo otimizados e estratégias para retenção de informações a longo prazo.",
+                    date: "2025-02-20",
+                    authors: "Dra. Carolina Mendes",
+                    category: "diversos",
+                    tags: ["educação", "desenvolvimento", "neurociência", "diversos"],
+                    fileLink: "#artigo-tecnicas-estudo"
+                },
+                {
+                    id: 11,
+                    title: "Sustentabilidade no Ambiente Acadêmico",
+                    abstract: "Iniciativas práticas para tornar universidades e instituições de pesquisa mais sustentáveis, desde a redução do consumo de papel até estratégias de eficiência energética e gestão de resíduos laboratoriais.",
+                    date: "2025-02-15",
+                    authors: "Prof. Marcelo Lima",
+                    category: "diversos",
+                    tags: ["sustentabilidade", "academia", "meio ambiente", "diversos"],
+                    fileLink: "#artigo-sustentabilidade-academica"
+                }
+            ];
+            
+            // Salvar no localStorage
+            localStorage.setItem('blogArticles', JSON.stringify(sampleArticles));
+        }
+    });
+    </script>
     
     <!-- Script para carregamento dinâmico de artigos recentes -->
     <script>
