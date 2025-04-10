@@ -403,7 +403,7 @@
                         <div class="card-body">
                             <h5 class="card-title">${article.title}</h5>
                             <p class="card-text">${article.abstract ? article.abstract.substring(0, 150) + '...' : 'Sem resumo disponível'}</p>
-                            <a href="${article.fileLink}" target="_blank" class="btn btn-primary">Ler mais</a>
+                            <a href="${article.file_link || article.fileLink}" target="_blank" class="btn btn-primary">Ler mais</a>
                         </div>
                     </div>
                 `;
@@ -420,14 +420,16 @@
             // Verificar se há materiais para exibir
             if (!materials || materials.length === 0) return;
             
-            // Usar todos os materiais, não apenas ebooks
-            const allMaterials = materials;
-            
             // Ordenar por data de criação (mais recentes primeiro)
-            allMaterials.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            materials.sort((a, b) => {
+                // Usar created_at em vez de createdAt
+                const dateA = a.created_at || a.createdAt || '';
+                const dateB = b.created_at || b.createdAt || '';
+                return new Date(dateB) - new Date(dateA);
+            });
             
             // Pegar até 3 materiais
-            const featuredMaterials = allMaterials.slice(0, 3);
+            const featuredMaterials = materials.slice(0, 3);
             
             // Referência ao container de materiais
             const materialsContainer = document.querySelector('.ebooks-section .row');
@@ -453,7 +455,7 @@
                     : (material.access === 'pago' ? '<span class="badge bg-primary publication-badge">Pago</span>' : '');
                 
                 // Usar capa fornecida ou imagem padrão
-                const coverImage = material.coverLink || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+                const coverImage = material.cover_link || material.coverLink || 'https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
                 
                 materialCard.innerHTML = `
                     <div class="card publication-card h-100">
@@ -467,7 +469,7 @@
                                 <span class="${material.access === 'gratuito' ? 'text-success' : 'text-primary'} fw-bold">
                                     ${material.access === 'gratuito' ? 'Download Gratuito' : (material.access === 'pago' ? 'Acesso Pago' : 'Acesso Restrito')}
                                 </span>
-                                <a href="${material.fileLink}" target="_blank" class="btn btn-outline-primary">
+                                <a href="${material.file_link || material.fileLink}" target="_blank" class="btn btn-outline-primary">
                                     ${material.access === 'gratuito' ? 'Baixar PDF' : 'Ver Detalhes'}
                                 </a>
                             </div>
@@ -538,7 +540,7 @@
                             ${doi ? `<span class="text-muted">DOI: ${doi}</span>` : '<span></span>'}
                             <div>
                                 <a href="#" class="btn btn-sm btn-outline-primary me-2">Resumo</a>
-                                <a href="${paper.fileLink}" target="_blank" class="btn btn-sm btn-primary">PDF</a>
+                                <a href="${paper.file_link || paper.fileLink}" target="_blank" class="btn btn-sm btn-primary">PDF</a>
                             </div>
                         </div>
                     </div>
@@ -573,8 +575,7 @@
                 
                 // Caso haja erro, tentar usar dados do localStorage se disponíveis
                 const storedArticles = localStorage.getItem('blogArticles');
-                if (storedArticles) {
-                    return JSON.parse(storedArticles);
+                if (storedArticles) {return JSON.parse(storedArticles);
                 }
                 
                 // Se não houver dados no localStorage, definir dados de fallback
@@ -587,7 +588,7 @@
                         authors: "Dr. Carlos Silva",
                         category: "medicina",
                         tags: ["medicina", "diagnóstico", "tecnologia", "saúde"],
-                        fileLink: "#artigo-diagnostico",
+                        file_link: "#artigo-diagnostico",
                         journal: "Revista Brasileira de Radiologia",
                         doi: "10.1234/rbr.2025.001"
                     },
@@ -599,7 +600,7 @@
                         authors: "Dra. Ana Rodrigues",
                         category: "medicina",
                         tags: ["medicina", "telemedicina", "saúde rural", "saúde"],
-                        fileLink: "#artigo-telemedicina",
+                        file_link: "#artigo-telemedicina",
                         journal: "Saúde e Tecnologia",
                         doi: "10.5678/st.2025.002"
                     },
@@ -611,7 +612,7 @@
                         authors: "Prof. Ricardo Almeida",
                         category: "ingles",
                         tags: ["inglês", "medicina", "conferências"],
-                        fileLink: "#artigo-ingles-medico"
+                        file_link: "#artigo-ingles-medico"
                     }
                 ];
                 
@@ -633,10 +634,18 @@
                     return;
                 }
                 
-                // Salvar materiais no localStorage para uso em outras páginas
-                localStorage.setItem('blogMaterials', JSON.stringify(materials));
+                // Converter campos para formato consistente se necessário
+                const processedMaterials = materials.map(material => ({
+                    ...material,
+                    // Garantir que temos ambos os formatos para compatibilidade
+                    fileLink: material.file_link || material.fileLink,
+                    coverLink: material.cover_link || material.coverLink
+                }));
                 
-                return materials;
+                // Salvar materiais no localStorage para uso em outras páginas
+                localStorage.setItem('blogMaterials', JSON.stringify(processedMaterials));
+                
+                return processedMaterials;
             } catch (err) {
                 console.error('Erro ao processar materiais:', err);
                 
@@ -654,9 +663,9 @@
                         description: "Um guia completo com os principais termos médicos em inglês, organizado por especialidades e com pronúncia.",
                         type: "ebook",
                         access: "gratuito",
-                        coverLink: "https://images.unsplash.com/photo-1576086213369-97a306d36557?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-                        fileLink: "#ebook-terminologia-medica",
-                        createdAt: "2025-03-10"
+                        cover_link: "https://images.unsplash.com/photo-1576086213369-97a306d36557?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                        file_link: "#ebook-terminologia-medica",
+                        created_at: "2025-03-10"
                     },
                     {
                         id: 2,
@@ -664,9 +673,9 @@
                         description: "Vocabulário técnico e expressões utilizadas na indústria de petróleo e gás, com exercícios práticos.",
                         type: "manual",
                         access: "pago",
-                        coverLink: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-                        fileLink: "#manual-petroleo-ingles",
-                        createdAt: "2025-02-28"
+                        cover_link: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                        file_link: "#manual-petroleo-ingles",
+                        created_at: "2025-02-28"
                     },
                     {
                         id: 3,
@@ -674,9 +683,9 @@
                         description: "Aprenda a estruturar artigos científicos em inglês, seguindo os padrões das principais revistas internacionais.",
                         type: "ebook",
                         access: "gratuito",
-                        coverLink: "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-                        fileLink: "#ebook-redacao-cientifica",
-                        createdAt: "2025-02-15"
+                        cover_link: "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                        file_link: "#ebook-redacao-cientifica",
+                        created_at: "2025-02-15"
                     }
                 ];
                 
